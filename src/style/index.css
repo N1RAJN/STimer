@@ -1,0 +1,36 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+.Timer-Container {
+    margin: 0 auto;
+    padding: 0;
+    width: 50vmin;
+    height: 30vmin;
+    display: flex;
+    align-items: center;
+}
+
+.Timer {
+    margin: 0;
+    padding: 0;
+    width: 80%;
+    height: 80%;
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Timer-Control-Button {
+    margin: 0;
+    padding: 0;
+    width: 20%;
+    height: 80%;
+}
+
+.ButtonSVG {
+    width: 100%;
+    height: 100%;
+}
