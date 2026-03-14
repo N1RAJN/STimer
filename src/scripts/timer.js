@@ -6,7 +6,6 @@ const timer = document.getElementById("timer");
 const timerMinutes = document.getElementById("timerMinutes");
 const timerSeconds = document.getElementById("timerSeconds");
 
-const initialDelay = 0;
 const counterDelay = 1000; // milliseconds
 
 var timerStarted = false;
@@ -36,11 +35,11 @@ const toggleTimer = () => {
         clearTimeout(timerId);
     } else {
         counterPaused = false;
-        counter(initialDelay); // No delay while starting/stopping timer
+        counter();
     }
 };
 
-const counter = (delay) => {
+const counter = () => {
     if (!counterPaused) {
         timerId = setTimeout(() => {
             secondCounter = sessionDuration.seconds = (secondCounter + 1) % 60;
@@ -53,15 +52,15 @@ const counter = (delay) => {
             }
             let displayedSecond = secondCounter.toString().padStart(2, "0");
             timerSeconds.innerHTML = displayedSecond;
-            counter(counterDelay);
-        }, delay);
+            counter();
+        }, counterDelay);
     }
 };
 
 const startTimer = () => {
     timerStarted = true;
     counterPaused = false;
-    counter(initialDelay);
+    counter();
 };
 
 timerControlButton.addEventListener("click", (e) => {
