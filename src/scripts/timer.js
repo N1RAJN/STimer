@@ -29,18 +29,8 @@ const toggleControlButton = (e) => {
     buttonSvgPath.setAttribute("d", SVGPaths[timerButtonState.innerHTML]);
 };
 
-const toggleTimer = () => {
-    if (!counterPaused) {
-        counterPaused = true;
-        clearTimeout(timerId);
-    } else {
-        counterPaused = false;
-        counter();
-    }
-};
-
 const counter = () => {
-    timerId = setTimeout(() => {
+    timerId = setInterval(() => {
         sessionDuration.seconds = (sessionDuration.seconds + 1) % 60;
         if (sessionDuration.seconds === 0) {
             sessionDuration.minutes = sessionDuration.minutes + 1;
@@ -53,17 +43,26 @@ const counter = () => {
             .toString()
             .padStart(2, "0");
         timerSeconds.innerHTML = displayedSecond;
-        counter();
+        //counter();
     }, counterDelay);
 };
 
 const startTimer = () => {
     timerStarted = true;
     counterPaused = false;
-    toggleTimerStopButton();
+    toggleTimerStopButton(); // display it
     counter();
 };
 
+const toggleTimer = () => {
+    if (!counterPaused) {
+        counterPaused = true;
+        clearTimeout(timerId);
+    } else {
+        counterPaused = false;
+        counter();
+    }
+};
 const resetTimer = () => {
     clearTimeout(timerId);
     timerStarted = false;
