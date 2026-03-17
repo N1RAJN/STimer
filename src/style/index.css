@@ -4,17 +4,19 @@ body {
 }
 
 .Timer-Container {
-    margin: 3em auto;
+    font-size: clamp(8px, 2vw, 16px);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    width: min(20vw, 500px);
+    justify-content: center;
+    margin: 3rem auto;
+    gap: 0.5em;
+    width: fit-content;
+    max-width: 50vw;
 }
 
 .Timer {
-    font-size: clamp(1.5rem, 4vw, 3rem);
+    font-size: 4em;
     display: flex;
-    flex: 3;
     align-items: center;
     justify-content: center;
 }
@@ -23,7 +25,6 @@ body {
 .Timer-Stop-Button {
     padding: 0.5em;
     display: flex;
-    flex: 1;
     align-items: center;
     justify-content: center;
 }
@@ -33,6 +34,6 @@ body {
 }
 
 .ButtonSVG {
-    height: 2em;
-    width: 2em;
+    height: 2.5em;
+    width: 2.5em;
 }
