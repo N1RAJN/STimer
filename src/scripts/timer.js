@@ -48,7 +48,7 @@ const counter = () => {
 };
 
 const toggleFullScreenTimer = () => {
-    timerContainer.style.marginTop = "8rem";
+    timerContainer.style.marginTop = timerStarted ? "8rem" : "4rem";
     timerContainer.style.scale = timerStarted ? 1.6 : 1;
 };
 
