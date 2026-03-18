@@ -8,7 +8,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 3rem auto;
+    margin: 4rem auto;
     gap: 0.5em;
     width: fit-content;
     max-width: 50vw;
@@ -34,6 +34,6 @@ body {
 }
 
 .ButtonSVG {
-    height: 2.5em;
-    width: 2.5em;
+    height: 2.1em;
+    width: 2.1em;
 }

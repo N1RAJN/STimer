@@ -47,9 +47,15 @@ const counter = () => {
     }, counterDelay);
 };
 
+const toggleFullScreenTimer = () => {
+    timerContainer.style.marginTop = "8rem";
+    timerContainer.style.scale = timerStarted ? 1.6 : 1;
+};
+
 const startTimer = () => {
     timerStarted = true;
     counterPaused = false;
+    toggleFullScreenTimer();
     toggleTimerStopButton(); // display it
     counter();
 };
@@ -73,6 +79,7 @@ const resetTimer = () => {
     timerSeconds.innerHTML = "00";
     timerButtonState.innerHTML = "Play";
     buttonSvgPath.setAttribute("d", SVGPaths["Play"]);
+    toggleFullScreenTimer();
     toggleTimerStopButton();
 };
 
