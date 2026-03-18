@@ -11,7 +11,12 @@ body {
     margin: 4rem auto;
     gap: 0.5em;
     width: fit-content;
+    transition: none;
     max-width: 50vw;
+}
+
+.Timer-Container.is-Animating {
+    transition: all 0.8s allow-discrete;
 }
 
 .Timer {
@@ -21,8 +26,7 @@ body {
     justify-content: center;
 }
 
-.Timer-Toggle-Button,
-.Timer-Stop-Button {
+.Timer-Toggle-Button {
     padding: 0.5em;
     display: flex;
     align-items: center;
@@ -31,6 +35,17 @@ body {
 
 .Timer-Stop-Button {
     display: none;
+    padding: 0.5em;
+    align-items: center;
+    justify-content: center;
+
+    @starting-style {
+        margin-left: 1rem;
+    }
+}
+
+.Timer-Stop-Button.is-Animating {
+    transition: all 0.8s allow-discrete;
 }
 
 .ButtonSVG {

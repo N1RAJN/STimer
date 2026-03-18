@@ -43,11 +43,16 @@ const counter = () => {
             .toString()
             .padStart(2, "0");
         timerSeconds.innerHTML = displayedSecond;
-        //counter();
     }, counterDelay);
 };
 
 const toggleFullScreenTimer = () => {
+    timerContainer.classList.add("is-Animating");
+    timerStopButton.classList.add("is-Animating");
+    setTimeout(() => {
+        timerContainer.classList.remove("is-Animating");
+        timerStopButton.classList.remove("is-Animating");
+    }, 1000);
     timerContainer.style.marginTop = timerStarted ? "8rem" : "4rem";
     timerContainer.style.scale = timerStarted ? 1.6 : 1;
 };
