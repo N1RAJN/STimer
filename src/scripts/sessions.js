@@ -1,7 +1,13 @@
-import { sessionInfo, sessionStartedDate, pauseStartedDate } from "./timer.js";
+import {
+    sessionInfo,
+    sessionDuration,
+    sessionStartedDate,
+    pauseStartedDate,
+} from "./timer.js";
 export const saveSessionInfo = () => {
     sessionInfo.endedAt = new Date().toISOString();
     sessionInfo.startedAt = sessionStartedDate.toISOString();
+    sessionInfo.duration = { ...sessionDuration };
     console.log(sessionInfo);
 };
 export const savePauseInfo = () => {
