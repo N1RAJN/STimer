@@ -171,4 +171,5 @@ textarea.Session-Info-Input {
     background-color: #666666;
     color: white;
     cursor: pointer;
+    border-radius: 0.25rem;
 }
