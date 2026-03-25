@@ -8,6 +8,7 @@ const timerButtonState = document.getElementById("buttonState");
 const buttonSvgPath = document.getElementById("buttonSVGPath");
 const timerMinutes = document.getElementById("timerMinutes");
 const timerSeconds = document.getElementById("timerSeconds");
+const sessionInfoDialog = document.getElementById("sessionInfoDialog");
 
 const counterDelayMS = 1000;
 
@@ -21,6 +22,7 @@ export var sessionStartedDate;
 export var sessionInfo = {
     startedAt: "",
     endedAt: "",
+    duration: {},
     pausesInSession: [
         /*
         {
@@ -31,7 +33,7 @@ export var sessionInfo = {
     title: "", // General indication of what I did (eg, neetcode )
     description: "", // What I did specifically (eg backtracking, problem name)
     tag: "", // What kind of work did I spend my time on (eg DSA)
-    resources: "", // Resources that I used (eg link of the problem i solved, solutions i may have used)
+    resources: [""], // Resources that I used (eg link of the problem i solved, solutions i may have used)
 };
 
 const sessionTimer = () => {
@@ -107,8 +109,8 @@ const resetSessionTimer = () => {
     counterPaused = true;
     sessionDuration.minutes = 0;
     sessionDuration.seconds = 0;
-    pauseStartedDate = undefined;
-    sessionStartedDate = undefined;
+    pauseStartedDate = null;
+    sessionStartedDate = null;
     sessionInfo = {
         startedAt: "",
         endedAt: "",
@@ -120,6 +122,10 @@ const resetSessionTimer = () => {
     };
 };
 
+const showSessionInfoDialog = () => {
+    sessionInfoDialog.showModal();
+};
+
 timerToggleButton.addEventListener("click", (e) => {
     e.preventDefault();
     if (!timerStarted) startSessionTimer();
@@ -129,6 +135,7 @@ timerToggleButton.addEventListener("click", (e) => {
 
 timerStopButton.addEventListener("click", (e) => {
     e.preventDefault();
+    showSessionInfoDialog();
     if (counterPaused) savePauseInfo();
     saveSessionInfo();
     resetSessionTimer();
