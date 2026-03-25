@@ -19,6 +19,8 @@ var sessionTimerId;
 export var sessionDuration = { minutes: 0, seconds: 0 };
 export var pauseStartedDate;
 export var sessionStartedDate;
+export var pauseEndedDate;
+export var sessionEndedDate;
 export var sessionInfo = {
     startedAt: "",
     endedAt: "",
@@ -88,6 +90,7 @@ const toggleSessionTimer = () => {
         clearInterval(sessionTimerId);
         pauseStartedDate = new Date();
     } else {
+        pauseEndedDate = new Date();
         savePauseInfo();
         counterPaused = false;
         sessionTimer();
@@ -135,6 +138,7 @@ timerToggleButton.addEventListener("click", (e) => {
 
 timerStopButton.addEventListener("click", (e) => {
     e.preventDefault();
+    sessionEndedDate = new Date();
     showSessionInfoDialog();
     if (counterPaused) savePauseInfo();
     saveSessionInfo();
