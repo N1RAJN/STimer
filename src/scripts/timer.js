@@ -9,6 +9,11 @@ const buttonSvgPath = document.getElementById("buttonSVGPath");
 const timerMinutes = document.getElementById("timerMinutes");
 const timerSeconds = document.getElementById("timerSeconds");
 const sessionInfoDialog = document.getElementById("sessionInfoDialog");
+const sessionInfoSaveButton = document.getElementById("sessionInfoSaveButton");
+const sessionInfoDialogCloseButton = document.getElementById(
+    "sessionInfoDialogCloseButton",
+);
+const sessionDate = document.getElementById("sessionDate");
 
 const counterDelayMS = 1000;
 
@@ -98,6 +103,9 @@ const toggleSessionTimer = () => {
 };
 
 const resetDisplayedTimer = () => {
+    clearTimeout(sessionTimerId);
+    timerStarted = false;
+    counterPaused = true;
     timerMinutes.innerHTML = "00";
     timerSeconds.innerHTML = "00";
     timerButtonState.innerHTML = "Play";
@@ -107,9 +115,6 @@ const resetDisplayedTimer = () => {
 };
 
 const resetSessionTimer = () => {
-    clearTimeout(sessionTimerId);
-    timerStarted = false;
-    counterPaused = true;
     sessionDuration.minutes = 0;
     sessionDuration.seconds = 0;
     pauseStartedDate = null;
@@ -127,6 +132,7 @@ const resetSessionTimer = () => {
 
 const showSessionInfoDialog = () => {
     sessionInfoDialog.showModal();
+    sessionDate.value = sessionStartedDate.toDateString();
 };
 
 timerToggleButton.addEventListener("click", (e) => {
@@ -139,9 +145,25 @@ timerToggleButton.addEventListener("click", (e) => {
 timerStopButton.addEventListener("click", (e) => {
     e.preventDefault();
     sessionEndedDate = new Date();
+    if (counterPaused) {
+        pauseEndedDate = new Date();
+        savePauseInfo();
+    }
+    resetDisplayedTimer();
     showSessionInfoDialog();
-    if (counterPaused) savePauseInfo();
+});
+
+sessionInfoDialogCloseButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    sessionInfoDialog.close();
+});
+
+sessionInfoSaveButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    sessionInfoDialog.close();
+});
+
+sessionInfoDialog.addEventListener("close", () => {
     saveSessionInfo();
     resetSessionTimer();
-    resetDisplayedTimer();
 });

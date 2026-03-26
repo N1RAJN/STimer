@@ -142,6 +142,11 @@ div.Session-Info-Group:has(textarea) {
     color: white;
 }
 
+#sessionDate {
+    color: transparent;
+    text-shadow: 0 0 0 white;
+}
+
 textarea.Session-Info-Input {
     height: 70%;
     resize: vertical;
