@@ -2,12 +2,28 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 
 	_ "modernc.org/sqlite"
 )
+
+type sessionInfo struct {
+	StartedAt       string `json:"startedAt"`
+	EndedAt         string `json:"endedAt"`
+	Duration        uint16 `json:"duration"`
+	PausesInSession []struct {
+		StartedAt string `json:"startedAt"`
+		EndedAt   string `json:"endedAt"`
+	} `json:"pausesInSession"`
+	Title       string   `json:"title"`
+	Description string   `json:"description"`
+	Tag         string   `json:"tag"`
+	Resources   []string `json:"resources"`
+}
 
 var db *sql.DB
 
@@ -22,6 +38,7 @@ func main() {
 
 	fs := http.FileServer(http.Dir("./src"))
 	http.Handle("/", fs)
+	http.HandleFunc("/api/storeSession", storeSessionInfo)
 
 	fmt.Println("Server running at http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -73,6 +90,16 @@ func createTable() {
 	}
 }
 
+func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
+	var err error
+	var sessionData sessionInfo
+	var requestBody []byte
+	requestBody, err = io.ReadAll(r.Body)
+
+	err = json.Unmarshal(requestBody, &sessionData)
 	if err != nil {
+		log.Fatal(err)
 	}
+	fmt.Println(sessionData.StartedAt)
+	io.WriteString(w, "hello world")
 }
