@@ -14,6 +14,10 @@ const sessionInfoDialogCloseButton = document.getElementById(
     "sessionInfoDialogCloseButton",
 );
 const sessionDate = document.getElementById("sessionDate");
+export const sessionTag = document.getElementById("sessionTag");
+export const sessionTitle = document.getElementById("sessionTitle");
+export const sessionDescription = document.getElementById("sessionDescription");
+export const sessionResources = document.getElementById("sessionResources");
 
 const counterDelayMS = 1000;
 
@@ -130,6 +134,18 @@ const resetSessionTimer = () => {
     };
 };
 
+const resetSessionInfoInputs = () => {
+    [
+        sessionDate,
+        sessionTag,
+        sessionDescription,
+        sessionTitle,
+        sessionResources,
+    ].forEach((input) => {
+        input.value = "";
+    });
+};
+
 const showSessionInfoDialog = () => {
     sessionInfoDialog.showModal();
     sessionDate.value = sessionStartedDate.toDateString();
@@ -163,7 +179,16 @@ sessionInfoSaveButton.addEventListener("click", (e) => {
     sessionInfoDialog.close();
 });
 
-sessionInfoDialog.addEventListener("close", () => {
-    saveSessionInfo();
+sessionInfoDialog.addEventListener("close", async () => {
+    try {
+        const result = await saveSessionInfo();
+        if (!result.ok) {
+            console.log("Some Error Occured!");
+            return;
+        }
+        resetSessionInfoInputs();
+    } catch (err) {
+        console.log(err);
+    }
     resetSessionTimer();
 });

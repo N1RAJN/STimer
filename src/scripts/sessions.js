@@ -5,12 +5,23 @@ import {
     sessionEndedDate,
     pauseStartedDate,
     pauseEndedDate,
+    sessionTag,
+    sessionDescription,
+    sessionResources,
+    sessionTitle,
 } from "./timer.js";
+
 export const saveSessionInfo = async () => {
     sessionInfo.endedAt = sessionEndedDate.toISOString();
     sessionInfo.startedAt = sessionStartedDate.toISOString();
     sessionInfo.duration =
         sessionDuration.minutes * 60 + sessionDuration.seconds;
+    sessionInfo.tag = sessionTag.value;
+    sessionInfo.title = sessionTitle.value;
+    sessionInfo.description = sessionDescription.value;
+    sessionResources.value.split("\n").forEach((link) => {
+        if (link.trim()) sessionInfo.resources.push(link);
+    });
     try {
         const result = await fetch("api/storeSession", {
             method: "POST",
@@ -19,10 +30,9 @@ export const saveSessionInfo = async () => {
             },
             body: JSON.stringify(sessionInfo),
         });
-        const data = await result.text();
-        console.log(data);
+        return result;
     } catch (err) {
-        console.error(err);
+        throw err;
     }
 };
 export const savePauseInfo = () => {
