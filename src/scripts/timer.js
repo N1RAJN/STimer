@@ -29,7 +29,7 @@ export var sessionEndedDate;
 export var sessionInfo = {
     startedAt: "",
     endedAt: "",
-    duration: {},
+    duration: "",
     pausesInSession: [
         /*
         {
@@ -40,7 +40,7 @@ export var sessionInfo = {
     title: "", // General indication of what I did (eg, neetcode )
     description: "", // What I did specifically (eg backtracking, problem name)
     tag: "", // What kind of work did I spend my time on (eg DSA)
-    resources: [""], // Resources that I used (eg link of the problem i solved, solutions i may have used)
+    resources: [], // Resources that I used (eg link of the problem i solved, solutions i may have used)
 };
 
 const sessionTimer = () => {
@@ -126,7 +126,7 @@ const resetSessionTimer = () => {
         title: "",
         description: "",
         tag: "",
-        resources: "",
+        resources: [],
     };
 };
 
