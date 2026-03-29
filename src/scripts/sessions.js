@@ -16,12 +16,14 @@ export const saveSessionInfo = async () => {
     sessionInfo.startedAt = sessionStartedDate.toISOString();
     sessionInfo.duration =
         sessionDuration.minutes * 60 + sessionDuration.seconds;
-    sessionInfo.tag = sessionTag.value;
+    sessionTag.value.split("#").forEach((tag) => {
+        if (tag.trim()) {
+            sessionInfo.tags.push(tag);
+        }
+    });
     sessionInfo.title = sessionTitle.value;
     sessionInfo.description = sessionDescription.value;
-    sessionResources.value.split("\n").forEach((link) => {
-        if (link.trim()) sessionInfo.resources.push(link);
-    });
+    sessionInfo.resources = sessionResources.value.trim();
     try {
         const result = await fetch("api/storeSession", {
             method: "POST",

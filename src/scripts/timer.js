@@ -43,8 +43,8 @@ export var sessionInfo = {
     ],
     title: "", // General indication of what I did (eg, neetcode )
     description: "", // What I did specifically (eg backtracking, problem name)
-    tag: "", // What kind of work did I spend my time on (eg DSA)
-    resources: [], // Resources that I used (eg link of the problem i solved, solutions i may have used)
+    tags: [], // What kind of work did I spend my time on (eg DSA)
+    resources: "", // Resources that I used (eg link of the problem i solved, solutions i may have used)
 };
 
 const sessionTimer = () => {
@@ -129,8 +129,8 @@ const resetSessionTimer = () => {
         pausesInSession: [],
         title: "",
         description: "",
-        tag: "",
-        resources: [],
+        tags: [],
+        resources: "",
     };
 };
 
@@ -186,6 +186,8 @@ sessionInfoDialog.addEventListener("close", async () => {
             console.log("Some Error Occured!");
             return;
         }
+        const message = await result.text();
+        console.log(message);
         resetSessionInfoInputs();
     } catch (err) {
         console.log(err);
