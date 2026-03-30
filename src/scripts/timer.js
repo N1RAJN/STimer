@@ -53,6 +53,12 @@ export var sessionInfo = {
         return;
     }
     const tags = await result.json();
+    tags.forEach((tag) => {
+        const tagDiv = document.createElement("div");
+        tagDiv.innerHTML = tag;
+        tagDiv.className = "Session-Tag-Card";
+        sessionTagsList.appendChild(tagDiv);
+    });
 })();
 
 const sessionTimer = () => {
@@ -71,8 +77,7 @@ const sessionTimer = () => {
         timerSeconds.innerHTML = displayedSecond;
     }, counterDelayMS);
 };
-const toggleTimerControlButton = (e) => {
-    e.preventDefault();
+const toggleTimerControlButton = () => {
     const buttonState = timerButtonState.innerHTML;
     timerButtonState.innerHTML = buttonState == "Play" ? "Pause" : "Play";
     buttonSvgPath.setAttribute("d", SVGPaths[timerButtonState.innerHTML]);
@@ -129,8 +134,6 @@ const resetDisplayedTimer = () => {
 const resetSessionTimer = () => {
     sessionDuration.minutes = 0;
     sessionDuration.seconds = 0;
-    pauseStartedDate = null;
-    sessionStartedDate = null;
     sessionInfo = {
         startedAt: "",
         endedAt: "",
@@ -155,10 +158,21 @@ const showSessionInfoDialog = () => {
     sessionInfoDialog.showModal();
 };
 
+sessionTagsList.addEventListener("click", (e) => {
+    const classes = e.target.classList;
+    if (classes.contains("Session-Tag-Card")) {
+        if (classes.contains("Selected")) {
+            e.target.classList.remove("Selected");
+        } else {
+            e.target.classList.add("Selected");
+        }
+    }
+});
+
 timerToggleButton.addEventListener("click", () => {
     if (!timerStarted) startSessionTimer();
     else toggleSessionTimer();
-    toggleTimerControlButton(e);
+    toggleTimerControlButton();
 });
 
 timerStopButton.addEventListener("click", () => {

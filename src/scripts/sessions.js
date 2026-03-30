@@ -5,7 +5,6 @@ import {
     sessionEndedDate,
     pauseStartedDate,
     pauseEndedDate,
-    sessionTag,
     sessionDescription,
     sessionResources,
     sessionTitle,
@@ -16,11 +15,6 @@ export const saveSessionInfo = async () => {
     sessionInfo.startedAt = sessionStartedDate.toISOString();
     sessionInfo.duration =
         sessionDuration.minutes * 60 + sessionDuration.seconds;
-    sessionTag.value.split("#").forEach((tag) => {
-        if (tag.trim()) {
-            sessionInfo.tags.push(tag);
-        }
-    });
     sessionInfo.title = sessionTitle.value;
     sessionInfo.description = sessionDescription.value;
     sessionInfo.resources = sessionResources.value.trim();
@@ -34,6 +28,7 @@ export const saveSessionInfo = async () => {
         });
         return result;
     } catch (err) {
+        // Handled by the callback of dialog eventlistener
         throw err;
     }
 };

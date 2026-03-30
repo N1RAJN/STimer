@@ -228,20 +228,17 @@ func getTagsList(w http.ResponseWriter, r *http.Request) {
 		var tag string
 		if err := rows.Scan(&tag); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			log.Fatal(err)
 			return
 		}
 		tagsList = append(tagsList, tag)
 	}
 	if err := rows.Err(); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		log.Fatal(err)
 		return
 	}
 	encodedTags, err := json.Marshal(tagsList)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		log.Fatal(err)
 		return
 	}
 	w.WriteHeader(http.StatusOK)
