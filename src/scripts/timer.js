@@ -9,18 +9,17 @@ const buttonSvgPath = document.getElementById("buttonSVGPath");
 const timerMinutes = document.getElementById("timerMinutes");
 const timerSeconds = document.getElementById("timerSeconds");
 const sessionInfoDialog = document.getElementById("sessionInfoDialog");
+const sessionTagsList = document.getElementById("sessionTagsList");
 const sessionInfoSaveButton = document.getElementById("sessionInfoSaveButton");
 const sessionInfoDialogCloseButton = document.getElementById(
     "sessionInfoDialogCloseButton",
 );
 const sessionDate = document.getElementById("sessionDate");
-export const sessionTag = document.getElementById("sessionTag");
 export const sessionTitle = document.getElementById("sessionTitle");
 export const sessionDescription = document.getElementById("sessionDescription");
 export const sessionResources = document.getElementById("sessionResources");
 
 const counterDelayMS = 1000;
-
 var timerStarted = false;
 var counterPaused = true;
 var sessionTimerId;
@@ -46,6 +45,15 @@ export var sessionInfo = {
     tags: [], // What kind of work did I spend my time on (eg DSA)
     resources: "", // Resources that I used (eg link of the problem i solved, solutions i may have used)
 };
+
+(async () => {
+    const result = await fetch("/api/getTags");
+    if (!result.ok) {
+        console.error("Fetching the tags failed.");
+        return;
+    }
+    const tags = await result.json();
+})();
 
 const sessionTimer = () => {
     sessionTimerId = setInterval(() => {
@@ -135,31 +143,25 @@ const resetSessionTimer = () => {
 };
 
 const resetSessionInfoInputs = () => {
-    [
-        sessionDate,
-        sessionTag,
-        sessionDescription,
-        sessionTitle,
-        sessionResources,
-    ].forEach((input) => {
-        input.value = "";
-    });
+    [sessionDate, sessionDescription, sessionTitle, sessionResources].forEach(
+        (input) => {
+            input.value = "";
+        },
+    );
 };
 
 const showSessionInfoDialog = () => {
-    sessionInfoDialog.showModal();
     sessionDate.value = sessionStartedDate.toDateString();
+    sessionInfoDialog.showModal();
 };
 
-timerToggleButton.addEventListener("click", (e) => {
-    e.preventDefault();
+timerToggleButton.addEventListener("click", () => {
     if (!timerStarted) startSessionTimer();
     else toggleSessionTimer();
     toggleTimerControlButton(e);
 });
 
-timerStopButton.addEventListener("click", (e) => {
-    e.preventDefault();
+timerStopButton.addEventListener("click", () => {
     sessionEndedDate = new Date();
     if (counterPaused) {
         pauseEndedDate = new Date();
@@ -169,8 +171,7 @@ timerStopButton.addEventListener("click", (e) => {
     showSessionInfoDialog();
 });
 
-sessionInfoDialogCloseButton.addEventListener("click", (e) => {
-    e.preventDefault();
+sessionInfoDialogCloseButton.addEventListener("click", () => {
     sessionInfoDialog.close();
 });
 

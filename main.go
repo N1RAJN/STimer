@@ -44,6 +44,7 @@ func main() {
 	fs := http.FileServer(http.Dir("./src"))
 	http.Handle("/", fs)
 	http.HandleFunc("/api/storeSession", storeSessionInfo)
+	http.HandleFunc("/api/getTags", getTagsList)
 
 	fmt.Println("Server running at http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -210,4 +211,40 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	io.WriteString(w, "Session Info saved")
+}
+
+func getTagsList(w http.ResponseWriter, r *http.Request) {
+	query := `
+	SELECT tag_name FROM tags
+	`
+	rows, err := db.Query(query)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		io.WriteString(w, "Query failed")
+		return
+	}
+	var tagsList []string
+	for rows.Next() {
+		var tag string
+		if err := rows.Scan(&tag); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			log.Fatal(err)
+			return
+		}
+		tagsList = append(tagsList, tag)
+	}
+	if err := rows.Err(); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Fatal(err)
+		return
+	}
+	encodedTags, err := json.Marshal(tagsList)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Fatal(err)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	io.WriteString(w, string(encodedTags))
 }
