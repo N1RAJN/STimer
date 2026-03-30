@@ -86,6 +86,7 @@ const toggleTimerControlButton = () => {
 const toggleTimerStopButton = () => {
     timerStopButton.style.display = timerStarted ? "flex" : "none";
 };
+
 const toggleFullScreenTimer = () => {
     timerContainer.classList.add("is-Animating");
     timerStopButton.classList.add("is-Animating");

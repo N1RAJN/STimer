@@ -11,6 +11,11 @@ import {
 } from "./timer.js";
 
 export const saveSessionInfo = async () => {
+    const selectedTags = document.getElementsByClassName("Selected");
+    Array.from(selectedTags).map((tag) => {
+        sessionInfo.tags.push(tag.innerHTML);
+        tag.classList.remove("Selected");
+    });
     sessionInfo.endedAt = sessionEndedDate.toISOString();
     sessionInfo.startedAt = sessionStartedDate.toISOString();
     sessionInfo.duration =
