@@ -4,10 +4,12 @@ import { SVGPaths } from "./svgs.js";
 const timerContainer = document.getElementById("timerContainer");
 const timerToggleButton = document.getElementById("timerToggleButton");
 const timerStopButton = document.getElementById("timerStopButton");
+const addResourceButton = document.getElementById("addResourceButton");
 const timerButtonState = document.getElementById("buttonState");
 const buttonSvgPath = document.getElementById("buttonSVGPath");
 const timerMinutes = document.getElementById("timerMinutes");
 const timerSeconds = document.getElementById("timerSeconds");
+const sessionInfoDialogHeader = document.getElementById("dialogHeader");
 const sessionInfoDialog = document.getElementById("sessionInfoDialog");
 const sessionTagsList = document.getElementById("sessionTagsList");
 const sessionInfoSaveButton = document.getElementById("sessionInfoSaveButton");
@@ -87,6 +89,7 @@ const toggleTimerControlButton = () => {
 
 const toggleTimerStopButton = () => {
     timerStopButton.style.display = timerStarted ? "flex" : "none";
+    addResourceButton.style.display = timerStarted ? "flex" : "none";
 };
 
 const toggleFullScreenTimer = () => {
@@ -187,6 +190,14 @@ timerStopButton.addEventListener("click", () => {
         savePauseInfo();
     }
     resetDisplayedTimer();
+    sessionInfoDialogHeader.innerHTML = "Session Completed!";
+    sessionInfoSaveButton.innerText = "Save Session";
+    showSessionInfoDialog();
+});
+
+addResourceButton.addEventListener("click", () => {
+    sessionInfoDialogHeader.innerHTML = "Add Resources You Used.";
+    sessionInfoSaveButton.innerText = "Add";
     showSessionInfoDialog();
 });
 
@@ -224,6 +235,7 @@ addSessionTagInput.addEventListener("keypress", (e) => {
 });
 
 sessionInfoDialog.addEventListener("close", async () => {
+    if (timerStarted) return;
     try {
         const result = await saveSessionInfo();
         if (!result.ok) {

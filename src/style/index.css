@@ -53,6 +53,14 @@ body {
     width: 2.1em;
 }
 
+.Add-Resource-Button {
+    display: none;
+    font-size: 2rem;
+    font-weight: 1000;
+    user-select: none;
+    cursor: pointer;
+}
+
 .Session-Info-Dialog {
     background-color: #1a1a1a;
     color: white;
