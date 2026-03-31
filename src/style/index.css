@@ -146,6 +146,35 @@ div.Session-Info-Group:has(textarea) {
     color: white;
 }
 
+.Session-Tags-List-Label-Container {
+    display: flex;
+    flex-direction: row;
+
+    & label {
+        display: inline;
+        flex: 1;
+    }
+}
+
+.Add-Session-Tag-Container {
+    display: flex;
+    gap: 0.2em;
+
+}
+
+.Add-Session-Tag-Input {
+    flex: 3;
+    visibility: hidden;
+    box-sizing: border-box;
+    padding: 0.2rem;
+    border: solid 1px #666666;
+    border-radius: 0.25rem;
+    background-color: #333333;
+    font-weight: 500;
+    font-family: 'IBM Plex Mono', monospace;
+    color: white;
+}
+
 #sessionTagsList {
     box-sizing: border-box;
     width: 100%;
@@ -195,8 +224,22 @@ textarea.Session-Info-Input {
 .Session-Info-Dialog-Close-Button:focus,
 .Session-Info-Dialog:focus,
 .Session-Info-Group:focus,
-.Session-Info-Input:focus {
+.Session-Info-Input:focus,
+.Add-Session-Tag-Input:focus {
     outline: none;
+}
+
+.Add-Session-Tag-Button {
+    display: flex;
+    width: 1.3em;
+    flex: 2;
+    justify-content: right;
+    background-color: #1a1a1a;
+    color: #cccccc;
+    border: 0;
+    font-size: 1.3em;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .Session-Info-Dialog-Close-Button {

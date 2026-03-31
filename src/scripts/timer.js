@@ -14,6 +14,8 @@ const sessionInfoSaveButton = document.getElementById("sessionInfoSaveButton");
 const sessionInfoDialogCloseButton = document.getElementById(
     "sessionInfoDialogCloseButton",
 );
+const addSessionTagInput = document.getElementById("addSessionTagInput");
+const addSessionTagButton = document.getElementById("addSessionTagButton");
 const sessionDate = document.getElementById("sessionDate");
 export const sessionTitle = document.getElementById("sessionTitle");
 export const sessionDescription = document.getElementById("sessionDescription");
@@ -152,6 +154,8 @@ const resetSessionInfoInputs = () => {
             input.value = "";
         },
     );
+    addSessionTagButton.innerHTML = "+";
+    addSessionTagInput.style.visibility = "hidden";
 };
 
 const showSessionInfoDialog = () => {
@@ -193,6 +197,30 @@ sessionInfoDialogCloseButton.addEventListener("click", () => {
 sessionInfoSaveButton.addEventListener("click", (e) => {
     e.preventDefault();
     sessionInfoDialog.close();
+});
+
+addSessionTagButton.addEventListener("click", () => {
+    const buttonText = addSessionTagButton.innerHTML;
+    if (buttonText == "+") {
+        addSessionTagButton.innerHTML = "x";
+        addSessionTagInput.style.visibility = "visible";
+    } else {
+        addSessionTagButton.innerHTML = "+";
+        addSessionTagInput.style.visibility = "hidden";
+        addSessionTagInput.value = "";
+    }
+});
+
+addSessionTagInput.addEventListener("keypress", (e) => {
+    if (e.key == "Enter") {
+        const tagDiv = document.createElement("div");
+        tagDiv.innerHTML = addSessionTagInput.value;
+        tagDiv.className = "Session-Tag-Card";
+        sessionTagsList.appendChild(tagDiv);
+        addSessionTagButton.innerHTML = "+";
+        addSessionTagInput.style.visibility = "hidden";
+        addSessionTagInput.value = "";
+    }
 });
 
 sessionInfoDialog.addEventListener("close", async () => {
