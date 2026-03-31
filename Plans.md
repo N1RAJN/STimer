@@ -2,11 +2,10 @@
 
 ## Session Timer
 
-### Track:
-- Pauses in between session
-- Session start and end timestamp
-- Session duration
-Ability to add links during the on-going session
+- Track pauses in between session
+- Track session start and end timestamp
+- Track session duration
+- Add resources during the on-going session
 
 ### TimerModes:
 1. StopWatch (count up)
@@ -36,7 +35,7 @@ Shown at the end of a session. Allow user to
 ### Sort
 - Session length
 - Recency 
-
+### Actions
 - Update & delete session info
 ---
 ## Failure Resilience:
@@ -62,7 +61,7 @@ Shown at the end of a session. Allow user to
 
 **Timeline of sessions**:  Each session rendered as a rectangle with its duration and timestamp
     
-Inspired by: [Studo](Studo.space) 
+Inspired by: [Studo](https://Studo.space) 
 
 
 
