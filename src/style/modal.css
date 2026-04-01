@@ -1,0 +1,207 @@
+.Session-Info-Dialog {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 1em;
+    width: min(40vw, 350px);
+    height: 90%;
+    border: solid;
+    border-width: min(0.3em, 3px);
+    border-radius: min(0.6em, 8px);
+    border-color: #333333;
+}
+
+@media (max-width: 700px) {
+    .Session-Info-Dialog {
+        width: 90%;
+        margin: 5% auto;
+    }
+}
+
+.Session-Info-Dialog-Inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+
+}
+
+.Dialog-Header-Container {
+    height: 8%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 1.3rem;
+    border: none;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #333333;
+}
+
+.Dialog-Header {
+    font-weight: 700;
+}
+
+.Session-Info-Inputs-Container {
+    margin-top: 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.Session-Info-Group {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+    width: 100%;
+
+    & label {
+        display: block;
+        margin-bottom: 0.3rem;
+    }
+}
+
+div.Session-Info-Group:has(input) {
+    flex: 1;
+}
+
+div.Session-Info-Group:has(div) {
+    flex: 1;
+}
+
+div.Session-Info-Group:has(textarea) {
+    flex: 2;
+
+}
+
+.Session-Info-Input {
+    box-sizing: border-box;
+    width: 100%;
+    height: 50%;
+    padding: 0.5rem;
+    border: solid 1px #666666;
+    border-radius: 0.25rem;
+    background-color: #333333;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: 'IBM Plex Mono', monospace;
+    color: white;
+}
+
+.Session-Tags-List-Label-Container {
+    display: flex;
+    flex-direction: row;
+
+    & label {
+        display: inline;
+        flex: 1;
+    }
+}
+
+.Add-Session-Tag-Container {
+    display: flex;
+    gap: 0.2em;
+
+}
+
+.Add-Session-Tag-Input {
+    flex: 3;
+    visibility: hidden;
+    box-sizing: border-box;
+    padding: 0.2rem;
+    border: solid 1px #666666;
+    border-radius: 0.25rem;
+    background-color: #333333;
+    font-weight: 500;
+    font-family: 'IBM Plex Mono', monospace;
+    color: white;
+}
+
+#sessionTagsList {
+    box-sizing: border-box;
+    width: 100%;
+    height: 50%;
+    padding: 0.5rem 0;
+    gap: 0.2em;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    font-size: 1.1rem;
+    font-weight: 500;
+    font-family: 'IBM Plex Mono', monospace;
+    color: white;
+}
+
+.Session-Tag-Card {
+    width: fit-content;
+    display: flex;
+    box-sizing: border-box;
+    padding: 0 0.4em;
+    align-items: center;
+    justify-content: center;
+    border: solid 1px #666666;
+    border-radius: 0.25rem;
+    background-color: #333333;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+}
+
+.Session-Tag-Card.Selected {
+    background-color: white;
+    color: #333333;
+}
+
+#sessionDate {
+    color: transparent;
+    text-shadow: 0 0 0 white;
+}
+
+textarea.Session-Info-Input {
+    height: 70%;
+    resize: vertical;
+    margin: 0;
+}
+
+.Session-Info-Dialog-Close-Button:focus,
+.Session-Info-Dialog:focus,
+.Session-Info-Group:focus,
+.Session-Info-Input:focus,
+.Add-Session-Tag-Input:focus {
+    outline: none;
+}
+
+.Add-Session-Tag-Button {
+    display: flex;
+    width: 1.3em;
+    flex: 2;
+    justify-content: right;
+    background-color: #1a1a1a;
+    color: #cccccc;
+    border: 0;
+    font-size: 1.3em;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.Session-Info-Dialog-Close-Button {
+    display: flex;
+    background-color: #1a1a1a;
+    color: #cccccc;
+    border: 0;
+    font-size: 0.8em;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.Session-Info-Save-Button {
+    flex: 0.4;
+    width: 100%;
+    background-color: #666666;
+    color: white;
+    cursor: pointer;
+    border-radius: 0.25rem;
+}

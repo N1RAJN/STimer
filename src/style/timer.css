@@ -1,0 +1,57 @@
+.Timer-Container {
+    font-size: clamp(8px, 2vw, 16px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4rem auto;
+    gap: 0.5em;
+    width: fit-content;
+    transition: none;
+    max-width: 50vw;
+}
+
+.Timer-Container.is-Animating {
+    transition: all 0.8s allow-discrete;
+}
+
+.Timer {
+    font-size: 4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Timer-Toggle-Button {
+    padding: 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Timer-Stop-Button {
+    display: none;
+    padding: 0.5em;
+    align-items: flex-start;
+    justify-content: center;
+
+    @starting-style {
+        margin-left: 1rem;
+    }
+}
+
+.Timer-Stop-Button.is-Animating {
+    transition: all 0.8s allow-discrete;
+}
+
+.ButtonSVG {
+    height: 2.1em;
+    width: 2.1em;
+}
+
+.Add-Resource-Button {
+    display: none;
+    font-size: 2rem;
+    font-weight: 1000;
+    user-select: none;
+    cursor: pointer;
+}
