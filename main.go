@@ -12,7 +12,7 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-type sessionInfo struct {
+type sessionInfoObj struct {
 	StartedAt       string `json:"startedAt"`
 	EndedAt         string `json:"endedAt"`
 	Duration        uint16 `json:"duration"`
@@ -28,6 +28,23 @@ type sessionInfo struct {
 type pauseObj struct {
 	StartedAtUnixTime int64
 	EndedAtUnixTime   int64
+}
+type sessionListRequestObj struct {
+	Sort      string `json:"sort"`
+	TimeRange uint16 `json:"timeRange"`
+}
+type sessionListResponseObj struct {
+	StartedAt       uint64
+	EndedAt         uint64
+	Duration        uint16
+	PausesInSession []struct {
+		StartedAt uint64
+		EndedAt   uint64
+	}
+	Title       string
+	Description string
+	Tags        []string
+	Resources   string
 }
 
 var db *sql.DB
@@ -45,6 +62,7 @@ func main() {
 	http.Handle("/", fs)
 	http.HandleFunc("/api/storeSession", storeSessionInfo)
 	http.HandleFunc("/api/getTags", getTagsList)
+	http.HandleFunc("/api/getSession", getSessions)
 
 	fmt.Println("Server running at http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -98,7 +116,7 @@ func createTable() {
 
 func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 	var err error
-	var sessionData sessionInfo
+	var sessionData sessionInfoObj
 	var requestBody []byte
 	var startedTime, endedTime, pauseStartedTime, pauseEndedTime time.Time
 
@@ -244,4 +262,59 @@ func getTagsList(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	io.WriteString(w, string(encodedTags))
+}
+
+func getSessions(w http.ResponseWriter, r *http.Request) {
+	var sessionConstraints sessionListRequestObj
+	requestBody, err := io.ReadAll(r.Body)
+	if err == nil {
+		err = json.Unmarshal(requestBody, &sessionConstraints)
+	}
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		io.WriteString(w, "Invalid request body.")
+		return
+	}
+	sessionWithTagsQuery := `
+	SELECT s.*, GROUP_CONCAT(t.tag_name) as tags
+	FROM session s
+	LEFT JOIN session_tags st ON s.session_id = st.session_id
+	LEFT JOIN tags t ON st.tag_id = t.tag_id
+	GROUP BY s.session_id
+	`
+	sessionWithTags, err := db.Query(sessionWithTagsQuery)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	var (
+		sessionId, started, ended     uint64
+		duration                      uint16
+		title, description, resources string
+		tags                          sql.NullString
+	)
+	for sessionWithTags.Next() {
+		err = sessionWithTags.Scan(&sessionId, &started, &ended, &duration, &title, &description, &resources, &tags)
+		if tags.Valid {
+			fmt.Println(tags)
+		}
+	}
+	pausesQuery := `
+	SELECT session_id, started_At, ended_At 
+	FROM pauses
+	GROUP BY session_id
+	`
+	pauses, err := db.Query(pausesQuery)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	var sId, pStarted, pEnded uint64
+	for pauses.Next() {
+		if err := pauses.Scan(&sId, &pStarted, &pEnded); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	}
 }
