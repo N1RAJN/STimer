@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	_ "modernc.org/sqlite"
@@ -26,8 +27,8 @@ type sessionInfoObj struct {
 	Resources   string   `json:"resources"`
 }
 type pauseObj struct {
-	StartedAtUnixTime int64
-	EndedAtUnixTime   int64
+	StartedAtUnixTime uint64
+	EndedAtUnixTime   uint64
 }
 type sessionListRequestObj struct {
 	Sort      string `json:"sort"`
@@ -37,14 +38,11 @@ type sessionListResponseObj struct {
 	StartedAt       uint64
 	EndedAt         uint64
 	Duration        uint16
-	PausesInSession []struct {
-		StartedAt uint64
-		EndedAt   uint64
-	}
-	Title       string
-	Description string
-	Tags        []string
-	Resources   string
+	Title           string
+	Description     string
+	Resources       string
+	Tags            []string
+	PausesInSession []pauseObj
 }
 
 var db *sql.DB
@@ -177,7 +175,7 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 			io.WriteString(w, "Invalid Time Format.")
 			return
 		}
-		pausesInSession = append(pausesInSession, pauseObj{StartedAtUnixTime: pauseStartedTime.Unix(), EndedAtUnixTime: pauseEndedTime.Unix()})
+		pausesInSession = append(pausesInSession, pauseObj{StartedAtUnixTime: uint64(pauseStartedTime.Unix()), EndedAtUnixTime: uint64(pauseEndedTime.Unix())})
 	}
 
 	pausesQuery := `
@@ -276,45 +274,71 @@ func getSessions(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, "Invalid request body.")
 		return
 	}
-	sessionWithTagsQuery := `
+	// Since only one column of table tag is needed, use aggregation to get the tags in one row
+	sessionWithTagsQuery := ` 
 	SELECT s.*, GROUP_CONCAT(t.tag_name) as tags
 	FROM session s
 	LEFT JOIN session_tags st ON s.session_id = st.session_id
 	LEFT JOIN tags t ON st.tag_id = t.tag_id
 	GROUP BY s.session_id
 	`
+
 	sessionWithTags, err := db.Query(sessionWithTagsQuery)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	sessionList := make(map[uint64]sessionListResponseObj) // actual response obj to send as a json
+	// using maps to groups pauses by the sessionids
+	var session sessionListResponseObj // object to hold each session's info
 	var (
+		// varaibles to build the session Info object
 		sessionId, started, ended     uint64
 		duration                      uint16
 		title, description, resources string
 		tags                          sql.NullString
 	)
+
 	for sessionWithTags.Next() {
 		err = sessionWithTags.Scan(&sessionId, &started, &ended, &duration, &title, &description, &resources, &tags)
+		var tagSlice []string
 		if tags.Valid {
-			fmt.Println(tags)
+			// tags contains all tags associated with the session, separated by comma
+			tagSlice = strings.Split(tags.String, ",")
 		}
+		session = sessionListResponseObj{started, ended, duration, title, description, resources, tagSlice, []pauseObj{}} // keep the pausesInSession empty, and append later
+		sessionList[sessionId] = session
 	}
+
+	// Need multiple columns from pauses table, so do it separately
 	pausesQuery := `
 	SELECT session_id, started_At, ended_At 
 	FROM pauses
-	GROUP BY session_id
-	`
+		`
+	var sId, pStarted, pEnded uint64
 	pauses, err := db.Query(pausesQuery)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	var sId, pStarted, pEnded uint64
 	for pauses.Next() {
 		if err := pauses.Scan(&sId, &pStarted, &pEnded); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
+		fmt.Println(sId, pStarted, pEnded)
+		if pause, ok := sessionList[sId]; ok {
+			pause.PausesInSession = append(pause.PausesInSession, pauseObj{pStarted, pEnded})
+			sessionList[sId] = pause
+		}
 	}
+	encodedList, err := json.Marshal(sessionList)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	io.WriteString(w, string(encodedList))
 }
