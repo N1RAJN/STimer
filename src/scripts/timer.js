@@ -16,6 +16,9 @@ const sessionInfoSaveButton = document.getElementById("sessionInfoSaveButton");
 const sessionInfoDialogCloseButton = document.getElementById(
     "sessionInfoDialogCloseButton",
 );
+const toggleSessionListButton = document.getElementById(
+    "toggleSessionListButton",
+);
 const addSessionTagInput = document.getElementById("addSessionTagInput");
 const addSessionTagButton = document.getElementById("addSessionTagButton");
 const sessionDate = document.getElementById("sessionDate");
@@ -24,9 +27,11 @@ export const sessionDescription = document.getElementById("sessionDescription");
 export const sessionResources = document.getElementById("sessionResources");
 
 const counterDelayMS = 1000;
+var sessionList;
 var timerStarted = false;
 var counterPaused = true;
 var sessionTimerId;
+var isSessionListHidden = true;
 
 export var sessionDuration = { minutes: 0, seconds: 0 };
 export var pauseStartedDate;
@@ -249,4 +254,10 @@ sessionInfoDialog.addEventListener("close", async () => {
         console.log(err);
     }
     resetSessionTimer();
+});
+
+toggleSessionListButton.addEventListener("click", () => {
+    if (timerStarted) return;
+    sessionListContainer.style.display = isSessionListHidden ? "flex" : "none";
+    isSessionListHidden = !isSessionListHidden;
 });
