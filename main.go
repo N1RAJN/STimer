@@ -327,7 +327,6 @@ func getSessions(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-		fmt.Println(sId, pStarted, pEnded)
 		if pause, ok := sessionList[sId]; ok {
 			pause.PausesInSession = append(pause.PausesInSession, pauseObj{pStarted, pEnded})
 			sessionList[sId] = pause

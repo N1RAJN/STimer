@@ -1,0 +1,32 @@
+.Session-List-Container {
+    box-sizing: border-box;
+    border: 1px;
+    border-style: solid;
+    border-color: white;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 95%;
+    max-width: 800px;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.Toggle-Session-List-Button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+}
+
+.Session-List {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 40%;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}

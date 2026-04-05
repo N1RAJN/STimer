@@ -19,6 +19,8 @@ const sessionInfoDialogCloseButton = document.getElementById(
 const toggleSessionListButton = document.getElementById(
     "toggleSessionListButton",
 );
+const sessionListContainer = document.getElementById("sessionListContainer");
+const sessionList = document.getElementById("sessionList");
 const addSessionTagInput = document.getElementById("addSessionTagInput");
 const addSessionTagButton = document.getElementById("addSessionTagButton");
 const sessionDate = document.getElementById("sessionDate");
@@ -26,11 +28,30 @@ export const sessionTitle = document.getElementById("sessionTitle");
 export const sessionDescription = document.getElementById("sessionDescription");
 export const sessionResources = document.getElementById("sessionResources");
 
+const sessionTimeFilter = {
+    Day: 86400, // seconds
+    Week: 604800,
+    Month: 2628288,
+    Year: 3.1536e7,
+};
+
+const sessionSorts = {
+    Duration: {
+        ascending: (a, b) => a[1].Duration - b[1].Duration,
+        descending: (a, b) => b[1].Duration - a[1].Duration,
+    },
+    Recency: {
+        ascending: (a, b) => b[1].StartedAt - a[1].StartedAt, // More recent timestamps have higher UNIX time
+        descending: (a, b) => a[1].StartedAt - b[1].StartedAt,
+    },
+};
+
 const counterDelayMS = 1000;
-var sessionList;
+var sessionsToPopulate;
+var allSessions;
+var sessionTimerId;
 var timerStarted = false;
 var counterPaused = true;
-var sessionTimerId;
 var isSessionListHidden = true;
 
 export var sessionDuration = { minutes: 0, seconds: 0 };
@@ -56,6 +77,17 @@ export var sessionInfo = {
 };
 
 (async () => {
+    const sessions = await fetch("/api/getSession", {
+        method: "POST",
+        body: JSON.stringify({
+            sort: "Today",
+            timeRange: 40000,
+        }),
+    });
+    allSessions = await sessions.json();
+    filterSessionList();
+    sortSessionList();
+    populateSessionList(1);
     const result = await fetch("/api/getTags");
     if (!result.ok) {
         console.error("Fetching the tags failed.");
@@ -69,6 +101,58 @@ export var sessionInfo = {
         sessionTagsList.appendChild(tagDiv);
     });
 })();
+
+function populateSessionList(pageNo = 1) {
+    sessionsToPopulate.forEach(([sessionId, sessionInfo]) => {
+        const sessionInfoCard = document.createElement("div");
+        sessionInfoCard.classList.add("Session-Info-Card");
+        sessionInfoCard.id = sessionId;
+
+        const sessionInfoCardTitle = document.createElement("div");
+        sessionInfoCardTitle.classList.add("Session-Info-Card-Title");
+        sessionInfoCardTitle.innerHTML = sessionInfo.Title;
+
+        const sessionInfoCardTimestamp = document.createElement("div");
+        sessionInfoCardTimestamp.classList.add("Session-Info-Card-Timestamp");
+
+        const sessionDate = new Date(sessionInfo.StartedAt * 1000);
+
+        const timestampDate = document.createElement("span");
+        timestampDate.innerHTML = sessionDate.toLocaleString("en-US", {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+        });
+        const timestampTime = document.createElement("span");
+        timestampTime.innerHTML = sessionDate.toLocaleString("en-US", {
+            hour: "numeric",
+            hour12: true,
+            minute: "numeric",
+        });
+
+        sessionInfoCardTimestamp.appendChild(timestampDate);
+        sessionInfoCardTimestamp.appendChild(timestampTime);
+
+        sessionInfoCard.appendChild(sessionInfoCardTitle);
+        sessionInfoCard.appendChild(sessionInfoCardTimestamp);
+
+        sessionList.appendChild(sessionInfoCard);
+    });
+}
+
+function filterSessionList(filterRange = 86400) {
+    const currentDate = new Date();
+    const currentUnixTimeMS = currentDate.getTime();
+    const timeRange = currentUnixTimeMS / 1000 - filterRange;
+    sessionsToPopulate = Object.entries(allSessions).filter(
+        ([_, sessionObj]) => sessionObj.StartedAt >= timeRange,
+    );
+}
+
+function sortSessionList(sortBy = sessionSorts.Recency.ascending) {
+    sessionsToPopulate.sort(sortBy);
+}
 
 const sessionTimer = () => {
     sessionTimerId = setInterval(() => {
