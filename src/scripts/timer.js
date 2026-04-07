@@ -110,7 +110,9 @@ function populateSessionList(pageNo = 1) {
 
         const sessionInfoCardTitle = document.createElement("div");
         sessionInfoCardTitle.classList.add("Session-Info-Card-Title");
-        sessionInfoCardTitle.innerHTML = sessionInfo.Title;
+        sessionInfoCardTitle.innerHTML = sessionInfo.Title
+            ? sessionInfo.Title
+            : "No-Title";
 
         const sessionInfoCardTimestamp = document.createElement("div");
         sessionInfoCardTimestamp.classList.add("Session-Info-Card-Timestamp");
@@ -118,6 +120,7 @@ function populateSessionList(pageNo = 1) {
         const sessionDate = new Date(sessionInfo.StartedAt * 1000);
 
         const timestampDate = document.createElement("span");
+        timestampDate.classList.add("Timestamp-Date");
         timestampDate.innerHTML = sessionDate.toLocaleString("en-US", {
             weekday: "long",
             month: "long",
@@ -125,6 +128,7 @@ function populateSessionList(pageNo = 1) {
             year: "numeric",
         });
         const timestampTime = document.createElement("span");
+        timestampTime.classList.add("Timestamp-Time");
         timestampTime.innerHTML = sessionDate.toLocaleString("en-US", {
             hour: "numeric",
             hour12: true,
@@ -144,7 +148,7 @@ function populateSessionList(pageNo = 1) {
 function filterSessionList(filterRange = 86400) {
     const currentDate = new Date();
     const currentUnixTimeMS = currentDate.getTime();
-    const timeRange = currentUnixTimeMS / 1000 - filterRange;
+    const timeRange = currentUnixTimeMS / 1000 - filterRange * 5;
     sessionsToPopulate = Object.entries(allSessions).filter(
         ([_, sessionObj]) => sessionObj.StartedAt >= timeRange,
     );

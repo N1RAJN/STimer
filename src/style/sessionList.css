@@ -1,18 +1,3 @@
-.Session-List-Container {
-    box-sizing: border-box;
-    border: 1px;
-    border-style: solid;
-    border-color: white;
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-    width: 95%;
-    max-width: 800px;
-    align-items: center;
-    justify-content: center;
-}
-
-
 .Toggle-Session-List-Button {
     display: flex;
     align-items: center;
@@ -21,12 +6,79 @@
 
 }
 
-.Session-List {
+.Session-List-Container {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 40%;
+    gap: 1px;
+    background-color: #333333;
+    color: white;
+    box-sizing: border-box;
+    margin: 0 auto;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    border: solid;
+    border-width: min(0.2em, 2px);
+    border-radius: min(0.5em, 6px);
+    border-color: #333333;
+
+    width: 95%;
+    max-width: 800px;
+    height: 80vh;
 }
+
+.Session-List-Header-Container {
+    font-size: 1.5em;
+    width: 100%;
+    max-height: 50px;
+    box-sizing: border-box;
+    background-color: #222222;
+    display: flex;
+    border-radius: min(0.5em, 6px);
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.Session-List-Header {
+    text-align: left;
+}
+
+.Session-List {
+    box-sizing: border-box;
+    width: 100%;
+    height: 40%;
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1em;
+    border-radius: min(0.5em, 6px);
+    min-height: 0;
+    overflow-y: scroll;
+}
+
+.Session-Info-Card {
+    box-sizing: border-box;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: 0.5em;
+    border-radius: 0.5px;
+    background-color: #1a1a1a;
+}
+
+.Session-Info-Card-Title {
+    font-size: 1.3em;
+}
+
+.Session-Info-Card-Timestamp {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5em;
+    font-size: 1em;
+}
+
+.Timestamp-Date {}
+
+.Timestamp-Time {}
