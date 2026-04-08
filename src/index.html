@@ -51,6 +51,27 @@
     <div id="sessionListContainer" class="Session-List-Container">
         <div id="sessionListHeaderContainer" class="Session-List-Header-Container">
             <div id="sessionListHeader" class="Session-List-Header">Study Session Log</div>
+            <div class="Session-List-Dropdown-Container">
+                <div class="Session-List-Dropdown">
+                    <select name="sessionListFilter" id="sessionListFilter">
+                        <option value="Day">Today</option>
+                        <option value="Week">This Week</option>
+                        <option value="Month">This Month</option>
+                        <option value="Year">This year</option>
+                        <option value="All">All time</option>
+                    </select>
+
+                </div>
+                <div class="Session-List-Dropdown">
+                    <select name="sessionListSort" id="sessionListSort">
+                        <option value="Recency.Ascen">Most Recent</option>
+                        <option value="Recency.Desc">Least Recent</option>
+                        <option value="Duration.Ascen">Longest</option>
+                        <option value="Duration.Desc">Shortest</option>
+                    </select>
+
+                </div>
+            </div>
         </div>
         <div id="sessionList" class="Session-List">
         </div>

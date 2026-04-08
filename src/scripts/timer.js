@@ -153,7 +153,13 @@ function populateSessionList() {
             hour12: true,
             minute: "numeric",
         });
+
+        const timestampDuration = document.createElement("span");
+        timestampDuration.classList.add("Timestamp-Duration");
+        timestampDuration.innerHTML = `${(sessionInfo.Duration / 60).toFixed(0)} mins`;
+
         sessionInfoCardTimestamp.appendChild(timestampTime);
+        sessionInfoCardTimestamp.appendChild(timestampDuration);
 
         sessionInfoCard.appendChild(sessionInfoCardTitle);
         sessionInfoCard.appendChild(sessionInfoCardTimestamp);
