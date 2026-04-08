@@ -28,13 +28,28 @@ export const sessionTitle = document.getElementById("sessionTitle");
 export const sessionDescription = document.getElementById("sessionDescription");
 export const sessionResources = document.getElementById("sessionResources");
 
+const currDate = new Date();
 const sessionTimeFilter = {
-    Day: 86400, // seconds
-    Week: 604800,
-    Month: 2628288,
-    Year: 3.1536e7,
+    Day:
+        new Date(
+            currDate.getFullYear(),
+            currDate.getMonth(),
+            currDate.getDate(),
+        ).getTime() / 1000,
+    Week:
+        new Date(
+            currDate.getFullYear(),
+            currDate.getMonth(),
+            currDate.getDate() - currDate.getDay(),
+        ).getTime() / 1000,
+    Month:
+        new Date(currDate.getFullYear(), currDate.getMonth(), 1).getTime() /
+        1000,
+    Year: new Date(currDate.getFullYear(), 0, 1).getTime() / 1000,
+    All: 0,
 };
 
+console.log(sessionTimeFilter);
 const sessionSorts = {
     Duration: {
         ascending: (a, b) => a[1].Duration - b[1].Duration,
@@ -47,6 +62,8 @@ const sessionSorts = {
 };
 
 const counterDelayMS = 1000;
+var currentSort = sessionSorts.Recency.ascending;
+var currentFilter = sessionTimeFilter.Week;
 var sessionsToPopulate;
 var allSessions;
 var sessionTimerId;
@@ -85,9 +102,9 @@ export var sessionInfo = {
         }),
     });
     allSessions = await sessions.json();
-    filterSessionList();
-    sortSessionList();
-    populateSessionList(1);
+    filterSessionList(currentFilter);
+    sortSessionList(currentSort);
+    populateSessionList();
     const result = await fetch("/api/getTags");
     if (!result.ok) {
         console.error("Fetching the tags failed.");
@@ -102,7 +119,7 @@ export var sessionInfo = {
     });
 })();
 
-function populateSessionList(pageNo = 1) {
+function populateSessionList() {
     sessionsToPopulate.forEach(([sessionId, sessionInfo]) => {
         const sessionInfoCard = document.createElement("div");
         sessionInfoCard.classList.add("Session-Info-Card");
@@ -112,21 +129,23 @@ function populateSessionList(pageNo = 1) {
         sessionInfoCardTitle.classList.add("Session-Info-Card-Title");
         sessionInfoCardTitle.innerHTML = sessionInfo.Title
             ? sessionInfo.Title
-            : "No-Title";
+            : "—";
 
         const sessionInfoCardTimestamp = document.createElement("div");
         sessionInfoCardTimestamp.classList.add("Session-Info-Card-Timestamp");
 
         const sessionDate = new Date(sessionInfo.StartedAt * 1000);
 
-        const timestampDate = document.createElement("span");
-        timestampDate.classList.add("Timestamp-Date");
-        timestampDate.innerHTML = sessionDate.toLocaleString("en-US", {
-            weekday: "long",
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-        });
+        if (currentFilter != sessionTimeFilter.Day) {
+            const timestampDate = document.createElement("span");
+            timestampDate.classList.add("Timestamp-Date");
+            timestampDate.innerHTML = sessionDate.toLocaleString(
+                "en-US",
+                formatSessionOptions(),
+            );
+            sessionInfoCardTimestamp.appendChild(timestampDate);
+        }
+
         const timestampTime = document.createElement("span");
         timestampTime.classList.add("Timestamp-Time");
         timestampTime.innerHTML = sessionDate.toLocaleString("en-US", {
@@ -134,8 +153,6 @@ function populateSessionList(pageNo = 1) {
             hour12: true,
             minute: "numeric",
         });
-
-        sessionInfoCardTimestamp.appendChild(timestampDate);
         sessionInfoCardTimestamp.appendChild(timestampTime);
 
         sessionInfoCard.appendChild(sessionInfoCardTitle);
@@ -145,16 +162,31 @@ function populateSessionList(pageNo = 1) {
     });
 }
 
-function filterSessionList(filterRange = 86400) {
-    const currentDate = new Date();
-    const currentUnixTimeMS = currentDate.getTime();
-    const timeRange = currentUnixTimeMS / 1000 - filterRange * 5;
+function formatSessionOptions() {
+    let formatOptions = {};
+    if (
+        currentFilter <= sessionTimeFilter.Week ||
+        currentFilter == sessionTimeFilter.Month
+    ) {
+        formatOptions.weekday = "short";
+        formatOptions.day = "numeric";
+    }
+    if (currentFilter <= sessionTimeFilter.Year) {
+        formatOptions.month = "short";
+    }
+    if (currentFilter <= sessionTimeFilter.All) {
+        formatOptions.year = "numeric";
+    }
+    return formatOptions;
+}
+
+function filterSessionList(filterRange = currentFilter) {
     sessionsToPopulate = Object.entries(allSessions).filter(
-        ([_, sessionObj]) => sessionObj.StartedAt >= timeRange,
+        ([_, sessionObj]) => sessionObj.StartedAt >= filterRange,
     );
 }
 
-function sortSessionList(sortBy = sessionSorts.Recency.ascending) {
+function sortSessionList(sortBy = currentSort) {
     sessionsToPopulate.sort(sortBy);
 }
 
