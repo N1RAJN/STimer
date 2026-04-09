@@ -21,6 +21,8 @@ const toggleSessionListButton = document.getElementById(
 );
 const sessionListContainer = document.getElementById("sessionListContainer");
 const sessionList = document.getElementById("sessionList");
+const sessionFilterDropdown = document.getElementById("sessionListFilter");
+const sessionSortDropdown = document.getElementById("sessionListSort");
 const addSessionTagInput = document.getElementById("addSessionTagInput");
 const addSessionTagButton = document.getElementById("addSessionTagButton");
 const sessionDate = document.getElementById("sessionDate");
@@ -49,7 +51,6 @@ const sessionTimeFilter = {
     All: 0,
 };
 
-console.log(sessionTimeFilter);
 const sessionSorts = {
     Duration: {
         ascending: (a, b) => a[1].Duration - b[1].Duration,
@@ -63,7 +64,7 @@ const sessionSorts = {
 
 const counterDelayMS = 1000;
 var currentSort = sessionSorts.Recency.ascending;
-var currentFilter = sessionTimeFilter.Week;
+var currentFilter = sessionTimeFilter.Day;
 var sessionsToPopulate;
 var allSessions;
 var sessionTimerId;
@@ -102,8 +103,8 @@ export var sessionInfo = {
         }),
     });
     allSessions = await sessions.json();
-    filterSessionList(currentFilter);
-    sortSessionList(currentSort);
+    filterSessionList();
+    sortSessionList();
     populateSessionList();
     const result = await fetch("/api/getTags");
     if (!result.ok) {
@@ -120,6 +121,7 @@ export var sessionInfo = {
 })();
 
 function populateSessionList() {
+    sessionList.innerHTML = "";
     sessionsToPopulate.forEach(([sessionId, sessionInfo]) => {
         const sessionInfoCard = document.createElement("div");
         sessionInfoCard.classList.add("Session-Info-Card");
@@ -186,14 +188,14 @@ function formatSessionOptions() {
     return formatOptions;
 }
 
-function filterSessionList(filterRange = currentFilter) {
+function filterSessionList() {
     sessionsToPopulate = Object.entries(allSessions).filter(
-        ([_, sessionObj]) => sessionObj.StartedAt >= filterRange,
+        ([_, sessionObj]) => sessionObj.StartedAt >= currentFilter,
     );
 }
 
-function sortSessionList(sortBy = currentSort) {
-    sessionsToPopulate.sort(sortBy);
+function sortSessionList() {
+    sessionsToPopulate.sort(currentSort);
 }
 
 const sessionTimer = () => {
@@ -386,4 +388,18 @@ toggleSessionListButton.addEventListener("click", () => {
     if (timerStarted) return;
     sessionListContainer.style.display = isSessionListHidden ? "flex" : "none";
     isSessionListHidden = !isSessionListHidden;
+});
+
+sessionFilterDropdown.addEventListener("change", () => {
+    currentFilter = sessionTimeFilter[sessionFilterDropdown.value];
+    filterSessionList();
+    sortSessionList();
+    populateSessionList();
+});
+
+sessionSortDropdown.addEventListener("change", () => {
+    const sort = sessionSortDropdown.value.split(".");
+    currentSort = sessionSorts[sort[0]][sort[1]];
+    sortSessionList();
+    populateSessionList();
 });
