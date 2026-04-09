@@ -7,7 +7,7 @@
 }
 
 .Session-List-Container {
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 1px;
     background-color: #333333;
@@ -65,6 +65,7 @@
         font-size: 1em;
         font-weight: 500;
         width: 100%;
+        padding: 0.3em;
         background-color: #333333;
         color: white;
         border: 1px solid #333333;
@@ -103,25 +104,26 @@
     align-items: center;
     font-size: 1.3em;
     min-width: 7em;
-    flex: 6;
+    flex: 1;
 }
 
 .Session-Info-Card-Timestamp {
+    box-sizing: border-box;
     display: flex;
     flex-direction: row;
-    gap: 1.5em;
-    flex: 4;
+    gap: 0.8em;
+    flex: 1;
     align-items: center;
+    justify-content: space-around;
     font-size: 1em;
 }
 
 .Timestamp-Date {
-
+    white-space: nowrap;
     font-weight: 250;
 }
 
 .Timestamp-Time {
-
     font-weight: 350;
 }
 

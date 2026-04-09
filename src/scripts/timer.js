@@ -232,7 +232,7 @@ const toggleFullScreenTimer = () => {
         timerContainer.classList.remove("is-Animating");
         timerStopButton.classList.remove("is-Animating");
     }, 1000);
-    timerContainer.style.marginTop = timerStarted ? "8rem" : "4rem";
+    timerContainer.style.marginTop = timerStarted ? "10rem" : "6rem";
     timerContainer.style.scale = timerStarted ? 1.6 : 1;
 };
 
@@ -388,6 +388,8 @@ toggleSessionListButton.addEventListener("click", () => {
     if (timerStarted) return;
     sessionListContainer.style.display = isSessionListHidden ? "flex" : "none";
     isSessionListHidden = !isSessionListHidden;
+    timerContainer.style.marginTop = isSessionListHidden ? "6rem" : "1rem";
+    timerContainer.style.marginBottom = isSessionListHidden ? "6rem" : "1rem";
 });
 
 sessionFilterDropdown.addEventListener("change", () => {
