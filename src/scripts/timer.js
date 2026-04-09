@@ -78,20 +78,20 @@ export var sessionStartedDate;
 export var pauseEndedDate;
 export var sessionEndedDate;
 export var sessionInfo = {
-    startedAt: "",
-    endedAt: "",
-    duration: "",
-    pausesInSession: [
+    StartedAt: 0,
+    EndedAt: 0,
+    Duration: "",
+    PausesInSession: [
         /*
         {
             startedAt: "",
             endedAt: "",
         },*/
     ],
-    title: "", // General indication of what I did (eg, neetcode )
-    description: "", // What I did specifically (eg backtracking, problem name)
-    tags: [], // What kind of work did I spend my time on (eg DSA)
-    resources: "", // Resources that I used (eg link of the problem i solved, solutions i may have used)
+    Title: "", // General indication of what I did (eg, neetcode )
+    Description: "", // What I did specifically (eg backtracking, problem name)
+    Tags: [], // What kind of work did I spend my time on (eg DSA)
+    Resources: "", // Resources that I used (eg link of the problem i solved, solutions i may have used)
 };
 
 (async () => {
@@ -274,13 +274,13 @@ const resetSessionTimer = () => {
     sessionDuration.minutes = 0;
     sessionDuration.seconds = 0;
     sessionInfo = {
-        startedAt: "",
-        endedAt: "",
-        pausesInSession: [],
-        title: "",
-        description: "",
-        tags: [],
-        resources: "",
+        StartedAt: 0,
+        EndedAt: 0,
+        PausesInSession: [],
+        Title: "",
+        Description: "",
+        Tags: [],
+        Resources: "",
     };
 };
 

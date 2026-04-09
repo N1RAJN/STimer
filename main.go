@@ -8,27 +8,26 @@ import (
 	"log"
 	"net/http"
 	"strings"
-	"time"
 
 	_ "modernc.org/sqlite"
 )
 
 type sessionInfoObj struct {
-	StartedAt       string `json:"startedAt"`
-	EndedAt         string `json:"endedAt"`
-	Duration        uint16 `json:"duration"`
+	StartedAt       uint64 `json:"StartedAt"`
+	EndedAt         uint64 `json:"EndedAt"`
+	Duration        uint16 `json:"Duration"`
 	PausesInSession []struct {
-		StartedAt string `json:"startedAt"`
-		EndedAt   string `json:"endedAt"`
-	} `json:"pausesInSession"`
-	Title       string   `json:"title"`
-	Description string   `json:"description"`
-	Tags        []string `json:"tags"`
-	Resources   string   `json:"resources"`
+		StartedAt uint64 `json:"StartedAt"`
+		EndedAt   uint64 `json:"EndedAt"`
+	} `json:"PausesInSession"`
+	Title       string   `json:"Title"`
+	Description string   `json:"Description"`
+	Tags        []string `json:"Tags"`
+	Resources   string   `json:"Resources"`
 }
 type pauseObj struct {
-	StartedAtUnixTime uint64
-	EndedAtUnixTime   uint64
+	StartedAt uint64
+	EndedAt   uint64
 }
 type sessionListRequestObj struct {
 	Sort      string `json:"sort"`
@@ -116,7 +115,6 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 	var err error
 	var sessionData sessionInfoObj
 	var requestBody []byte
-	var startedTime, endedTime, pauseStartedTime, pauseEndedTime time.Time
 
 	requestBody, err = io.ReadAll(r.Body)
 	if err == nil {
@@ -125,21 +123,12 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		fmt.Println(err)
 		io.WriteString(w, "Invalid request body.")
 		return
 	}
-	// Parse the ISO 8601 timestamp
-	startedTime, err = time.Parse(time.RFC3339Nano, sessionData.StartedAt)
-	if err == nil {
-		endedTime, err = time.Parse(time.RFC3339Nano, sessionData.EndedAt)
-	}
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		io.WriteString(w, "Invalid Time Format.")
-		return
-	}
-	startedUnixTime := startedTime.Unix()
-	endedUnixTime := endedTime.Unix()
+	startedTime := sessionData.StartedAt
+	endedTime := sessionData.EndedAt
 	duration := sessionData.Duration
 	title := sessionData.Title
 	description := sessionData.Description
@@ -156,7 +145,7 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 	INSERT INTO session(started_at, ended_at, duration, title, description, resources)
 	Values(?, ?, ?, ?, ?, ?)
 	`
-	sessionQueryResult, queryErr := tx.Exec(sessionQuery, startedUnixTime, endedUnixTime, duration, title, description, resources)
+	sessionQueryResult, queryErr := tx.Exec(sessionQuery, startedTime, endedTime, duration, title, description, resources)
 	if queryErr != nil {
 		tx.Rollback()
 		w.WriteHeader(http.StatusInternalServerError)
@@ -165,17 +154,7 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 	}
 	var pausesInSession []pauseObj
 	for _, pause := range sessionData.PausesInSession {
-		pauseStartedTime, err = time.Parse(time.RFC3339Nano, pause.StartedAt)
-		if err == nil {
-			pauseEndedTime, err = time.Parse(time.RFC3339Nano, pause.EndedAt)
-		}
-		if err != nil {
-			tx.Rollback()
-			w.WriteHeader(http.StatusBadRequest)
-			io.WriteString(w, "Invalid Time Format.")
-			return
-		}
-		pausesInSession = append(pausesInSession, pauseObj{StartedAtUnixTime: uint64(pauseStartedTime.Unix()), EndedAtUnixTime: uint64(pauseEndedTime.Unix())})
+		pausesInSession = append(pausesInSession, pauseObj{StartedAt: pause.StartedAt, EndedAt: pause.EndedAt})
 	}
 
 	pausesQuery := `
@@ -189,7 +168,7 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	for _, pause := range pausesInSession {
-		_, err = tx.Exec(pausesQuery, sessionId, pause.StartedAtUnixTime, pause.EndedAtUnixTime)
+		_, err = tx.Exec(pausesQuery, sessionId, pause.StartedAt, pause.EndedAt)
 		if err != nil {
 			tx.Rollback()
 			w.WriteHeader(http.StatusInternalServerError)
@@ -226,7 +205,8 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 	tx.Commit()
 
 	w.WriteHeader(http.StatusOK)
-	io.WriteString(w, "Session Info saved")
+	message := fmt.Sprintf("Session Info Saved#%d", sessionId)
+	io.WriteString(w, message)
 }
 
 func getTagsList(w http.ResponseWriter, r *http.Request) {

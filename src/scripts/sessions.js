@@ -13,16 +13,16 @@ import {
 export const saveSessionInfo = async () => {
     const selectedTags = document.getElementsByClassName("Selected");
     Array.from(selectedTags).map((tag) => {
-        sessionInfo.tags.push(tag.innerHTML);
+        sessionInfo.Tags.push(tag.innerHTML);
         tag.classList.remove("Selected");
     });
-    sessionInfo.endedAt = sessionEndedDate.toISOString();
-    sessionInfo.startedAt = sessionStartedDate.toISOString();
-    sessionInfo.duration =
+    sessionInfo.EndedAt = +(sessionEndedDate.getTime() / 1000).toFixed(0);
+    sessionInfo.StartedAt = +(sessionStartedDate.getTime() / 1000).toFixed(0);
+    sessionInfo.Duration =
         sessionDuration.minutes * 60 + sessionDuration.seconds;
-    sessionInfo.title = sessionTitle.value;
-    sessionInfo.description = sessionDescription.value;
-    sessionInfo.resources = sessionResources.value.trim();
+    sessionInfo.Title = sessionTitle.value;
+    sessionInfo.Description = sessionDescription.value;
+    sessionInfo.Resources = sessionResources.value.trim();
     try {
         const result = await fetch("api/storeSession", {
             method: "POST",
@@ -38,9 +38,9 @@ export const saveSessionInfo = async () => {
     }
 };
 export const savePauseInfo = () => {
-    const pauseEndedAt = pauseEndedDate.toISOString();
-    const pauseStartedAt = pauseStartedDate.toISOString();
-    sessionInfo.pausesInSession.push({
+    const pauseEndedAt = +(pauseEndedDate.getTime() / 1000).toFixed(0);
+    const pauseStartedAt = +(pauseStartedDate.toISOString() / 1000).toFixed(0);
+    sessionInfo.PausesInSession.push({
         startedAt: pauseStartedAt,
         endedAt: pauseEndedAt,
     });
