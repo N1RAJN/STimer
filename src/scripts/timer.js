@@ -232,6 +232,8 @@ const toggleFullScreenTimer = () => {
         timerContainer.classList.remove("is-Animating");
         timerStopButton.classList.remove("is-Animating");
     }, 1000);
+    sessionListContainer.style.display = "none";
+    isSessionListHidden = true;
     timerContainer.style.marginTop = timerStarted ? "10rem" : "6rem";
     timerContainer.style.scale = timerStarted ? 1.6 : 1;
 };
@@ -375,8 +377,13 @@ sessionInfoDialog.addEventListener("close", async () => {
             console.log("Some Error Occured!");
             return;
         }
-        const message = await result.text();
-        console.log(message);
+        const response = await result.text();
+        const message = response.split("#");
+        console.log(message[0]);
+        allSessions[message[1]] = JSON.parse(JSON.stringify(sessionInfo));
+        filterSessionList();
+        sortSessionList();
+        populateSessionList();
         resetSessionInfoInputs();
     } catch (err) {
         console.log(err);
