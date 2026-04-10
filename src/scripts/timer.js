@@ -69,6 +69,7 @@ var timerStarted = false;
 var timerPaused = true;
 var isSessionListHidden = true;
 
+export var unsaved = false;
 export var sessionDuration = { minutes: 0, seconds: 0 };
 export var pauseStartedDate;
 export var sessionStartedDate;
@@ -117,6 +118,14 @@ export var sessionInfo = {
     });
 })();
 
+(function checkUnsavedSession() {
+    const session = localStorage.getItem("activeSession");
+    if (!session) return;
+    unsaved = true;
+    sessionInfo = JSON.parse(session);
+    sessionResources.value = sessionInfo.Resources;
+    showSessionInfoDialog("Unsaved Session.", "Save session");
+})();
 function populateSessionList() {
     sessionList.innerHTML = "";
     sessionsToPopulate.forEach(([sessionId, sessionInfo]) => {
@@ -217,6 +226,7 @@ const storeSessionLocal = () => {
             }
             sessionCopy.PausesInSession = pauses;
         }
+        sessionCopy.Resources = sessionResources.value.trim();
         localStorage.setItem("activeSession", JSON.stringify(sessionCopy));
     }, 3000);
 };
@@ -321,10 +331,13 @@ const resetSessionInfoInputs = () => {
     addSessionTagInput.style.visibility = "hidden";
 };
 
-const showSessionInfoDialog = () => {
-    sessionDate.value = sessionStartedDate.toDateString();
+function showSessionInfoDialog(header, button) {
+    if (!unsaved) sessionDate.value = sessionStartedDate.toDateString();
+    else sessionDate.value = new Date(sessionInfo.StartedAt).toDateString();
+    sessionInfoDialogHeader.innerHTML = header;
+    sessionInfoSaveButton.innerText = button;
     sessionInfoDialog.showModal();
-};
+}
 
 sessionTagsList.addEventListener("click", (e) => {
     const classes = e.target.classList;
@@ -350,15 +363,11 @@ timerStopButton.addEventListener("click", () => {
         savePauseInfo();
     }
     resetDisplayedTimer();
-    sessionInfoDialogHeader.innerHTML = "Session Completed!";
-    sessionInfoSaveButton.innerText = "Save Session";
-    showSessionInfoDialog();
+    showSessionInfoDialog("Session Completed!", "Save Session");
 });
 
 addResourceButton.addEventListener("click", () => {
-    sessionInfoDialogHeader.innerHTML = "Add Resources You Used.";
-    sessionInfoSaveButton.innerText = "Add";
-    showSessionInfoDialog();
+    showSessionInfoDialog("Add Resources You Used.", "Add");
 });
 
 sessionInfoDialogCloseButton.addEventListener("click", () => {
@@ -403,7 +412,8 @@ sessionInfoDialog.addEventListener("close", async () => {
             return;
         }
         resetSessionTimer();
-        //localStorage.removeItem("activeSession");
+        localStorage.removeItem("activeSession");
+        unsaved = false;
         const response = await result.text();
         const message = response.split("#");
         console.log(message[0]);
