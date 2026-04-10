@@ -23,6 +23,7 @@ export const saveSessionInfo = async () => {
     sessionInfo.Title = sessionTitle.value;
     sessionInfo.Description = sessionDescription.value;
     sessionInfo.Resources = sessionResources.value.trim();
+    localStorage.setItem("activeSession", JSON.stringify(sessionInfo));
     try {
         const result = await fetch("api/storeSession", {
             method: "POST",
@@ -38,10 +39,14 @@ export const saveSessionInfo = async () => {
     }
 };
 export const savePauseInfo = () => {
-    const pauseStartedAt = +pauseStartedDate.getTime();
-    const pauseEndedAt = +pauseEndedDate.getTime();
-    sessionInfo.PausesInSession.push({
-        startedAt: pauseStartedAt,
-        endedAt: pauseEndedAt,
-    });
+    const pauseInfo = {
+        startedAt: +pauseStartedDate.getTime(),
+        endedAt: +pauseEndedDate.getTime(),
+    };
+    sessionInfo.PausesInSession.push(pauseInfo);
+    let localSessionCopy = JSON.parse(localStorage.getItem("activeSession"));
+    localSessionCopy.PausesInSession[
+        localSessionCopy.PausesInSession.length - 1
+    ] = pauseInfo;
+    localStorage.setItem("activeSession", JSON.stringify(localSessionCopy));
 };

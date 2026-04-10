@@ -64,6 +64,7 @@ var currentFilter = sessionTimeFilter.Day;
 var sessionsToPopulate;
 var allSessions;
 var sessionTimerId;
+var localSessionId;
 var timerStarted = false;
 var timerPaused = true;
 var isSessionListHidden = true;
@@ -194,6 +195,31 @@ function sortSessionList() {
     sessionsToPopulate.sort(currentSort);
 }
 
+const storeSessionLocal = () => {
+    localSessionId = setInterval(() => {
+        let sessionCopy = JSON.parse(JSON.stringify(sessionInfo));
+        sessionCopy.StartedAt = +sessionStartedDate.getTime();
+        sessionCopy.Duration =
+            sessionDuration.minutes * 60 + sessionDuration.seconds;
+        sessionCopy.EndedAt = +new Date().getTime();
+        let pauses = sessionCopy.PausesInSession;
+        if (timerPaused) {
+            if (pauses.length == 0) {
+                pauses.push({
+                    StartedAt: pauseStartedDate.getTime(),
+                    EndedAt: +new Date().getTime(),
+                });
+            } else {
+                pauses[pauses.length - 1] = {
+                    StartedAt: pauseStartedDate.getTime(),
+                    EndedAt: +new Date().getTime(),
+                };
+            }
+            sessionCopy.PausesInSession = pauses;
+        }
+        localStorage.setItem("activeSession", JSON.stringify(sessionCopy));
+    }, 3000);
+};
 const sessionTimer = () => {
     sessionTimerId = setInterval(() => {
         sessionDuration.seconds = (sessionDuration.seconds + 1) % 60;
@@ -239,6 +265,7 @@ const startSessionTimer = () => {
     sessionStartedDate = new Date();
     timerStarted = true;
     timerPaused = false;
+    storeSessionLocal();
     toggleFullScreenTimer();
     toggleTimerStopButton();
     sessionTimer();
@@ -250,15 +277,16 @@ const toggleSessionTimer = () => {
         clearInterval(sessionTimerId);
         pauseStartedDate = new Date();
     } else {
+        timerPaused = false;
         pauseEndedDate = new Date();
         savePauseInfo();
-        timerPaused = false;
         sessionTimer();
     }
 };
 
 const resetDisplayedTimer = () => {
     clearTimeout(sessionTimerId);
+    clearTimeout(localSessionId);
     timerStarted = false;
     timerPaused = true;
     timerMinutes.innerHTML = "00";
@@ -374,6 +402,8 @@ sessionInfoDialog.addEventListener("close", async () => {
             console.log("Some Error Occured!");
             return;
         }
+        resetSessionTimer();
+        //localStorage.removeItem("activeSession");
         const response = await result.text();
         const message = response.split("#");
         console.log(message[0]);
@@ -385,7 +415,6 @@ sessionInfoDialog.addEventListener("close", async () => {
     } catch (err) {
         console.log(err);
     }
-    resetSessionTimer();
 });
 
 toggleSessionListButton.addEventListener("click", () => {
