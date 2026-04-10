@@ -32,22 +32,18 @@ export const sessionResources = document.getElementById("sessionResources");
 
 const currDate = new Date();
 const sessionTimeFilter = {
-    Day:
-        new Date(
-            currDate.getFullYear(),
-            currDate.getMonth(),
-            currDate.getDate(),
-        ).getTime() / 1000,
-    Week:
-        new Date(
-            currDate.getFullYear(),
-            currDate.getMonth(),
-            currDate.getDate() - currDate.getDay(),
-        ).getTime() / 1000,
-    Month:
-        new Date(currDate.getFullYear(), currDate.getMonth(), 1).getTime() /
-        1000,
-    Year: new Date(currDate.getFullYear(), 0, 1).getTime() / 1000,
+    Day: new Date(
+        currDate.getFullYear(),
+        currDate.getMonth(),
+        currDate.getDate(),
+    ).getTime(),
+    Week: new Date(
+        currDate.getFullYear(),
+        currDate.getMonth(),
+        currDate.getDate() - currDate.getDay(),
+    ).getTime(),
+    Month: new Date(currDate.getFullYear(), currDate.getMonth(), 1).getTime(),
+    Year: new Date(currDate.getFullYear(), 0, 1).getTime(),
     All: 0,
 };
 
@@ -69,7 +65,7 @@ var sessionsToPopulate;
 var allSessions;
 var sessionTimerId;
 var timerStarted = false;
-var counterPaused = true;
+var timerPaused = true;
 var isSessionListHidden = true;
 
 export var sessionDuration = { minutes: 0, seconds: 0 };
@@ -214,6 +210,7 @@ const sessionTimer = () => {
         timerSeconds.innerHTML = displayedSecond;
     }, counterDelayMS);
 };
+
 const toggleTimerControlButton = () => {
     const buttonState = timerButtonState.innerHTML;
     timerButtonState.innerHTML = buttonState == "Play" ? "Pause" : "Play";
@@ -241,21 +238,21 @@ const toggleFullScreenTimer = () => {
 const startSessionTimer = () => {
     sessionStartedDate = new Date();
     timerStarted = true;
-    counterPaused = false;
+    timerPaused = false;
     toggleFullScreenTimer();
     toggleTimerStopButton();
     sessionTimer();
 };
 
 const toggleSessionTimer = () => {
-    if (!counterPaused) {
-        counterPaused = true;
+    if (!timerPaused) {
+        timerPaused = true;
         clearInterval(sessionTimerId);
         pauseStartedDate = new Date();
     } else {
         pauseEndedDate = new Date();
         savePauseInfo();
-        counterPaused = false;
+        timerPaused = false;
         sessionTimer();
     }
 };
@@ -263,7 +260,7 @@ const toggleSessionTimer = () => {
 const resetDisplayedTimer = () => {
     clearTimeout(sessionTimerId);
     timerStarted = false;
-    counterPaused = true;
+    timerPaused = true;
     timerMinutes.innerHTML = "00";
     timerSeconds.innerHTML = "00";
     timerButtonState.innerHTML = "Play";
@@ -320,7 +317,7 @@ timerToggleButton.addEventListener("click", () => {
 
 timerStopButton.addEventListener("click", () => {
     sessionEndedDate = new Date();
-    if (counterPaused) {
+    if (timerPaused) {
         pauseEndedDate = new Date();
         savePauseInfo();
     }

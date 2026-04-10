@@ -16,8 +16,8 @@ export const saveSessionInfo = async () => {
         sessionInfo.Tags.push(tag.innerHTML);
         tag.classList.remove("Selected");
     });
-    sessionInfo.EndedAt = +(sessionEndedDate.getTime() / 1000).toFixed(0);
-    sessionInfo.StartedAt = +(sessionStartedDate.getTime() / 1000).toFixed(0);
+    sessionInfo.EndedAt = +sessionEndedDate.getTime();
+    sessionInfo.StartedAt = +sessionStartedDate.getTime();
     sessionInfo.Duration =
         sessionDuration.minutes * 60 + sessionDuration.seconds;
     sessionInfo.Title = sessionTitle.value;
@@ -38,8 +38,8 @@ export const saveSessionInfo = async () => {
     }
 };
 export const savePauseInfo = () => {
-    const pauseEndedAt = +(pauseEndedDate.getTime() / 1000).toFixed(0);
-    const pauseStartedAt = +(pauseStartedDate.toISOString() / 1000).toFixed(0);
+    const pauseStartedAt = +pauseStartedDate.getTime();
+    const pauseEndedAt = +pauseEndedDate.getTime();
     sessionInfo.PausesInSession.push({
         startedAt: pauseStartedAt,
         endedAt: pauseEndedAt,
