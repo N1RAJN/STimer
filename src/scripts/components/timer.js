@@ -71,8 +71,12 @@ function startSessionTimer(storeSessionLocal) {
 function toggleSessionTimer(savePauseInfo) {
     if (!state.timerPaused) {
         state.timerPaused = true;
-        clearInterval(globals.sessionTimerId);
         globals.pauseStartedDate = new Date();
+        globals.sessionInfo.PausesInSession.push({
+            StartedAt: +new Date().getTime(),
+            EndedAt: null,
+        });
+        clearInterval(globals.sessionTimerId);
     } else {
         state.timerPaused = false;
         globals.pauseEndedDate = new Date();

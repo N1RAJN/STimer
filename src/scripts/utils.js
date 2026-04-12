@@ -31,4 +31,4 @@ export const sessionSorts = {
     },
 };
 export const counterDelayMS = 1000;
-export const saveIntervalMs = 3000;
+export const saveIntervalMs = 10000;

@@ -8,10 +8,8 @@ import {
 import { state, globals } from "../state.js";
 export async function saveSessionInfo() {
     const selectedTags = document.getElementsByClassName("Selected");
-    if (!state.sessionUnsaved) {
-        globals.sessionInfo.StartedAt = +globals.sessionStartedDate.getTime();
-        globals.sessionInfo.EndedAt = +globals.sessionEndedDate.getTime();
-    }
+    globals.sessionInfo.StartedAt = +globals.sessionStartedDate.getTime();
+    globals.sessionInfo.EndedAt = +globals.sessionEndedDate.getTime();
     Array.from(selectedTags).map((tag) => {
         globals.sessionInfo.Tags.push(tag.innerHTML);
         tag.classList.remove("Selected");
@@ -36,15 +34,12 @@ export async function saveSessionInfo() {
     }
 }
 export function savePauseInfo() {
-    const pauseInfo = {
-        startedAt: +globals.pauseStartedDate.getTime(),
-        endedAt: +globals.pauseEndedDate.getTime(),
-    };
-    globals.sessionInfo.PausesInSession.push(pauseInfo);
+    let size = globals.sessionInfo.PausesInSession.length;
+    globals.sessionInfo.PausesInSession[size - 1].EndedAt =
+        +globals.pauseEndedDate.getTime();
     let localSessionCopy = JSON.parse(localStorage.getItem("activeSession"));
-    localSessionCopy.PausesInSession[
-        localSessionCopy.PausesInSession.length - 1
-    ] = pauseInfo;
+    localSessionCopy.PausesInSession[size - 1].EndedAt =
+        +globals.pauseEndedDate.getTime();
     localStorage.setItem("activeSession", JSON.stringify(localSessionCopy));
 }
 export function storeSessionLocal() {
@@ -56,18 +51,9 @@ export function storeSessionLocal() {
             globals.sessionDuration.seconds;
     }
     sessionCopy.EndedAt = +new Date().getTime();
-    let pauses = sessionCopy.PausesInSession;
+    let size = sessionCopy.PausesInSession.length;
     if (state.timerPaused) {
-        const pause = {
-            StartedAt: globals.pauseStartedDate.getTime(),
-            EndedAt: +new Date().getTime(),
-        };
-        if (pauses.length == 0) {
-            pauses.push(pause);
-        } else {
-            pauses[pauses.length - 1] = pause;
-        }
-        sessionCopy.PausesInSession = pauses;
+        sessionCopy.PausesInSession[size - 1].EndedAt = +new Date().getTime();
     }
     sessionCopy.Resources = sessionResources.value.trim();
     localStorage.setItem("activeSession", JSON.stringify(sessionCopy));
@@ -78,6 +64,8 @@ export function restoreUnsavedSession(showSessionInfoDialog) {
     if (!session) return;
     state.sessionUnsaved = true;
     globals.sessionInfo = JSON.parse(session);
+    globals.sessionStartedDate = new Date(globals.sessionInfo.StartedAt);
+    globals.sessionEndedDate = new Date(globals.sessionInfo.EndedAt);
     sessionResources.value = globals.sessionInfo.Resources;
     showSessionInfoDialog("Unsaved Session.", "Save session");
 }
