@@ -61,7 +61,6 @@ function startSessionTimer(storeSessionLocal) {
     globals.sessionStartedDate = new Date();
     state.timerStarted = true;
     state.timerPaused = false;
-    state.sessionUnsaved = true;
     globals.localSessionId = setInterval(storeSessionLocal, saveIntervalMs);
     toggleFullScreenTimer();
     toggleTimerStopButton();
@@ -117,15 +116,17 @@ export function initTimer(
     savePauseInfo,
 ) {
     timerToggleButton.addEventListener("click", () => {
-        if (!state.timerStarted) startSessionTimer(storeSessionLocal);
-        else toggleSessionTimer(savePauseInfo);
+        if (!state.timerStarted) {
+            startSessionTimer(storeSessionLocal);
+            storeSessionLocal();
+        } else toggleSessionTimer(savePauseInfo);
         toggleTimerControlButton();
     });
 
     timerStopButton.addEventListener("click", () => {
         globals.sessionEndedDate = new Date();
         if (state.timerPaused) {
-            globals.pauseEndedDate = new Date();
+            globals.pauseEndedDate = globals.sessionEndedDate;
             savePauseInfo();
         }
         resetDisplayedTimer();

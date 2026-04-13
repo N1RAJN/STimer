@@ -5,7 +5,8 @@ export const state = {
     timerStarted: false,
     timerPaused: true,
     isSessionListHidden: true,
-    sessionUnsaved: false,
+    sessionSaved: true,
+    localCopyCreated: false,
 };
 export const globals = {
     sessionDuration: { minutes: 0, seconds: 0 },

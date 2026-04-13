@@ -24,12 +24,7 @@ function resetSessionInfoInputs() {
 }
 
 export function showSessionInfoDialog(header, button) {
-    if (!state.sessionUnsaved)
-        sessionDate.value = new date(globals.sessionStartedDate).toDateString();
-    else
-        sessionDate.value = new Date(
-            globals.sessionInfo.StartedAt,
-        ).toDateString();
+    sessionDate.value = globals.sessionStartedDate.toDateString();
     sessionInfoDialogHeader.innerHTML = header;
     sessionInfoSaveButton.innerText = button;
     sessionInfoDialog.showModal();
@@ -94,8 +89,10 @@ export function initSessionModal(
                 console.error("Some Error Occured!");
                 return;
             }
+            localStorage.removeItem("sessionSaved");
             localStorage.removeItem("activeSession");
-            state.sessionUnsaved = false;
+            state.sessionSaved = true;
+
             const response = await result.text();
             const message = response.split("#");
             console.log(message[0]);

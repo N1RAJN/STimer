@@ -35,12 +35,10 @@ export async function saveSessionInfo() {
 }
 export function savePauseInfo() {
     let size = globals.sessionInfo.PausesInSession.length;
+    console.log(globals.sessionInfo);
     globals.sessionInfo.PausesInSession[size - 1].EndedAt =
         +globals.pauseEndedDate.getTime();
-    let localSessionCopy = JSON.parse(localStorage.getItem("activeSession"));
-    localSessionCopy.PausesInSession[size - 1].EndedAt =
-        +globals.pauseEndedDate.getTime();
-    localStorage.setItem("activeSession", JSON.stringify(localSessionCopy));
+    localStorage.setItem("activeSession", JSON.stringify(globals.sessionInfo));
 }
 export function storeSessionLocal() {
     let sessionCopy = JSON.parse(JSON.stringify(globals.sessionInfo));
@@ -52,18 +50,28 @@ export function storeSessionLocal() {
     }
     sessionCopy.EndedAt = +new Date().getTime();
     let size = sessionCopy.PausesInSession.length;
-    if (state.timerPaused) {
+    if (state.timerPaused && state.localCopyCreated) {
         sessionCopy.PausesInSession[size - 1].EndedAt = +new Date().getTime();
     }
     sessionCopy.Resources = sessionResources.value.trim();
+
+    // Immediately create a local copy on session start;
+    // Only after atleast saveIntervalMs that we declare the session as unsaved
+    if (state.localCopyCreated && state.sessionSaved) {
+        localStorage.setItem("sessionSaved", JSON.stringify(false));
+        state.sessionSaved = false;
+    }
+
     localStorage.setItem("activeSession", JSON.stringify(sessionCopy));
+    if (!state.localCopyCreated) state.localCopyCreated = true;
 }
 
 export function restoreUnsavedSession(showSessionInfoDialog) {
-    const session = localStorage.getItem("activeSession");
-    if (!session) return;
-    state.sessionUnsaved = true;
-    globals.sessionInfo = JSON.parse(session);
+    const unsavedSession = localStorage.getItem("sessionSaved");
+    // sessionSaved key is removed on successful session save
+    if (unsavedSession == null) return;
+    state.sessionSaved = false;
+    globals.sessionInfo = JSON.parse(localStorage.getItem("activeSession"));
     globals.sessionStartedDate = new Date(globals.sessionInfo.StartedAt);
     globals.sessionEndedDate = new Date(globals.sessionInfo.EndedAt);
     sessionResources.value = globals.sessionInfo.Resources;
