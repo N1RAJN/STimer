@@ -27,7 +27,7 @@ export function populateSessionList() {
 
         const sessionDate = new Date(session.StartedAt);
 
-        if (globals.currentFilter != sessionTimeFilter.Day) {
+        if (state.currentFilter != sessionTimeFilter.Day) {
             const timestampDate = document.createElement("span");
             timestampDate.classList.add("Timestamp-Date");
             timestampDate.innerHTML = sessionDate.toLocaleString(

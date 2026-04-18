@@ -15,8 +15,8 @@ export const globals = {
     sessionTimerId: 0,
     localSessionId: 0,
     pauseStartedDate: 0,
-    sessionStartedDate: 0,
-    pauseEndedDate: 0,
+    sessionStartedDate: null,
+    pauseEndedDate: null,
     sessionEndedDate: 0,
     sessionInfo: {
         StartedAt: 0,

@@ -8,6 +8,9 @@ export const timerMinutes = document.getElementById("timerMinutes");
 export const timerStopButton = document.getElementById("timerStopButton");
 export const addResourceButton = document.getElementById("addResourceButton");
 
+// Heatmap
+export const heatMapContainer = document.getElementById("heatmapContainer");
+
 // Session List
 export const toggleSessionListButton = document.getElementById(
     "toggleSessionListButton",
