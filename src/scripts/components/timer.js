@@ -8,6 +8,7 @@ import {
     timerStopButton,
     addResourceButton,
     sessionListContainer,
+    heatmapContainer,
 } from "../elements.js";
 import { state, globals } from "../state.js";
 import { SVGPaths, counterDelayMS, saveIntervalMs } from "../utils.js";
@@ -55,6 +56,7 @@ function toggleFullScreenTimer() {
     }
     timerContainer.style.marginTop = state.timerStarted ? "10rem" : "6rem";
     timerContainer.style.scale = state.timerStarted ? 1.6 : 1;
+    heatmapContainer.style.display = state.timerStarted ? "none" : "flex";
 }
 
 function startSessionTimer(storeSessionLocal) {
