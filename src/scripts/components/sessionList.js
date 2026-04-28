@@ -2,6 +2,7 @@ import {
     sessionList,
     toggleSessionListButton,
     timerContainer,
+    heatmapContainer,
     sessionListContainer,
     sessionFilterDropdown,
     sessionSortDropdown,
@@ -93,6 +94,9 @@ export function initSessionList() {
         sessionListContainer.style.display = state.isSessionListHidden
             ? "flex"
             : "none";
+        heatmapContainer.style.display = state.isSessionListHidden
+            ? "none"
+            : "flex";
         state.isSessionListHidden = !state.isSessionListHidden;
         timerContainer.style.marginTop = state.isSessionListHidden
             ? "6rem"
