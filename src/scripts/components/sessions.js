@@ -4,8 +4,8 @@ import {
     sessionResources,
     sessionTagsList,
 } from "../elements.js";
-
 import { state, globals } from "../state.js";
+
 export async function saveSessionInfo() {
     const selectedTags = document.getElementsByClassName("Selected");
     globals.sessionInfo.StartedAt = +globals.sessionStartedDate.getTime();
@@ -33,6 +33,7 @@ export async function saveSessionInfo() {
         console.error(err);
     }
 }
+
 export function savePauseInfo() {
     let size = globals.sessionInfo.PausesInSession.length;
     console.log(globals.sessionInfo);
@@ -40,6 +41,7 @@ export function savePauseInfo() {
         +globals.pauseEndedDate.getTime();
     localStorage.setItem("activeSession", JSON.stringify(globals.sessionInfo));
 }
+
 export function storeSessionLocal() {
     let sessionCopy = JSON.parse(JSON.stringify(globals.sessionInfo));
     sessionCopy.StartedAt = +globals.sessionStartedDate.getTime();
@@ -77,6 +79,7 @@ export function restoreUnsavedSession(showSessionInfoDialog) {
     sessionResources.value = globals.sessionInfo.Resources;
     showSessionInfoDialog("Unsaved Session.", "Save session");
 }
+
 async function getSessionList() {
     try {
         const sessions = await fetch("/api/getSession", {
@@ -87,10 +90,21 @@ async function getSessionList() {
             }),
         });
         globals.allSessions = await sessions.json();
+        for (const session of Object.values(globals.allSessions)) {
+            const dateString = new Date(session.StartedAt).toDateString();
+            let dateEntry = globals.allSessionsByDate?.[dateString] ?? {
+                totalSessionDuration: 0,
+                sessions: [],
+            };
+            dateEntry.totalSessionDuration += session.Duration;
+            dateEntry.sessions.push(session);
+            globals.allSessionsByDate[dateString] = dateEntry;
+        }
     } catch (err) {
         console.error(err);
     }
 }
+
 export async function initializeSessionList(
     filterSessionList,
     sortSessionList,
@@ -101,6 +115,7 @@ export async function initializeSessionList(
     sortSessionList();
     populateSessionList();
 }
+
 export async function getAndPopulateTagsList() {
     try {
         const result = await fetch("/api/getTags");
