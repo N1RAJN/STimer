@@ -1,16 +1,24 @@
-import { heatMapContainer } from "../elements.js";
+import { heatmapCellContainer } from "../elements.js";
 import { globals } from "../state.js";
-import { currDate } from "../utils.js";
 
 export function initHeatmap() {
-    for (let i = 1; i <= 365; i += 7) {
-        const column = document.createElement("div");
-        column.className = "Heatmap-Column";
-        for (let j = 1; j <= 7; ++j) {
-            const cell = document.createElement("div");
-            cell.className = "Heatmap-Cell";
-            column.appendChild(cell);
+    const year = "2026";
+    for (let i = 1; i <= 365; i++) {
+        if ((i - 1) % 7 == 0) {
+            var column = document.createElement("div");
+            column.className = "Heatmap-Column";
         }
-        heatMapContainer.appendChild(column);
+        const cell = document.createElement("div");
+        cell.className = "Heatmap-Cell";
+        const dateString = new Date(year, 0, i).toDateString();
+        cell.id = dateString;
+        const alpha =
+            (globals.allSessionsByDate?.[dateString]?.[
+                "totalSessionDuration"
+            ] ?? 1) / 10;
+        cell.style.backgroundColor = `rgba(255, 255, 255, ${alpha})`;
+
+        column.appendChild(cell);
+        heatmapCellContainer.appendChild(column);
     }
 }

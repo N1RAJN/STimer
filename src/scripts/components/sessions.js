@@ -5,6 +5,7 @@ import {
     sessionTagsList,
 } from "../elements.js";
 import { state, globals } from "../state.js";
+import { initHeatmap } from "./heatmap.js";
 
 export async function saveSessionInfo() {
     const selectedTags = document.getElementsByClassName("Selected");
@@ -114,6 +115,7 @@ export async function initializeSessionList(
     filterSessionList();
     sortSessionList();
     populateSessionList();
+    initHeatmap();
 }
 
 export async function getAndPopulateTagsList() {

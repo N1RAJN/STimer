@@ -9,7 +9,9 @@ export const timerStopButton = document.getElementById("timerStopButton");
 export const addResourceButton = document.getElementById("addResourceButton");
 
 // Heatmap
-export const heatMapContainer = document.getElementById("heatmapContainer");
+export const heatmapCellContainer = document.getElementById(
+    "heatmapCellContainer",
+);
 
 // Session List
 export const toggleSessionListButton = document.getElementById(

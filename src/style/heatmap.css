@@ -1,17 +1,55 @@
 .Heatmap-Container {
+    width: fit-content;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.Heatmap-Month-Label {
+    height: fit-content;
+    font-size: 0.9em;
+    font-weight: 300;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.Heatmap-Body {
+    display: flex;
+    gap: 5px;
+}
+
+.Heatmap-Day-Label {
+    width: fit-content;
+    height: fit-content;
+    font-size: 0.7em;
+    font-weight: 200;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    & div {
+        display: flex;
+        align-items: center;
+        height: 12px;
+    }
+}
+
+.Heatmap-Cell-Container {
     height: fit-content;
     width: fit-content;
     margin: auto;
     display: flex;
-    gap: 1px;
+    gap: 2px;
 }
 
 .Heatmap-Column {
     box-sizing: border-box;
     width: 14px;
-    gap: 1px;
+    gap: 4px;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     display: flex;
     flex-direction: column;
 }
@@ -19,5 +57,5 @@
 .Heatmap-Cell {
     width: 12px;
     height: 12px;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.1);
 }

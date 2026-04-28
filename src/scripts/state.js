@@ -11,6 +11,7 @@ export const state = {
 export const globals = {
     sessionDuration: { minutes: 0, seconds: 0 },
     allSessions: {},
+    allSessionsByDate: {},
     sessionsToPopulate: [],
     sessionTimerId: 0,
     localSessionId: 0,
