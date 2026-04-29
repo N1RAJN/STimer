@@ -1,4 +1,4 @@
-import { heatmapCellContainer } from "../elements.js";
+import { heatmapCellContainer, heatmapDayLabel } from "../elements.js";
 import { globals } from "../state.js";
 
 export function initHeatmap() {
@@ -11,6 +11,11 @@ export function initHeatmap() {
         const cell = document.createElement("div");
         cell.className = "Heatmap-Cell";
         const dateString = new Date(year, 0, i).toDateString();
+        if (i <= 7) {
+            const dayLabel = document.createElement("div");
+            dayLabel.innerHTML = dateString.split(" ")[0];
+            heatmapDayLabel.appendChild(dayLabel);
+        }
         cell.id = dateString;
         const alpha =
             (globals.allSessionsByDate?.[dateString]?.[
