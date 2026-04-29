@@ -1,5 +1,6 @@
 import { heatmapCellContainer, heatmapDayLabel } from "../elements.js";
 import { globals } from "../state.js";
+import { currDate } from "../utils.js";
 
 export function initHeatmap() {
     const year = "2026";
@@ -11,6 +12,7 @@ export function initHeatmap() {
         const cell = document.createElement("div");
         cell.className = "Heatmap-Cell";
         const dateString = new Date(year, 0, i).toDateString();
+        // Day Labels
         if (i <= 7) {
             const dayLabel = document.createElement("div");
             dayLabel.innerHTML = dateString.split(" ")[0];
@@ -26,4 +28,7 @@ export function initHeatmap() {
         column.appendChild(cell);
         heatmapCellContainer.appendChild(column);
     }
+    document
+        .getElementById(`${currDate.toDateString()}`)
+        .classList.add("Today");
 }
