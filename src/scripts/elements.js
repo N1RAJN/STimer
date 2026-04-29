@@ -5,6 +5,7 @@ export const buttonSvgPath = document.getElementById("buttonSVGPath");
 export const timerContainer = document.getElementById("timerContainer");
 export const timerSeconds = document.getElementById("timerSeconds");
 export const timerMinutes = document.getElementById("timerMinutes");
+export const dummyRightButton = document.getElementById("dummyRightButtons");
 export const timerStopButton = document.getElementById("timerStopButton");
 export const addResourceButton = document.getElementById("addResourceButton");
 

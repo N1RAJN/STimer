@@ -29,6 +29,11 @@
     cursor: pointer;
 }
 
+.Dummy-Right-Buttons {
+    height: 4.2em;
+    width: 4.2em;
+}
+
 .Timer-Stop-Button {
     display: none;
     padding: 0.5em;

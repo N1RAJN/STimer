@@ -9,6 +9,7 @@ import {
     addResourceButton,
     sessionListContainer,
     heatmapContainer,
+    dummyRightButton,
 } from "../elements.js";
 import { state, globals } from "../state.js";
 import { SVGPaths, counterDelayMS, saveIntervalMs } from "../utils.js";
@@ -41,6 +42,7 @@ function toggleTimerControlButton() {
 function toggleTimerStopButton() {
     timerStopButton.style.display = state.timerStarted ? "flex" : "none";
     addResourceButton.style.display = state.timerStarted ? "flex" : "none";
+    dummyRightButton.style.display = state.timerStarted ? "none" : "flex";
 }
 
 function toggleFullScreenTimer() {
