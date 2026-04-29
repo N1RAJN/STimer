@@ -12,6 +12,7 @@ export const addResourceButton = document.getElementById("addResourceButton");
 // Heatmap
 export const heatmapContainer = document.getElementById("heatmapContainer");
 export const heatmapDayLabel = document.getElementById("heatmapDayLabel");
+export const heatmapCellToolTip = document.getElementById("heatmapCellToolTip");
 export const heatmapCellContainer = document.getElementById(
     "heatmapCellContainer",
 );

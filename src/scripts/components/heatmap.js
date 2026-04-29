@@ -1,8 +1,14 @@
-import { heatmapCellContainer, heatmapDayLabel } from "../elements.js";
+import {
+    heatmapCellContainer,
+    heatmapDayLabel,
+    heatmapCellToolTip,
+} from "../elements.js";
 import { globals } from "../state.js";
 import { currDate } from "../utils.js";
 
-export function initHeatmap() {
+var toolId;
+
+function populateHeatmapCell() {
     const year = "2026";
     for (let i = 1; i <= 365; i++) {
         if ((i - 1) % 7 == 0) {
@@ -28,7 +34,52 @@ export function initHeatmap() {
         column.appendChild(cell);
         heatmapCellContainer.appendChild(column);
     }
+}
+
+function populateToolTip(e) {
+    if (e.target.className.split(" ")[0] != "Heatmap-Cell") {
+        heatmapCellToolTip.innerHTML = " ";
+        return;
+    }
+    toolId = setTimeout(() => {
+        const cellDate = e.target.id;
+        const duration =
+            globals.allSessionsByDate?.[cellDate]?.["totalSessionDuration"] ??
+            0;
+
+        let formattedDate = cellDate.replace(
+            /(\w+) (\w+) (\d+) (\d+)/,
+            "$1, $2 $3, $4",
+        );
+        let hour = Math.floor(duration / 3600);
+        let min = Math.floor(duration / 60) % 60;
+        let sec = duration % 60;
+        let formattedDuration = [
+            hour && `${hour}h`,
+            min && `${min}m`,
+            `${sec}s`,
+        ]
+            .filter(Boolean)
+            .join(" ");
+
+        heatmapCellToolTip.innerHTML = `${formattedDate} : ${formattedDuration}`;
+        heatmapCellToolTip.style.left = `${e.clientX + 12}px`;
+        heatmapCellToolTip.style.top = `${e.clientY + 12}px`;
+        heatmapCellToolTip.style.display = "flex";
+    }, 600);
+}
+
+export function initHeatmap() {
+    populateHeatmapCell();
     document
         .getElementById(`${currDate.toDateString()}`)
         .classList.add("Today");
+    heatmapCellContainer.addEventListener("mouseover", (e) =>
+        populateToolTip(e),
+    );
+    heatmapCellContainer.addEventListener("mouseout", () => {
+        clearTimeout(toolId);
+        heatmapCellToolTip.style.display = "none";
+        heatmapCellToolTip.innerHTML = " ";
+    });
 }
