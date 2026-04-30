@@ -48,7 +48,19 @@ export function populateSessionList() {
 
         const timestampDuration = document.createElement("span");
         timestampDuration.classList.add("Timestamp-Duration");
-        timestampDuration.innerHTML = `${(session.Duration / 60).toFixed(0)} mins`;
+
+        let hour = Math.floor(session.Duration / 3600);
+        let min = Math.floor(session.Duration / 60) % 60;
+        let sec = session.Duration % 60;
+        let formattedDuration = [
+            hour && `${hour}h`,
+            min && `${min}m`,
+            `${sec}s`,
+        ]
+            .filter(Boolean)
+            .join(" ");
+
+        timestampDuration.innerHTML = formattedDuration;
 
         sessionInfoCardTimestamp.appendChild(timestampTime);
         sessionInfoCardTimestamp.appendChild(timestampDuration);
