@@ -1,5 +1,6 @@
 import {
     buttonSvgPath,
+    timer,
     timerMinutes,
     timerSeconds,
     timerToggleButton,
@@ -15,17 +16,49 @@ import { state, globals } from "../state.js";
 import { SVGPaths, counterDelayMS, saveIntervalMs } from "../utils.js";
 
 function sessionTimer() {
+    let timerDuration = globals.timerDurationSec;
     globals.sessionTimerId = setInterval(() => {
         globals.sessionDurationSec++;
-        const durationSec = globals.sessionDurationSec % 60;
-        if (durationSec == 0) {
-            const durationMin = Math.floor(globals.sessionDurationSec / 60);
+        timerDuration--;
+        let durationSec, durationMin;
+        if (state.stopwatchMode) {
+            durationSec = globals.sessionDurationSec % 60;
+            if (durationSec == 0) {
+                durationMin = Math.floor(globals.sessionDurationSec / 60);
+            }
+        } else {
+            durationSec = timerDuration % 60;
+            if (durationSec == 59) {
+                durationMin = Math.floor(timerDuration / 60);
+            }
+        }
+
+        if (durationMin) {
             const displayedMinute = durationMin.toString().padStart(2, "0");
             timerMinutes.innerHTML = displayedMinute;
         }
+
         const displayedSecond = durationSec.toString().padStart(2, "0");
         timerSeconds.innerHTML = displayedSecond;
     }, counterDelayMS);
+}
+
+function toggleTimerMode() {
+    if (state.stopwatchMode) {
+        state.stopwatchMode = false;
+
+        const durationMin = Math.floor(globals.timerDurationSec / 60);
+        const displayedMinute = durationMin.toString().padStart(2, "0");
+        timerMinutes.innerHTML = displayedMinute;
+
+        const durationSec = globals.timerDurationSec % 60;
+        const displayedSecond = durationSec.toString().padStart(2, "0");
+        timerSeconds.innerHTML = displayedSecond;
+    } else {
+        state.stopwatchMode = true;
+        timerMinutes.innerHTML = "00";
+        timerSeconds.innerHTML = "00";
+    }
 }
 
 function toggleTimerControlButton() {
@@ -88,8 +121,18 @@ function resetDisplayedTimer() {
     clearTimeout(globals.localSessionId);
     state.timerStarted = false;
     state.timerPaused = true;
-    timerMinutes.innerHTML = "00";
-    timerSeconds.innerHTML = "00";
+    if (state.stopwatchMode) {
+        timerMinutes.innerHTML = "00";
+        timerSeconds.innerHTML = "00";
+    } else {
+        const durationMin = Math.floor(globals.timerDurationSec / 60);
+        const displayedMinute = durationMin.toString().padStart(2, "0");
+        timerMinutes.innerHTML = displayedMinute;
+
+        const durationSec = globals.timerDurationSec % 60;
+        const displayedSecond = durationSec.toString().padStart(2, "0");
+        timerSeconds.innerHTML = displayedSecond;
+    }
     timerButtonState.innerHTML = "Play";
     buttonSvgPath.setAttribute("d", SVGPaths["Play"]);
     toggleFullScreenTimer();
@@ -108,11 +151,18 @@ export function resetSessionTimer() {
         Resources: "",
     };
 }
+
 export function initTimer(
     showSessionInfoDialog,
     storeSessionLocal,
     savePauseInfo,
 ) {
+    timer.addEventListener("click", () => {
+        if (!state.timerStarted) {
+            toggleTimerMode();
+        }
+    });
+
     timerToggleButton.addEventListener("click", () => {
         if (!state.timerStarted) {
             startSessionTimer(storeSessionLocal);

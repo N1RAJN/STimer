@@ -7,8 +7,10 @@ export const state = {
     isSessionListHidden: true,
     sessionSaved: true,
     localCopyCreated: false,
+    stopwatchMode: true,
 };
 export const globals = {
+    timerDurationSec: 3600,
     sessionDurationSec: 0,
     allSessions: {},
     allSessionsByDate: {},

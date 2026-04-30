@@ -1,4 +1,5 @@
 // Timer
+export const timer = document.getElementById("timer");
 export const timerToggleButton = document.getElementById("timerToggleButton");
 export const timerButtonState = document.getElementById("buttonState");
 export const buttonSvgPath = document.getElementById("buttonSVGPath");
