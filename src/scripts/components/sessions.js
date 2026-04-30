@@ -15,8 +15,7 @@ export async function saveSessionInfo() {
         globals.sessionInfo.Tags.push(tag.innerHTML);
         tag.classList.remove("Selected");
     });
-    globals.sessionInfo.Duration =
-        globals.sessionDuration.minutes * 60 + globals.sessionDuration.seconds;
+    globals.sessionInfo.Duration = globals.sessionDurationSec;
     globals.sessionInfo.Title = sessionTitle.value;
     globals.sessionInfo.Description = sessionDescription.value;
     globals.sessionInfo.Resources = sessionResources.value.trim();
@@ -46,11 +45,8 @@ export function savePauseInfo() {
 export function storeSessionLocal() {
     let sessionCopy = JSON.parse(JSON.stringify(globals.sessionInfo));
     sessionCopy.StartedAt = +globals.sessionStartedDate.getTime();
-    if (!state.timerPaused) {
-        sessionCopy.Duration =
-            globals.sessionDuration.minutes * 60 +
-            globals.sessionDuration.seconds;
-    }
+    if (!state.timerPaused) sessionCopy.Duration = globals.sessionDurationSec;
+
     sessionCopy.EndedAt = +new Date().getTime();
     let size = sessionCopy.PausesInSession.length;
     if (state.timerPaused && state.localCopyCreated) {

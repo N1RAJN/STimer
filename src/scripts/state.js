@@ -9,7 +9,7 @@ export const state = {
     localCopyCreated: false,
 };
 export const globals = {
-    sessionDuration: { minutes: 0, seconds: 0 },
+    sessionDurationSec: 0,
     allSessions: {},
     allSessionsByDate: {},
     sessionsToPopulate: [],

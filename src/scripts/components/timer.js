@@ -16,19 +16,14 @@ import { SVGPaths, counterDelayMS, saveIntervalMs } from "../utils.js";
 
 function sessionTimer() {
     globals.sessionTimerId = setInterval(() => {
-        globals.sessionDuration.seconds =
-            (globals.sessionDuration.seconds + 1) % 60;
-        if (globals.sessionDuration.seconds === 0) {
-            globals.sessionDuration.minutes =
-                globals.sessionDuration.minutes + 1;
-            let displayedMinute = globals.sessionDuration.minutes
-                .toString()
-                .padStart(2, "0");
+        globals.sessionDurationSec++;
+        const durationSec = globals.sessionDurationSec % 60;
+        if (durationSec == 0) {
+            const durationMin = Math.floor(globals.sessionDurationSec / 60);
+            const displayedMinute = durationMin.toString().padStart(2, "0");
             timerMinutes.innerHTML = displayedMinute;
         }
-        let displayedSecond = globals.sessionDuration.seconds
-            .toString()
-            .padStart(2, "0");
+        const displayedSecond = durationSec.toString().padStart(2, "0");
         timerSeconds.innerHTML = displayedSecond;
     }, counterDelayMS);
 }
@@ -102,8 +97,7 @@ function resetDisplayedTimer() {
 }
 
 export function resetSessionTimer() {
-    globals.sessionDuration.minutes = 0;
-    globals.sessionDuration.seconds = 0;
+    globals.sessionDurationSec = 0;
     globals.sessionInfo = {
         StartedAt: 0,
         EndedAt: 0,
