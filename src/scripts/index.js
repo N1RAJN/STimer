@@ -18,6 +18,7 @@ import {
     initSessionList,
 } from "./components/sessionList.js";
 import { initHeatmap } from "./components/heatmap.js";
+import { initSettings } from "./components/settings.js";
 
 initializeSessionList(
     filterSessionList,
@@ -39,3 +40,4 @@ restoreUnsavedSession(showSessionInfoDialog);
 
 initTimer(showSessionInfoDialog, storeSessionLocal, savePauseInfo);
 initSessionList();
+initSettings();

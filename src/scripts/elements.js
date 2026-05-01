@@ -9,6 +9,13 @@ export const timerMinutes = document.getElementById("timerMinutes");
 export const dummyRightButton = document.getElementById("dummyRightButtons");
 export const timerStopButton = document.getElementById("timerStopButton");
 export const addResourceButton = document.getElementById("addResourceButton");
+export const settingsButton = document.getElementById("settingsButton");
+
+//Settings
+export const settingsModal = document.getElementById("settingsModal");
+export const settingsModalCloseButton = document.getElementById(
+    "settingsModalCloseButton",
+);
 
 // Heatmap
 export const heatmapContainer = document.getElementById("heatmapContainer");

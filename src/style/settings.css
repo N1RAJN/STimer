@@ -1,0 +1,68 @@
+.Settings-Button {
+    display: flex;
+    padding: 0.5em;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    & svg {
+        width: 2.1em;
+        height: 2.1em;
+    }
+}
+
+.Settings-Modal {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 0.5em;
+    width: min(40vw, 350px);
+    height: 40%;
+    border: solid;
+    border-width: min(0.3em, 3px);
+    border-radius: min(0.6em, 8px);
+    border-color: #333333;
+}
+
+.Settings-Modal:focus {
+    outline: none;
+}
+
+@media (max-width: 700px) {
+    .Settings-Modal {
+        width: 90%;
+        margin: auto;
+    }
+}
+
+.Settings-Modal-Container {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.Settings-Modal-Header-Container {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+}
+
+.Settings-Modal-Header {
+    flex: 3;
+}
+
+
+.Settings-Modal-Close-Button {
+    flex: 0.3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.Timer-Mode-Setting {
+    flex: 1;
+}
+
+.Session-Tags-Setting {
+    flex: 1;
+}
