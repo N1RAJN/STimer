@@ -150,12 +150,20 @@
                 <div id="settingsModalHeader" class="Settings-Modal-Header">Settings</div>
                 <div id="settingsModalCloseButton" class="Settings-Modal-Close-Button"> X </div>
             </div>
-            <div id="timerModeSetting" class="Timer-Mode-Setting">
-                Timer Mode
+            <div id="settingsModalBody" class="Settings-Modal-Body">
+                <div id="timerModeSetting" class="Timer-Mode-Setting">
+                    <div id="timerModeSettingTitle" class="Timer-Mode-Setting-Title">Timer Mode: </div>
+                    <select id="timerModeDropdown" class="Timer-Mode-Dropdown">
+                        <option value="Stopwatch">Stopwatch</option>
+                        <option value="Countdown">Countdown</option>
+                    </select>
+                </div>
+                <div id="sessionTagsSetting" class="Session-Tags-Setting">
+                    <div id="sessionTagsSettingTitle" class="Session-Tags-Setting-Title">Sessions Tags: </div>
+                    <div id="tagsListSettings" class="Tags-List-Settings"></div>
+                </div>
             </div>
-            <div id="sessionTagsSetting" class="Session-Tags-Setting">
-                Sessions Tags
-            </div>
+            <button id="settingsModalSaveButton" class="Settings-Modal-Save-Button">Save Settings</button>
         </div>
     </dialog>
     <div id="heatmapCellToolTip" class="Heatmap-Cell-Tool-Tip"></div>

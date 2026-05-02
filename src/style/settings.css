@@ -14,17 +14,13 @@
 .Settings-Modal {
     background-color: #1a1a1a;
     color: white;
-    padding: 0.5em;
-    width: min(40vw, 350px);
-    height: 40%;
+    padding: 0.7em;
+    width: min(45vw, 400px);
+    height: 60%;
     border: solid;
     border-width: min(0.3em, 3px);
     border-radius: min(0.6em, 8px);
     border-color: #333333;
-}
-
-.Settings-Modal:focus {
-    outline: none;
 }
 
 @media (max-width: 700px) {
@@ -35,19 +31,27 @@
 }
 
 .Settings-Modal-Container {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
+    padding: 0;
 }
 
 
 .Settings-Modal-Header-Container {
-    flex: 1;
+    flex: 0.7;
     display: flex;
     justify-content: space-between;
 }
 
 .Settings-Modal-Header {
     flex: 3;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: 600;
 }
 
 
@@ -59,10 +63,75 @@
     cursor: pointer;
 }
 
-.Timer-Mode-Setting {
-    flex: 1;
+
+.Settings-Modal-Body {
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 1em;
+    font-size: 1.2rem;
 }
 
-.Session-Tags-Setting {
+.Timer-Mode-Setting {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.Timer-Mode-Setting-Title {
+    font-weight: 600;
+}
+
+.Timer-Mode-Dropdown {
+    font-size: 0.8em;
+    font-weight: 400;
+    padding: 0.3em;
+    background-color: #333333;
+    color: white;
+    border: 1px solid #333333;
+    border-radius: 0.5em;
+}
+
+
+.Session-Tags-Setting {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.Session-Tags-Setting-Title {
+    font-weight: 600;
+}
+
+.Tags-List-Settings {
+    box-sizing: border-box;
+    width: 100%;
+    height: 50%;
+    padding: 0.5rem 0;
+    gap: 0.2em;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    font-size: 1.1rem;
+    font-weight: 500;
+    font-family: 'IBM Plex Mono', monospace;
+    color: white;
+}
+
+.Settings-Modal-Save-Button {
+    flex: 0.4;
+    font-size: 1.2em;
+    background-color: #666666;
+    color: white;
+    cursor: pointer;
+    border-radius: 0.25rem;
+}
+
+.Settings-Modal-Save-Button:focus,
+.Timer-Mode-Dropdown:focus,
+.Settings-Modal:focus {
+    outline: none;
 }

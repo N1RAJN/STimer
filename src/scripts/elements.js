@@ -16,6 +16,7 @@ export const settingsModal = document.getElementById("settingsModal");
 export const settingsModalCloseButton = document.getElementById(
     "settingsModalCloseButton",
 );
+export const tagsListSettings = document.getElementById("tagsListSettings");
 
 // Heatmap
 export const heatmapContainer = document.getElementById("heatmapContainer");

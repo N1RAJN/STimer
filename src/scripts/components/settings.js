@@ -3,6 +3,7 @@ import {
     settingsModal,
     settingsModalCloseButton,
 } from "../elements.js";
+
 export function initSettings() {
     settingsButton.addEventListener("click", () => {
         settingsModal.showModal();

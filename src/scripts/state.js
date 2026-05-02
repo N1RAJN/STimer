@@ -13,6 +13,7 @@ export const globals = {
     timerDurationSec: 3600,
     sessionDurationSec: 0,
     allSessions: {},
+    sessionTags: [],
     allSessionsByDate: {},
     sessionsToPopulate: [],
     sessionTimerId: 0,

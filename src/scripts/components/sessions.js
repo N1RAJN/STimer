@@ -3,6 +3,7 @@ import {
     sessionDescription,
     sessionResources,
     sessionTagsList,
+    tagsListSettings,
 } from "../elements.js";
 import { state, globals } from "../state.js";
 import { initHeatmap } from "./heatmap.js";
@@ -122,11 +123,13 @@ export async function getAndPopulateTagsList() {
             return;
         }
         const tags = await result.json();
+        globals.sessionTags = tags;
         tags.forEach((tag) => {
             const tagDiv = document.createElement("div");
             tagDiv.innerHTML = tag;
             tagDiv.className = "Session-Tag-Card";
             sessionTagsList.appendChild(tagDiv);
+            tagsListSettings.appendChild(tagDiv);
         });
     } catch (err) {
         console.error(err);
