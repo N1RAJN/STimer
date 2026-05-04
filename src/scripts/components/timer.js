@@ -16,7 +16,7 @@ import { state, globals } from "../state.js";
 import { SVGPaths, counterDelayMS, saveIntervalMs } from "../utils.js";
 
 function sessionTimer() {
-    let timerDuration = globals.timerDurationSec;
+    let timerDuration = globals.countdownDurationSec;
     globals.sessionTimerId = setInterval(() => {
         globals.sessionDurationSec++;
         timerDuration--;
@@ -43,19 +43,16 @@ function sessionTimer() {
     }, counterDelayMS);
 }
 
-function toggleTimerMode() {
-    if (state.stopwatchMode) {
-        state.stopwatchMode = false;
-
-        const durationMin = Math.floor(globals.timerDurationSec / 60);
+export function toggleTimerMode() {
+    if (!state.stopwatchMode) {
+        const durationMin = Math.floor(globals.countdownDurationSec / 60);
         const displayedMinute = durationMin.toString().padStart(2, "0");
         timerMinutes.innerHTML = displayedMinute;
 
-        const durationSec = globals.timerDurationSec % 60;
+        const durationSec = globals.countdownDurationSec % 60;
         const displayedSecond = durationSec.toString().padStart(2, "0");
         timerSeconds.innerHTML = displayedSecond;
     } else {
-        state.stopwatchMode = true;
         timerMinutes.innerHTML = "00";
         timerSeconds.innerHTML = "00";
     }
@@ -125,11 +122,11 @@ function resetDisplayedTimer() {
         timerMinutes.innerHTML = "00";
         timerSeconds.innerHTML = "00";
     } else {
-        const durationMin = Math.floor(globals.timerDurationSec / 60);
+        const durationMin = Math.floor(globals.countdownDurationSec / 60);
         const displayedMinute = durationMin.toString().padStart(2, "0");
         timerMinutes.innerHTML = displayedMinute;
 
-        const durationSec = globals.timerDurationSec % 60;
+        const durationSec = globals.countdownDurationSec % 60;
         const displayedSecond = durationSec.toString().padStart(2, "0");
         timerSeconds.innerHTML = displayedSecond;
     }
@@ -159,6 +156,7 @@ export function initTimer(
 ) {
     timer.addEventListener("click", () => {
         if (!state.timerStarted) {
+            state.stopwatchMode = state.stopwatchMode ? false : true;
             toggleTimerMode();
         }
     });

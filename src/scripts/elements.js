@@ -13,10 +13,23 @@ export const settingsButton = document.getElementById("settingsButton");
 
 //Settings
 export const settingsModal = document.getElementById("settingsModal");
+export const tagsListSettings = document.getElementById("tagsListSettings");
+export const timerModeDropdown = document.getElementById("timerModeDropdown");
+export const countdownDurationSeconds = document.getElementById(
+    "countdownDurationSeconds",
+);
+export const countdownDurationMinutes = document.getElementById(
+    "countdownDurationMinutes",
+);
+export const countdownDurationContainer = document.getElementById(
+    "countdownDurationContainer",
+);
 export const settingsModalCloseButton = document.getElementById(
     "settingsModalCloseButton",
 );
-export const tagsListSettings = document.getElementById("tagsListSettings");
+export const settingsModalSaveButton = document.getElementById(
+    "settingsModalSaveButton",
+);
 
 // Heatmap
 export const heatmapContainer = document.getElementById("heatmapContainer");

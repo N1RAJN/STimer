@@ -152,11 +152,23 @@
             </div>
             <div id="settingsModalBody" class="Settings-Modal-Body">
                 <div id="timerModeSetting" class="Timer-Mode-Setting">
-                    <div id="timerModeSettingTitle" class="Timer-Mode-Setting-Title">Timer Mode: </div>
-                    <select id="timerModeDropdown" class="Timer-Mode-Dropdown">
-                        <option value="Stopwatch">Stopwatch</option>
-                        <option value="Countdown">Countdown</option>
-                    </select>
+                    <div id="timerModeSettingContainer" class="Timer-Mode-Setting-Container">
+                        <div id="timerModeSettingTitle" class="Timer-Mode-Setting-Title">Timer Mode: </div>
+                        <select id="timerModeDropdown" class="Timer-Mode-Dropdown">
+                            <option value="Stopwatch">Stopwatch</option>
+                            <option value="Countdown">Countdown</option>
+                        </select>
+                    </div>
+                    <div id="countdownDurationContainer" class="Countdown-Duration-Container">
+                        <div class="Countdown-Duration-Input-Container">
+                            <div id="countdownDurationMinTitle" class="Countdown-Duration-Title">Minutes:</div>
+                            <input type="number" min=0 id="countdownDurationMinutes" class="Countdown-Duration-Input" />
+                        </div>
+                        <div class="Countdown-Duration-Input-Container">
+                            <div id="countdownDurationSecTitle" class="Countdown-Duration-Title">Seconds:</div>
+                            <input type="number" min=0 id="countdownDurationSeconds" class="Countdown-Duration-Input" />
+                        </div>
+                    </div>
                 </div>
                 <div id="sessionTagsSetting" class="Session-Tags-Setting">
                     <div id="sessionTagsSettingTitle" class="Session-Tags-Setting-Title">Sessions Tags: </div>

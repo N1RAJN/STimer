@@ -6,7 +6,11 @@ import {
     initializeSessionList,
     getAndPopulateTagsList,
 } from "./components/sessions.js";
-import { initTimer, resetSessionTimer } from "./components/timer.js";
+import {
+    initTimer,
+    toggleTimerMode,
+    resetSessionTimer,
+} from "./components/timer.js";
 import {
     initSessionModal,
     showSessionInfoDialog,
@@ -40,4 +44,4 @@ restoreUnsavedSession(showSessionInfoDialog);
 
 initTimer(showSessionInfoDialog, storeSessionLocal, savePauseInfo);
 initSessionList();
-initSettings();
+initSettings(toggleTimerMode);

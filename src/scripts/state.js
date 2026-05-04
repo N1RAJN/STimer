@@ -10,7 +10,7 @@ export const state = {
     stopwatchMode: true,
 };
 export const globals = {
-    timerDurationSec: 3600,
+    countdownDurationSec: 3600,
     sessionDurationSec: 0,
     allSessions: {},
     sessionTags: [],

@@ -67,6 +67,11 @@ export function storeSessionLocal() {
 }
 
 export function restoreUnsavedSession(showSessionInfoDialog) {
+    // idk where else to put this, and don't want to make a separate function for this for now
+    const min = localStorage.getItem("countDownDurationMin") ?? 60;
+    const sec = localStorage.getItem("countDownDurationSec") ?? 0;
+    globals.countdownDurationSec = +min * 60 + +sec;
+
     const unsavedSession = localStorage.getItem("sessionSaved");
     // sessionSaved key is removed on successful session save
     if (unsavedSession == null) return;
