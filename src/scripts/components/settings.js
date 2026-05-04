@@ -20,6 +20,7 @@ function toggleCountdownDurationContainer() {
 }
 export function initSettings(toggleTimerMode) {
     settingsButton.addEventListener("click", () => {
+        if (state.timerStarted) return;
         if (state.stopwatchMode) {
             countdownDurationContainer.style.display = "none";
             timerModeDropdown.value = "Stopwatch";
