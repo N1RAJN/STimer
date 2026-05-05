@@ -10,6 +10,7 @@ import {
     sessionInfoDialogHeader,
     sessionInfoSaveButton,
     sessionTagsList,
+    tagsListSettings,
 } from "../elements.js";
 
 import { state, globals } from "../state.js";
@@ -68,6 +69,7 @@ export function initSessionModal(
         if (buttonText == "+") {
             addSessionTagButton.innerHTML = "x";
             addSessionTagInput.style.visibility = "visible";
+            addSessionTagInput.focus();
         } else {
             addSessionTagButton.innerHTML = "+";
             addSessionTagInput.style.visibility = "hidden";
@@ -81,6 +83,7 @@ export function initSessionModal(
             tagDiv.innerHTML = addSessionTagInput.value;
             tagDiv.className = "Session-Tag-Card";
             sessionTagsList.appendChild(tagDiv);
+            tagsListSettings.appendChild(tagDiv.cloneNode(true));
             addSessionTagButton.innerHTML = "+";
             addSessionTagInput.style.visibility = "hidden";
             addSessionTagInput.value = "";

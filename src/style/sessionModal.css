@@ -93,7 +93,6 @@ div.Session-Info-Group:has(textarea) {
 
 .Session-Tags-List-Label-Container {
     display: flex;
-    flex-direction: row;
 
     & label {
         display: inline;

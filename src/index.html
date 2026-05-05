@@ -153,7 +153,7 @@
             <div id="settingsModalBody" class="Settings-Modal-Body">
                 <div id="timerModeSetting" class="Timer-Mode-Setting">
                     <div id="timerModeSettingContainer" class="Timer-Mode-Setting-Container">
-                        <div id="timerModeSettingTitle" class="Timer-Mode-Setting-Title">Timer Mode: </div>
+                        <label>Timer Mode: </label>
                         <select id="timerModeDropdown" class="Timer-Mode-Dropdown">
                             <option value="Stopwatch">Stopwatch</option>
                             <option value="Countdown">Countdown</option>
@@ -161,17 +161,23 @@
                     </div>
                     <div id="countdownDurationContainer" class="Countdown-Duration-Container">
                         <div class="Countdown-Duration-Input-Container">
-                            <div id="countdownDurationMinTitle" class="Countdown-Duration-Title">Minutes:</div>
+                            <label>Minutes:</label>
                             <input type="number" min=0 id="countdownDurationMinutes" class="Countdown-Duration-Input" />
                         </div>
                         <div class="Countdown-Duration-Input-Container">
-                            <div id="countdownDurationSecTitle" class="Countdown-Duration-Title">Seconds:</div>
+                            <label>Seconds:</label>
                             <input type="number" min=0 id="countdownDurationSeconds" class="Countdown-Duration-Input" />
                         </div>
                     </div>
                 </div>
                 <div id="sessionTagsSetting" class="Session-Tags-Setting">
-                    <div id="sessionTagsSettingTitle" class="Session-Tags-Setting-Title">Sessions Tags: </div>
+                    <div id="sessionTagsSettingLabelContainer" class="Session-Tags-Setting-Label-Container">
+                        <label>Sessions Tags:</label>
+                        <div class="Add-Session-Tag-Container">
+                            <input id="addSessionTagSettingInput" class="Add-Session-Tag-Input" />
+                            <div id="addSessionTagSettingButton" class="Add-Session-Tag-Button">+</div>
+                        </div>
+                    </div>
                     <div id="tagsListSettings" class="Tags-List-Settings"></div>
                 </div>
             </div>

@@ -13,6 +13,12 @@ export const settingsButton = document.getElementById("settingsButton");
 
 //Settings
 export const settingsModal = document.getElementById("settingsModal");
+export const addSessionTagSettingInput = document.getElementById(
+    "addSessionTagSettingInput",
+);
+export const addSessionTagSettingButton = document.getElementById(
+    "addSessionTagSettingButton",
+);
 export const tagsListSettings = document.getElementById("tagsListSettings");
 export const timerModeDropdown = document.getElementById("timerModeDropdown");
 export const countdownDurationSeconds = document.getElementById(

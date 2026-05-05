@@ -36,6 +36,10 @@
     display: flex;
     flex-direction: column;
     padding: 0;
+
+    & label {
+        font-weight: 600;
+    }
 }
 
 
@@ -86,11 +90,9 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+
 }
 
-.Timer-Mode-Setting-Title {
-    font-weight: 600;
-}
 
 .Timer-Mode-Dropdown {
     font-size: 1em;
@@ -135,10 +137,6 @@
     justify-content: flex-start;
 }
 
-.Session-Tags-Setting-Title {
-    font-weight: 600;
-}
-
 .Tags-List-Settings {
     box-sizing: border-box;
     width: 100%;
@@ -152,6 +150,15 @@
     font-weight: 500;
     font-family: 'IBM Plex Mono', monospace;
     color: white;
+}
+
+.Session-Tags-Setting-Label-Container {
+    display: flex;
+
+    & label {
+        display: inline;
+        flex: 1;
+    }
 }
 
 .Settings-Modal-Save-Button {
