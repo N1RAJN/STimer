@@ -134,7 +134,7 @@ export async function getAndPopulateTagsList() {
             tagDiv.innerHTML = tag;
             tagDiv.className = "Session-Tag-Card";
             sessionTagsList.appendChild(tagDiv);
-            tagsListSettings.appendChild(tagDiv);
+            tagsListSettings.appendChild(tagDiv.cloneNode(true));
         });
     } catch (err) {
         console.error(err);
