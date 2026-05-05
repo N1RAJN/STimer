@@ -13,7 +13,12 @@ import {
     dummyRightButton,
 } from "../elements.js";
 import { state, globals } from "../state.js";
-import { SVGPaths, counterDelayMS, saveIntervalMs } from "../utils.js";
+import {
+    SVGPaths,
+    counterDelayMS,
+    customEvents,
+    saveIntervalMs,
+} from "../utils.js";
 
 function sessionTimer() {
     let timerDuration = globals.countdownDurationSec;
@@ -27,6 +32,7 @@ function sessionTimer() {
                 durationMin = Math.floor(globals.sessionDurationSec / 60);
             }
         } else {
+            if (timerDuration == 0) endSession();
             durationSec = timerDuration % 60;
             if (durationSec == 59) {
                 durationMin = Math.floor(timerDuration / 60);
@@ -149,6 +155,16 @@ export function resetSessionTimer() {
     };
 }
 
+function endSession() {
+    globals.sessionEndedDate = new Date();
+    if (state.timerPaused) {
+        globals.pauseEndedDate = globals.sessionEndedDate;
+        savePauseInfo();
+    }
+    resetDisplayedTimer();
+    document.dispatchEvent(new CustomEvent(customEvents.TimerStopped));
+}
+
 export function initTimer(
     showSessionInfoDialog,
     storeSessionLocal,
@@ -170,13 +186,7 @@ export function initTimer(
     });
 
     timerStopButton.addEventListener("click", () => {
-        globals.sessionEndedDate = new Date();
-        if (state.timerPaused) {
-            globals.pauseEndedDate = globals.sessionEndedDate;
-            savePauseInfo();
-        }
-        resetDisplayedTimer();
-        showSessionInfoDialog("Session Completed!", "Save Session");
+        endSession();
     });
 
     addResourceButton.addEventListener("click", () => {

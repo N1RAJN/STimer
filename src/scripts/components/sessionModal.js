@@ -13,6 +13,7 @@ import {
 } from "../elements.js";
 
 import { state, globals } from "../state.js";
+import { customEvents } from "../utils.js";
 function resetSessionInfoInputs() {
     [sessionDate, sessionDescription, sessionTitle, sessionResources].forEach(
         (input) => {
@@ -22,8 +23,10 @@ function resetSessionInfoInputs() {
     addSessionTagButton.innerHTML = "+";
     addSessionTagInput.style.visibility = "hidden";
 }
-
-export function showSessionInfoDialog(header, button) {
+export function showSessionInfoDialog(
+    header = "Session Completed!",
+    button = "Save Session",
+) {
     sessionDate.value = globals.sessionStartedDate.toDateString();
     sessionInfoDialogHeader.innerHTML = header;
     sessionInfoSaveButton.innerText = button;
@@ -37,6 +40,9 @@ export function initSessionModal(
     populateSessionList,
     saveSessionInfo,
 ) {
+    document.addEventListener(customEvents.TimerStopped, () => {
+        showSessionInfoDialog();
+    });
     sessionTagsList.addEventListener("click", (e) => {
         const classes = e.target.classList;
         if (classes.contains("Session-Tag-Card")) {
