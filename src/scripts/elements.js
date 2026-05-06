@@ -20,6 +20,11 @@ export const addSessionTagSettingButton = document.getElementById(
     "addSessionTagSettingButton",
 );
 export const tagsListSettings = document.getElementById("tagsListSettings");
+export const tagSettingContextMenu = document.getElementById(
+    "tagSettingContextMenu",
+);
+export const editTagButton = document.getElementById("editTagButton");
+export const deleteTagButton = document.getElementById("deleteTagButton");
 export const timerModeDropdown = document.getElementById("timerModeDropdown");
 export const countdownDurationSeconds = document.getElementById(
     "countdownDurationSeconds",

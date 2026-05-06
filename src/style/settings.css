@@ -161,6 +161,31 @@
     }
 }
 
+.Tag-Setting-Context-Menu {
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    gap: 0.1em;
+}
+
+.Edit-Tag-Button {
+    font-size: 1.0em;
+    background-color: #666666;
+    color: white;
+    cursor: pointer;
+    border: none;
+    border-radius: 0.25rem;
+}
+
+.Delete-Tag-Button {
+    font-size: 1.0em;
+    background-color: #990000;
+    color: white;
+    cursor: pointer;
+    border: none;
+    border-radius: 0.25rem;
+}
+
 .Settings-Modal-Save-Button {
     flex: 0.4;
     font-size: 1.2em;

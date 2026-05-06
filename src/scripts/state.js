@@ -11,6 +11,8 @@ export const state = {
 };
 export const globals = {
     countdownDurationSec: 3600,
+    selectedTag: null,
+    tagEditBuffer: { Deleted: [], Updated: [] },
     sessionDurationSec: 0,
     allSessions: {},
     sessionTags: [],
