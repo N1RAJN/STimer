@@ -83,7 +83,10 @@ function deselectAllCards() {
 function showContextMenu(e) {
     e.preventDefault();
     const classes = e.target.classList;
-    if (classes.contains("Session-Tag-Card")) {
+    if (
+        classes.contains("Session-Tag-Card") &&
+        e.target.contentEditable != "true"
+    ) {
         tagSettingContextMenu.style.left = `${e.pageX + 10}px`;
         tagSettingContextMenu.style.top = `${e.pageY + 10}px`;
         tagSettingContextMenu.style.display = "flex";
@@ -126,12 +129,19 @@ function editSessionTag(e) {
         editingTag.removeEventListener("blur", escapeHandler);
         globals.selectedTag = null;
         state.editedTag = false;
+        console.log(globals.tagEditBuffer);
     }
 }
 
 function deleteSessionTag(e) {
     e.stopPropagation();
+    // TODO: soft remove the cards, completely remove after saving and removed from db
+    // tagsListSettings.removeChild(globals.selectedTag);
+
+    globals.selectedTag.style.display = "none";
     globals.tagEditBuffer.Deleted.push(globals.selectedTag.innerHTML);
+    tagSettingContextMenu.style.display = "none";
+    console.log(globals.tagEditBuffer);
 }
 
 function saveSettings(toggleTimerMode) {
