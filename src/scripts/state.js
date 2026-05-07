@@ -12,7 +12,12 @@ export const state = {
 export const globals = {
     countdownDurationSec: 3600,
     selectedTag: null,
-    tagEditBuffer: { Deleted: [], Updated: [] },
+    tagEditBuffer: {
+        Deleted: [],
+        Updated: {
+            // NewTag : OldTag
+        },
+    },
     sessionDurationSec: 0,
     allSessions: {},
     sessionTags: [],

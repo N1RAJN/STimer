@@ -114,10 +114,9 @@ function editSessionTag(e) {
             tagEdited = true;
             editingTag.contentEditable = "false";
             editingTag.blur();
-            globals.tagEditBuffer.Updated.push({
-                old: oldTag,
-                new: editingTag.innerHTML,
-            });
+            if (oldTag != editingTag.innerHTML) {
+                globals.tagEditBuffer.Updated[editingTag.innerHTML] = oldTag;
+            }
         }
     }
     function escapeHandler() {
@@ -141,7 +140,24 @@ function deleteSessionTag(e) {
     globals.selectedTag.style.display = "none";
     globals.tagEditBuffer.Deleted.push(globals.selectedTag.innerHTML);
     tagSettingContextMenu.style.display = "none";
-    console.log(globals.tagEditBuffer);
+}
+
+function resolveTagEditHistory() {
+    const deleteBuffer = globals.tagEditBuffer.Deleted;
+    const updateBuffer = globals.tagEditBuffer.Updated;
+    for (let [newTag, oldTag] of Object.entries(updateBuffer)) {
+        while (updateBuffer[oldTag]) {
+            updateBuffer[newTag] = updateBuffer[oldTag];
+            delete updateBuffer[oldTag];
+            oldTag = updateBuffer[newTag];
+        }
+        const index = deleteBuffer.indexOf(newTag);
+        if (index > -1) {
+            deleteBuffer.splice(index, 1);
+            deleteBuffer.push(updateBuffer[newTag]);
+            delete updateBuffer[newTag];
+        }
+    }
 }
 
 function saveSettings(toggleTimerMode) {
@@ -160,6 +176,7 @@ function saveSettings(toggleTimerMode) {
     }
     toggleTimerMode();
     hideSessionTagInput();
+    resolveTagEditHistory();
     settingsModal.close();
 }
 
