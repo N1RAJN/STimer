@@ -61,6 +61,7 @@ function addSettingTags(e) {
     if (e.key == "Enter") {
         const tagDiv = document.createElement("div");
         tagDiv.innerHTML = addSessionTagSettingInput.value;
+        globals.tagEditBuffer.Added.push(addSessionTagSettingInput.value);
         tagDiv.className = "Session-Tag-Card";
         sessionTagsList.appendChild(tagDiv);
         tagsListSettings.appendChild(tagDiv.cloneNode(true));
@@ -143,21 +144,42 @@ function deleteSessionTag(e) {
 }
 
 function resolveTagEditHistory() {
+    const addedBuffer = globals.tagEditBuffer.Added;
     const deleteBuffer = globals.tagEditBuffer.Deleted;
     const updateBuffer = globals.tagEditBuffer.Updated;
     for (let [newTag, oldTag] of Object.entries(updateBuffer)) {
+        // Walk back the update chain and connect the latest tag name with the original one
         while (updateBuffer[oldTag]) {
             updateBuffer[newTag] = updateBuffer[oldTag];
             delete updateBuffer[oldTag];
             oldTag = updateBuffer[newTag];
         }
         const index = deleteBuffer.indexOf(newTag);
+        // If this tag was deleted, replace the current entry (newest name) with original one
         if (index > -1) {
-            deleteBuffer.splice(index, 1);
-            deleteBuffer.push(updateBuffer[newTag]);
+            deleteBuffer[index] = updateBuffer[newTag];
             delete updateBuffer[newTag];
         }
     }
+    const updates = Object.entries(updateBuffer);
+    addedBuffer.forEach((addedTag, addedIndex) => {
+        for (let [newTag, oldTag] of updates) {
+            if (addedTag == oldTag) {
+                addedBuffer[addedIndex] = newTag;
+                delete updateBuffer[newTag];
+            }
+        }
+    });
+    for (let delIdx in deleteBuffer) {
+        let addIdx = addedBuffer.indexOf(deleteBuffer[delIdx]);
+        if (addIdx > -1) {
+            addedBuffer.splice(addIdx, 1);
+            deleteBuffer.splice(delIdx, 1);
+        }
+    }
+    console.log(globals.tagEditBuffer);
+}
+
 }
 
 function saveSettings(toggleTimerMode) {

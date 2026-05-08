@@ -13,6 +13,7 @@ export const globals = {
     countdownDurationSec: 3600,
     selectedTag: null,
     tagEditBuffer: {
+        Added: [],
         Deleted: [],
         Updated: {
             // NewTag : OldTag
