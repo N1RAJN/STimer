@@ -177,9 +177,32 @@ function resolveTagEditHistory() {
             deleteBuffer.splice(delIdx, 1);
         }
     }
-    console.log(globals.tagEditBuffer);
 }
 
+async function saveSessionTagsEdits() {
+    if (
+        Object.keys(globals.tagEditBuffer.Updated).length > 0 ||
+        globals.tagEditBuffer.Deleted.length > 0 ||
+        globals.tagEditBuffer.Added.length > 0
+    ) {
+        try {
+            const response = await fetch("/api/updateTags", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(globals.tagEditBuffer),
+            });
+            if (!response.ok ){
+                console.err("Some Error Occuered");
+                return;
+            }
+            const message = await response.text();
+            console.log(message);
+        } catch (err) {
+            console.err(err);
+        }
+    }
 }
 
 function saveSettings(toggleTimerMode) {
@@ -199,6 +222,7 @@ function saveSettings(toggleTimerMode) {
     toggleTimerMode();
     hideSessionTagInput();
     resolveTagEditHistory();
+    saveSessionTagsEdits();
     settingsModal.close();
 }
 

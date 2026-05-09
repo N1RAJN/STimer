@@ -43,6 +43,11 @@ type sessionListResponseObj struct {
 	Tags            []string
 	PausesInSession []pauseObj
 }
+type tagUpdateBuffer struct {
+	Added   []string `json:"Added"`
+	Deleted []string `json:"Deleted"`
+	Updated map[string]interface{}
+}
 
 var db *sql.DB
 
@@ -59,6 +64,7 @@ func main() {
 	http.Handle("/", fs)
 	http.HandleFunc("/api/storeSession", storeSessionInfo)
 	http.HandleFunc("/api/getTags", getTagsList)
+	http.HandleFunc("/api/updateTags", updatedTags)
 	http.HandleFunc("/api/getSession", getSessions)
 
 	fmt.Println("Server running at http://localhost:8080")
@@ -320,4 +326,88 @@ func getSessions(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	io.WriteString(w, string(encodedList))
+
+}
+func updatedTags(w http.ResponseWriter, r *http.Request) {
+	var requestBody []byte
+	var tagUpdates tagUpdateBuffer
+	requestBody, err := io.ReadAll(r.Body)
+	if err == nil {
+		err = json.Unmarshal(requestBody, &tagUpdates)
+	}
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Println(err)
+		io.WriteString(w, "Invalid request body.")
+		return
+	}
+
+	tx, err := db.Begin()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Println(err)
+		return
+	}
+	addTagQuery := `
+	INSERT INTO tags(tag_name) values(?)
+	`
+
+	for _, tag := range tagUpdates.Added {
+		_, err := tx.Exec(addTagQuery, tag)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Println(err)
+			tx.Rollback()
+			return
+		}
+	}
+	updateTagsQuery := `
+	UPDATE tags
+	SET tag_name=?
+	WHERE tag_name=?
+	`
+	for newTag, oldTag := range tagUpdates.Updated {
+		_, err := tx.Exec(updateTagsQuery, newTag, oldTag)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Println(err)
+			tx.Rollback()
+			return
+		}
+	}
+	deleteSessionTagsQuery := `
+	DELETE FROM session_tags 
+	WHERE tag_id IN (
+		SELECT tag_id FROM tags WHERE tag_name = ?
+	)
+	`
+	for _, tag := range tagUpdates.Deleted {
+		_, err := tx.Exec(deleteSessionTagsQuery, tag)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Println(err)
+			tx.Rollback()
+			return
+		}
+	}
+	deleteTagsQuery := `
+	DELETE FROM tags
+	WHERE tag_name=?
+	`
+
+	for _, tag := range tagUpdates.Deleted {
+		_, err := tx.Exec(deleteTagsQuery, tag)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Println(err)
+			tx.Rollback()
+			return
+		}
+	}
+	tx.Commit()
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	io.WriteString(w, "Tags Settings Saved")
 }
