@@ -117,6 +117,8 @@ function editSessionTag(e) {
             editingTag.blur();
             if (oldTag != editingTag.innerHTML) {
                 globals.tagEditBuffer.Updated[editingTag.innerHTML] = oldTag;
+                document.getElementById(`session-${oldTag}`).innerHTML =
+                    editingTag.innerHTML;
             }
         }
     }
@@ -129,15 +131,11 @@ function editSessionTag(e) {
         editingTag.removeEventListener("blur", escapeHandler);
         globals.selectedTag = null;
         state.editedTag = false;
-        console.log(globals.tagEditBuffer);
     }
 }
 
 function deleteSessionTag(e) {
     e.stopPropagation();
-    // TODO: soft remove the cards, completely remove after saving and removed from db
-    // tagsListSettings.removeChild(globals.selectedTag);
-
     globals.selectedTag.style.display = "none";
     globals.tagEditBuffer.Deleted.push(globals.selectedTag.innerHTML);
     tagSettingContextMenu.style.display = "none";
@@ -162,6 +160,7 @@ function resolveTagEditHistory() {
         }
     }
     const updates = Object.entries(updateBuffer);
+    // If added and updated to new name
     addedBuffer.forEach((addedTag, addedIndex) => {
         for (let [newTag, oldTag] of updates) {
             if (addedTag == oldTag) {
@@ -170,6 +169,7 @@ function resolveTagEditHistory() {
             }
         }
     });
+    // If added and deleted, no need to do anything for that tag
     for (let delIdx in deleteBuffer) {
         let addIdx = addedBuffer.indexOf(deleteBuffer[delIdx]);
         if (addIdx > -1) {
@@ -179,6 +179,12 @@ function resolveTagEditHistory() {
     }
 }
 
+function deleteTagNodes() {
+    globals.tagEditBuffer.Deleted.forEach((tag) => {
+        document.getElementById(`session-${tag}`).remove();
+        document.getElementById(`setting-${tag}`).remove();
+    });
+}
 async function saveSessionTagsEdits() {
     if (
         Object.keys(globals.tagEditBuffer.Updated).length > 0 ||
@@ -193,11 +199,17 @@ async function saveSessionTagsEdits() {
                 },
                 body: JSON.stringify(globals.tagEditBuffer),
             });
-            if (!response.ok ){
+            if (!response.ok) {
                 console.err("Some Error Occuered");
                 return;
             }
             const message = await response.text();
+            deleteTagNodes();
+            globals.tagEditBuffer = {
+                Added: [],
+                Delete: [],
+                Updated: {},
+            };
             console.log(message);
         } catch (err) {
             console.err(err);

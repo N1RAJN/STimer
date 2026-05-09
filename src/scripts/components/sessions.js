@@ -133,8 +133,11 @@ export async function getAndPopulateTagsList() {
             const tagDiv = document.createElement("div");
             tagDiv.innerHTML = tag;
             tagDiv.className = "Session-Tag-Card";
+            tagDiv.id = `session-${tag}`;
             sessionTagsList.appendChild(tagDiv);
-            tagsListSettings.appendChild(tagDiv.cloneNode(true));
+            let tagDivCopy = tagDiv.cloneNode(true);
+            tagDivCopy.id = `setting-${tag}`;
+            tagsListSettings.appendChild(tagDivCopy);
         });
     } catch (err) {
         console.error(err);
