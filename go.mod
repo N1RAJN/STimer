@@ -1,4 +1,4 @@
-module test
+module STimer
 
 go 1.25.0
 
