@@ -6,14 +6,21 @@ Heavly Inspired by: [Studo](https://Studo.space)
 ---
 ## Features
 - Session tracker
+    - Stopwatch timer
+    - Countdown timer
 - Heatmap
+    - Github like heatmap review of session history.
 - Backup system
+    - Periodically save the session data so you don't lose the entire session.
 - Tags
+    - Categorize the session based on the task that you did.
 
 ---
 ## Things left to do
 - Integrated background music player
 - Session Statistics
+    - Detailed view of a session
+    - Statistics of sessions within different time period 
 
 ---
 ## Dependencies
