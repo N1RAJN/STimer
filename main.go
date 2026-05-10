@@ -12,36 +12,23 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-type sessionInfoObj struct {
-	StartedAt       uint64 `json:"StartedAt"`
-	EndedAt         uint64 `json:"EndedAt"`
-	Duration        uint16 `json:"Duration"`
-	PausesInSession []struct {
-		StartedAt uint64 `json:"StartedAt"`
-		EndedAt   uint64 `json:"EndedAt"`
-	} `json:"PausesInSession"`
-	Title       string   `json:"Title"`
-	Description string   `json:"Description"`
-	Tags        []string `json:"Tags"`
-	Resources   string   `json:"Resources"`
-}
 type pauseObj struct {
-	StartedAt uint64
-	EndedAt   uint64
+	StartedAt uint64 `json:"StartedAt"`
+	EndedAt   uint64 `json:"EndedAt"`
+}
+type sessionInfoObj struct {
+	StartedAt       uint64     `json:"StartedAt"`
+	EndedAt         uint64     `json:"EndedAt"`
+	Duration        uint16     `json:"Duration"`
+	PausesInSession []pauseObj `json:"PausesInSession"`
+	Title           string     `json:"Title"`
+	Description     string     `json:"Description"`
+	Tags            []string   `json:"Tags"`
+	Resources       string     `json:"Resources"`
 }
 type sessionListRequestObj struct {
 	Sort      string `json:"sort"`
 	TimeRange uint16 `json:"timeRange"`
-}
-type sessionListResponseObj struct {
-	StartedAt       uint64
-	EndedAt         uint64
-	Duration        uint16
-	Title           string
-	Description     string
-	Resources       string
-	Tags            []string
-	PausesInSession []pauseObj
 }
 type tagUpdateBuffer struct {
 	Added   []string `json:"Added"`
@@ -249,7 +236,7 @@ func getTagsList(w http.ResponseWriter, r *http.Request) {
 }
 
 func getSessions(w http.ResponseWriter, r *http.Request) {
-	var sessionConstraints sessionListRequestObj
+	var sessionConstraints sessionInfoObj
 	requestBody, err := io.ReadAll(r.Body)
 	if err == nil {
 		err = json.Unmarshal(requestBody, &sessionConstraints)
@@ -275,9 +262,9 @@ func getSessions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sessionList := make(map[uint64]sessionListResponseObj) // actual response obj to send as a json
+	sessionList := make(map[uint64]sessionInfoObj) // actual response obj to send as a json
 	// using maps to groups pauses by the sessionids
-	var session sessionListResponseObj // object to hold each session's info
+	var session sessionInfoObj // object to hold each session's info
 	var (
 		// varaibles to build the session Info object
 		sessionId, started, ended     uint64
@@ -293,7 +280,7 @@ func getSessions(w http.ResponseWriter, r *http.Request) {
 			// tags contains all tags associated with the session, separated by comma
 			tagSlice = strings.Split(tags.String, ",")
 		}
-		session = sessionListResponseObj{started, ended, duration, title, description, resources, tagSlice, []pauseObj{}} // keep the pausesInSession empty, and append later
+		session = sessionInfoObj{started, ended, duration, []pauseObj{}, title, description, tagSlice, resources} // keep the pausesInSession empty,  and append later
 		sessionList[sessionId] = session
 	}
 
