@@ -21,7 +21,7 @@ import {
     populateSessionList,
     initSessionList,
 } from "./components/sessionList.js";
-import { initHeatmap } from "./components/heatmap.js";
+import { calculateAlphaOfCell, initHeatmap } from "./components/heatmap.js";
 import { initSettings } from "./components/settings.js";
 
 initializeSessionList(
@@ -38,6 +38,7 @@ initSessionModal(
     sortSessionList,
     populateSessionList,
     saveSessionInfo,
+    calculateAlphaOfCell,
 );
 
 restoreUnsavedSession(showSessionInfoDialog);

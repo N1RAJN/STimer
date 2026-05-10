@@ -14,7 +14,7 @@ import {
 } from "../elements.js";
 
 import { state, globals } from "../state.js";
-import { customEvents } from "../utils.js";
+import { customEvents, currDate } from "../utils.js";
 function resetSessionInfoInputs() {
     [sessionDate, sessionDescription, sessionTitle, sessionResources].forEach(
         (input) => {
@@ -40,6 +40,7 @@ export function initSessionModal(
     sortSessionList,
     populateSessionList,
     saveSessionInfo,
+    calculateAlphaOfCell,
 ) {
     document.addEventListener(customEvents.TimerStopped, () => {
         showSessionInfoDialog();
@@ -106,10 +107,17 @@ export function initSessionModal(
             const message = response.split("#");
             console.log(message[0]);
 
+            const dateString = currDate.toDateString();
             // Add the saved session to the all session list
             globals.allSessions[message[1]] = JSON.parse(
                 JSON.stringify(globals.sessionInfo),
             );
+            console.log(globals.allSessionsByDate);
+            globals.allSessionsByDate[dateString].totalSessionDuration +=
+                globals.sessionInfo.Duration;
+            const alpha = calculateAlphaOfCell(dateString);
+            document.getElementById(`${dateString}`).style.backgroundColor =
+                `rgba(255, 255, 255, ${alpha})`;
             resetSessionTimer();
 
             // TODO: think of a better way of doing this

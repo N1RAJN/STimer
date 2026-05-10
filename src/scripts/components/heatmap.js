@@ -4,10 +4,18 @@ import {
     heatmapCellToolTip,
 } from "../elements.js";
 import { globals } from "../state.js";
-import { currDate } from "../utils.js";
+import { currDate, MAX_ALPHA, MIN_ALPHA, THRESHOLD } from "../utils.js";
 
 var toolId;
 
+export function calculateAlphaOfCell(dateString) {
+    const duration =
+        globals.allSessionsByDate?.[dateString]?.["totalSessionDuration"] ?? 0;
+    return Math.min(
+        MIN_ALPHA + (duration / THRESHOLD) * (MAX_ALPHA - MIN_ALPHA),
+        MAX_ALPHA,
+    );
+}
 function populateHeatmapCell() {
     const year = "2026";
     for (let i = 1; i <= 365; i++) {
@@ -25,10 +33,7 @@ function populateHeatmapCell() {
             heatmapDayLabel.appendChild(dayLabel);
         }
         cell.id = dateString;
-        const alpha =
-            (globals.allSessionsByDate?.[dateString]?.[
-                "totalSessionDuration"
-            ] ?? 1) / 7200;
+        const alpha = calculateAlphaOfCell(dateString);
         cell.style.backgroundColor = `rgba(255, 255, 255, ${alpha})`;
 
         column.appendChild(cell);

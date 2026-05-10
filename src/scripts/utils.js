@@ -35,3 +35,6 @@ export const saveIntervalMs = 10000;
 export const customEvents = {
     TimerStopped: "timerStopped",
 };
+export const MAX_ALPHA = 1.0;
+export const MIN_ALPHA = 0.1;
+export const THRESHOLD = 7200;
