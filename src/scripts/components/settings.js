@@ -59,12 +59,20 @@ function showAddSettingTagsInput() {
 
 function addSettingTags(e) {
     if (e.key == "Enter") {
+        const tag = addSessionTagSettingInput.value;
+        globals.tagEditBuffer.Added.push(tag);
+
         const tagDiv = document.createElement("div");
-        tagDiv.innerHTML = addSessionTagSettingInput.value;
-        globals.tagEditBuffer.Added.push(addSessionTagSettingInput.value);
+
+        tagDiv.innerHTML = tag;
         tagDiv.className = "Session-Tag-Card";
+        tagDiv.id = `session-${tag}`;
         sessionTagsList.appendChild(tagDiv);
-        tagsListSettings.appendChild(tagDiv.cloneNode(true));
+
+        let tagDivCopy = tagDiv.cloneNode(true);
+        tagDivCopy.id = `setting-${tag}`;
+        tagsListSettings.appendChild(tagDivCopy);
+
         addSessionTagSettingButton.innerHTML = "+";
         addSessionTagSettingInput.style.visibility = "hidden";
         addSessionTagSettingInput.value = "";
@@ -116,9 +124,11 @@ function editSessionTag(e) {
             editingTag.contentEditable = "false";
             editingTag.blur();
             if (oldTag != editingTag.innerHTML) {
+                editingTag.id = `setting-${editingTag.innerHTML}`;
                 globals.tagEditBuffer.Updated[editingTag.innerHTML] = oldTag;
-                document.getElementById(`session-${oldTag}`).innerHTML =
-                    editingTag.innerHTML;
+                const tagCard = document.getElementById(`session-${oldTag}`);
+                tagCard.innerHTML = editingTag.innerHTML;
+                tagCard.id = `session-${editingTag.innerHTML}`;
             }
         }
     }
@@ -207,7 +217,7 @@ async function saveSessionTagsEdits() {
             deleteTagNodes();
             globals.tagEditBuffer = {
                 Added: [],
-                Delete: [],
+                Deleted: [],
                 Updated: {},
             };
             console.log(message);
@@ -238,11 +248,36 @@ function saveSettings(toggleTimerMode) {
     settingsModal.close();
 }
 
+function revertTagChanges() {
+    globals.tagEditBuffer.Added?.forEach((tag) => {
+        document.getElementById(`session-${tag}`)?.remove();
+        document.getElementById(`setting-${tag}`)?.remove();
+    });
+    Object.entries(globals.tagEditBuffer.Updated)?.forEach(
+        ([newTag, oldTag]) => {
+            document.getElementById(`session-${newTag}`).innerHTML = oldTag;
+            document.getElementById(`setting-${newTag}`).innerHTML = oldTag;
+        },
+    );
+    globals.tagEditBuffer.Deleted?.forEach((tag) => {
+        document.getElementById(`session-${tag}`).style.display = "flex";
+        document.getElementById(`setting-${tag}`).style.display = "flex";
+    });
+
+    globals.tagEditBuffer = {
+        Added: [],
+        Deleted: [],
+        Updated: {},
+    };
+}
+
 export function initSettings(toggleTimerMode) {
     settingsButton.addEventListener("click", displaySettingsModal);
 
     settingsModalCloseButton.addEventListener("click", () => {
         hideSessionTagInput();
+        resolveTagEditHistory();
+        revertTagChanges();
         settingsModal.close();
     });
 

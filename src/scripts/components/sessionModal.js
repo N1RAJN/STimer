@@ -80,11 +80,17 @@ export function initSessionModal(
 
     addSessionTagInput.addEventListener("keypress", (e) => {
         if (e.key == "Enter") {
+            const tag = addSessionTagInput.value;
             const tagDiv = document.createElement("div");
-            tagDiv.innerHTML = addSessionTagInput.value;
+            tagDiv.innerHTML = tag;
             tagDiv.className = "Session-Tag-Card";
+            tagDiv.id = `session-${tag}`;
             sessionTagsList.appendChild(tagDiv);
-            tagsListSettings.appendChild(tagDiv.cloneNode(true));
+
+            let tagDivCopy = tagDiv.cloneNode(true);
+            tagDivCopy.id = `setting-${tag}`;
+            tagsListSettings.appendChild(tagDivCopy);
+
             addSessionTagButton.innerHTML = "+";
             addSessionTagInput.style.visibility = "hidden";
             addSessionTagInput.value = "";
@@ -112,7 +118,6 @@ export function initSessionModal(
             globals.allSessions[message[1]] = JSON.parse(
                 JSON.stringify(globals.sessionInfo),
             );
-            console.log(globals.allSessionsByDate);
             globals.allSessionsByDate[dateString].totalSessionDuration +=
                 globals.sessionInfo.Duration;
             const alpha = calculateAlphaOfCell(dateString);
