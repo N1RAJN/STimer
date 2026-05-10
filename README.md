@@ -1,7 +1,10 @@
 # STimer
 ---
 A generic study session tracker.
-Heavly Inspired by: [Studo](https://Studo.space)
+
+## Credits
+- Heavly Inspired by: [Studo](https://Studo.space)
+- SVGs from [SVGrepo](https://www.svgrepo.com)
 
 ---
 ## Features

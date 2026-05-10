@@ -28,7 +28,7 @@ function populateHeatmapCell() {
         const alpha =
             (globals.allSessionsByDate?.[dateString]?.[
                 "totalSessionDuration"
-            ] ?? 1) / 10;
+            ] ?? 1) / 7200;
         cell.style.backgroundColor = `rgba(255, 255, 255, ${alpha})`;
 
         column.appendChild(cell);
