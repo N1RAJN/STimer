@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	_ "modernc.org/sqlite"
@@ -40,7 +41,11 @@ var db *sql.DB
 
 func main() {
 	var err error
-	db, err = sql.Open("sqlite", "file:data.db")
+	db_path := os.Getenv("DB_PATH")
+	if db_path == "" {
+		db_path = "data.db"
+	}
+	db, err = sql.Open("sqlite", "file:"+db_path)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -54,8 +59,12 @@ func main() {
 	http.HandleFunc("/api/updateTags", updatedTags)
 	http.HandleFunc("/api/getSession", getSessions)
 
-	fmt.Println("Server running at http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	fmt.Println("Server running at http://localhost:" + port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
 func createTable() {

@@ -130,7 +130,7 @@ export async function getAndPopulateTagsList() {
         }
         const tags = await result.json();
         globals.sessionTags = tags;
-        tags.forEach((tag) => {
+        tags?.forEach((tag) => {
             const tagDiv = document.createElement("div");
             tagDiv.innerHTML = tag;
             tagDiv.className = "Session-Tag-Card";
