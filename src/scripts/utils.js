@@ -31,7 +31,7 @@ export const sessionSorts = {
     },
 };
 export const counterDelayMS = 1000;
-export const saveIntervalMs = 10000;
+export const saveIntervalMs = 300000;
 export const customEvents = {
     TimerStopped: "timerStopped",
 };
