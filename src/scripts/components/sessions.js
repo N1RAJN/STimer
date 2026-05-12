@@ -16,7 +16,8 @@ export async function saveSessionInfo() {
         globals.sessionInfo.Tags.push(tag.innerHTML);
         tag.classList.remove("Selected");
     });
-    globals.sessionInfo.Duration = globals.sessionDurationSec;
+    if (state.sessionSaved)
+        globals.sessionInfo.Duration = globals.sessionDurationSec;
     globals.sessionInfo.Title = sessionTitle.value;
     globals.sessionInfo.Description = sessionDescription.value;
     globals.sessionInfo.Resources = sessionResources.value.trim();
@@ -103,7 +104,6 @@ async function getSessionList() {
             dateEntry.sessions.push(session);
             globals.allSessionsByDate[dateString] = dateEntry;
         }
-        console.log(globals.allSessionsByDate);
     } catch (err) {
         console.error(err);
     }
