@@ -38,7 +38,6 @@ export async function saveSessionInfo() {
 
 export function savePauseInfo() {
     let size = globals.sessionInfo.PausesInSession.length;
-    console.log(globals.sessionInfo);
     globals.sessionInfo.PausesInSession[size - 1].EndedAt =
         +globals.pauseEndedDate.getTime();
     localStorage.setItem("activeSession", JSON.stringify(globals.sessionInfo));

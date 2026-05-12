@@ -108,6 +108,7 @@ export function initSessionModal(
             localStorage.removeItem("sessionSaved");
             localStorage.removeItem("activeSession");
             state.sessionSaved = true;
+            state.localCopyCreated = false;
 
             const response = await result.text();
             const message = response.split("#");

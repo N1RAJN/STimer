@@ -155,7 +155,7 @@ export function resetSessionTimer() {
     };
 }
 
-function endSession() {
+function endSession(savePauseInfo) {
     globals.sessionEndedDate = new Date();
     if (state.timerPaused) {
         globals.pauseEndedDate = globals.sessionEndedDate;
@@ -186,7 +186,7 @@ export function initTimer(
     });
 
     timerStopButton.addEventListener("click", () => {
-        endSession();
+        endSession(savePauseInfo);
     });
 
     addResourceButton.addEventListener("click", () => {
