@@ -113,13 +113,23 @@ export function initSessionModal(
             const message = response.split("#");
             console.log(message[0]);
 
-            const dateString = currDate.toDateString();
             // Add the saved session to the all session list
             globals.allSessions[message[1]] = JSON.parse(
                 JSON.stringify(globals.sessionInfo),
             );
+
+            const dateString = currDate.toDateString();
+            if (!globals.allSessionsByDate[dateString]) {
+                globals.allSessionsByDate[dateString] = {
+                    totalSessionDuration: 0,
+                    sessions: [],
+                };
+            }
             globals.allSessionsByDate[dateString].totalSessionDuration +=
                 globals.sessionInfo.Duration;
+            globals.allSessionsByDate[dateString].sessions.push(
+                globals.sessionInfo,
+            );
             const alpha = calculateAlphaOfCell(dateString);
             document.getElementById(`${dateString}`).style.backgroundColor =
                 `rgba(255, 255, 255, ${alpha})`;

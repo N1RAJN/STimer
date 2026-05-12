@@ -19,9 +19,7 @@ export function populateSessionList() {
 
         const sessionInfoCardTitle = document.createElement("div");
         sessionInfoCardTitle.classList.add("Session-Info-Card-Title");
-        sessionInfoCardTitle.innerHTML = session.Title
-            ? globals.sessionInfo.Title
-            : "—";
+        sessionInfoCardTitle.innerHTML = session.Title ? session.Title : "—";
 
         const sessionInfoCardTimestamp = document.createElement("div");
         sessionInfoCardTimestamp.classList.add("Session-Info-Card-Timestamp");

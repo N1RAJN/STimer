@@ -103,6 +103,7 @@ async function getSessionList() {
             dateEntry.sessions.push(session);
             globals.allSessionsByDate[dateString] = dateEntry;
         }
+        console.log(globals.allSessionsByDate);
     } catch (err) {
         console.error(err);
     }
