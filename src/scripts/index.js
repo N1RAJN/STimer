@@ -2,7 +2,6 @@ import {
     saveSessionInfo,
     savePauseInfo,
     storeSessionLocal,
-    restoreUnsavedSession,
     initializeSessionList,
     getAndPopulateTagsList,
 } from "./components/sessions.js";
@@ -30,7 +29,7 @@ initializeSessionList(
     populateSessionList,
     initHeatmap,
 );
-getAndPopulateTagsList(restoreUnsavedSession, showSessionInfoDialog);
+getAndPopulateTagsList(showSessionInfoDialog);
 
 initSessionModal(
     resetSessionTimer,
