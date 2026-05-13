@@ -55,6 +55,13 @@ export function storeSessionLocal() {
         sessionCopy.PausesInSession[size - 1].EndedAt = +new Date().getTime();
     }
     sessionCopy.Resources = sessionResources.value.trim();
+    sessionCopy.Title = sessionTitle.value.trim();
+    sessionCopy.Description = sessionDescription.value.trim();
+
+    const selectedTags = document.getElementsByClassName("Selected");
+    Array.from(selectedTags).map((tag) => {
+        sessionCopy.Tags.push(tag.innerHTML);
+    });
 
     // Immediately create a local copy on session start;
     // Only after atleast saveIntervalMs that we declare the session as unsaved
@@ -75,11 +82,19 @@ export function restoreUnsavedSession(showSessionInfoDialog) {
     const unsavedSession = localStorage.getItem("sessionSaved");
     // sessionSaved key is removed on successful session save
     if (unsavedSession == null) return;
-    state.restoredSession = true;
     globals.sessionInfo = JSON.parse(localStorage.getItem("activeSession"));
+    state.restoredSession = true;
+
     globals.sessionStartedDate = new Date(globals.sessionInfo.StartedAt);
     globals.sessionEndedDate = new Date(globals.sessionInfo.EndedAt);
+
     sessionResources.value = globals.sessionInfo.Resources;
+    sessionDescription.value = globals.sessionInfo.Description;
+    sessionTitle.value = globals.sessionInfo.Title;
+    globals.sessionInfo.Tags?.forEach((tag) => {
+        document.getElementById(`session-${tag}`).classList.add("Selected");
+    });
+    globals.sessionInfo.Tags = [];
     showSessionInfoDialog("Unsaved Session.", "Save session");
 }
 
@@ -120,7 +135,10 @@ export async function initializeSessionList(
     initHeatmap();
 }
 
-export async function getAndPopulateTagsList() {
+export async function getAndPopulateTagsList(
+    restoreUnsavedSession,
+    showSessionInfoDialog,
+) {
     try {
         const result = await fetch("/api/getTags");
         if (!result.ok) {
@@ -139,6 +157,7 @@ export async function getAndPopulateTagsList() {
             tagDivCopy.id = `setting-${tag}`;
             tagsListSettings.appendChild(tagDivCopy);
         });
+        restoreUnsavedSession(showSessionInfoDialog);
     } catch (err) {
         console.error(err);
     }
