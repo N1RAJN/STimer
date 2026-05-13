@@ -16,8 +16,9 @@ export async function saveSessionInfo() {
         globals.sessionInfo.Tags.push(tag.innerHTML);
         tag.classList.remove("Selected");
     });
-    if (state.sessionSaved)
+    if (!state.restoredSession) {
         globals.sessionInfo.Duration = globals.sessionDurationSec;
+    }
     globals.sessionInfo.Title = sessionTitle.value;
     globals.sessionInfo.Description = sessionDescription.value;
     globals.sessionInfo.Resources = sessionResources.value.trim();
@@ -57,9 +58,8 @@ export function storeSessionLocal() {
 
     // Immediately create a local copy on session start;
     // Only after atleast saveIntervalMs that we declare the session as unsaved
-    if (state.localCopyCreated && state.sessionSaved) {
+    if (state.localCopyCreated) {
         localStorage.setItem("sessionSaved", JSON.stringify(false));
-        state.sessionSaved = false;
     }
 
     localStorage.setItem("activeSession", JSON.stringify(sessionCopy));
@@ -75,7 +75,7 @@ export function restoreUnsavedSession(showSessionInfoDialog) {
     const unsavedSession = localStorage.getItem("sessionSaved");
     // sessionSaved key is removed on successful session save
     if (unsavedSession == null) return;
-    state.sessionSaved = false;
+    state.restoredSession = true;
     globals.sessionInfo = JSON.parse(localStorage.getItem("activeSession"));
     globals.sessionStartedDate = new Date(globals.sessionInfo.StartedAt);
     globals.sessionEndedDate = new Date(globals.sessionInfo.EndedAt);

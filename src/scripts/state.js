@@ -5,7 +5,7 @@ export const state = {
     timerStarted: false,
     timerPaused: true,
     isSessionListHidden: true,
-    sessionSaved: true,
+    restoredSession: false,
     localCopyCreated: false,
     stopwatchMode: true,
 };
