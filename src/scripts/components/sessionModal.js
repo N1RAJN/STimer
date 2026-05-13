@@ -107,7 +107,7 @@ export function initSessionModal(
             }
             localStorage.removeItem("sessionSaved");
             localStorage.removeItem("activeSession");
-            state.sessionSaved = true;
+            if (state.restoredSession) state.restoredSession = false;
             state.localCopyCreated = false;
 
             const response = await result.text();

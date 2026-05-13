@@ -30,7 +30,7 @@ initializeSessionList(
     populateSessionList,
     initHeatmap,
 );
-getAndPopulateTagsList();
+getAndPopulateTagsList(restoreUnsavedSession, showSessionInfoDialog);
 
 initSessionModal(
     resetSessionTimer,
@@ -40,8 +40,6 @@ initSessionModal(
     saveSessionInfo,
     calculateAlphaOfCell,
 );
-
-restoreUnsavedSession(showSessionInfoDialog);
 
 initTimer(showSessionInfoDialog, storeSessionLocal, savePauseInfo);
 initSessionList();
