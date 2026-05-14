@@ -34,6 +34,7 @@ export const counterDelayMS = 1000;
 export const saveIntervalMs = 300000;
 export const customEvents = {
     TimerStopped: "timerStopped",
+    SessionView: "sessionView",
 };
 export const MAX_ALPHA = 1.0;
 export const MIN_ALPHA = 0.1;

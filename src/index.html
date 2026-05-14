@@ -189,6 +189,43 @@
             <button id="settingsModalSaveButton" class="Settings-Modal-Save-Button">Save Settings</button>
         </div>
     </dialog>
+    <dialog id="sessionViewModal" class="Session-View-Modal">
+        <div id="sessionViewModalInner" class="Session-View-Modal-Inner">
+            <div id="sessionViewModalTitleContainer" class="Session-View-Modal-Title-Container">
+                <div id="sessionViewModalTitleLabel" class="Session-View-Modal-Title-Label">Session Info</div>
+                <button id="sessionViewModalCloseButton" class="Session-View-Modal-Close-Button"> X </button>
+            </div>
+            <div id="sessionViewModalBody" class="Session-View-Modal-Body">
+                <div id="sessionViewTitleContainer" class="Session-View-Title-Container">
+                    <label>Title: </label>
+                    <input type="text" id="sessionViewTitle" class="Session-View-Title" />
+                </div>
+                <div id="sessionViewTimestampContainer" class="Session-View-Timestamp-Container">
+                    <div id="sessionViewTimestamp" class="Session-View-Timestamp">
+                        <div id="sessionViewStartedDate" class="Session-View-Started-Date"></div>
+                        <div id="sessionViewEndedDate" class="Session-View-Ended-Date"></div>
+                        <div id="sessionViewDuration" class="Session-View-Duration"></div>
+                    </div>
+                </div>
+                <div id="sessionViewTagsContainer" class="Session-View-Tags-Container">
+                    <label>Tags:</label>
+                    <div id="sessionViewTags" class="Session-View-Tags"></div>
+                    <div id="sessionViewTagsList" class="Session-View-Tags-List"></div>
+                </div>
+                <div id="sessionViewDescriptionContainer" class="Session-View-Description-Container">
+                    <label>Description: </label>
+                    <input type="text" id="sessionViewDescription" class="Session-View-Description" />
+                </div>
+                <div id="sessionViewResourcesContainer" class="Session-View-Resources-Container">
+                    <lablel>Resources: </lablel>
+                    <input type="text" id="sessionViewResources" class="Session-View-Resources" />
+                </div>
+                <div id="sessionViewFooter" class="Session-View-Footer">
+                    <button id="sessionViewEditButton" class="Session-View-Edit-Button"> Edit </button>
+                    <button id="sessionViewDeleteButton" class="Session-View-Delete-Button"> Delete </button>
+                </div>
+            </div>
+    </dialog>
     <div id="heatmapCellToolTip" class="Heatmap-Cell-Tool-Tip"></div>
 </body>
 

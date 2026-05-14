@@ -80,3 +80,35 @@ export const sessionResources = document.getElementById("sessionResources");
 export const sessionInfoSaveButton = document.getElementById(
     "sessionInfoSaveButton",
 );
+
+// Session View
+export const sessionViewModal = document.getElementById("sessionViewModal");
+export const sessionViewModalCloseButton = document.getElementById(
+    "sessionViewModalCloseButton",
+);
+export const sessionViewTitle = document.getElementById("sessionViewTitle");
+export const sessionViewTags = document.getElementById("sessionViewTags");
+export const sessionViewDescription = document.getElementById(
+    "sessionViewDescription",
+);
+export const sessionViewResources = document.getElementById(
+    "sessionViewResources",
+);
+export const sessionViewTagsList = document.getElementById(
+    "sessionViewTagsList",
+);
+export const sessionViewEditButton = document.getElementById(
+    "sessionViewEditButton",
+);
+export const sessionViewDeleteButton = document.getElementById(
+    "sessionViewDeleteButton",
+);
+export const sessionViewStartedDate = document.getElementById(
+    "sessionViewStartedDate",
+);
+export const sessionViewEndedDate = document.getElementById(
+    "sessionViewEndedDate",
+);
+export const sessionViewDuration = document.getElementById(
+    "sessionViewDuration",
+);

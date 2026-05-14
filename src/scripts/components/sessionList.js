@@ -8,7 +8,7 @@ import {
     sessionSortDropdown,
 } from "../elements.js";
 import { state, globals } from "../state.js";
-import { sessionTimeFilter, sessionSorts } from "../utils.js";
+import { sessionTimeFilter, sessionSorts, customEvents } from "../utils.js";
 
 export function populateSessionList() {
     sessionList.innerHTML = "";
@@ -67,6 +67,15 @@ export function populateSessionList() {
         sessionInfoCard.appendChild(sessionInfoCardTimestamp);
 
         sessionList.appendChild(sessionInfoCard);
+
+        sessionInfoCard.addEventListener("click", (e) => {
+            if (e.currentTarget.className == "Session-Info-Card") {
+                globals.sessionToView = e.currentTarget;
+                document.dispatchEvent(
+                    new CustomEvent(customEvents.SessionView),
+                );
+            }
+        });
     });
 }
 
@@ -98,7 +107,7 @@ export function sortSessionList() {
     globals.sessionsToPopulate.sort(state.currentSort);
 }
 
-export function initSessionList() {
+export function initSessionList(showSessionViewModal) {
     toggleSessionListButton.addEventListener("click", () => {
         if (state.timerStarted) return;
         sessionListContainer.style.display = state.isSessionListHidden
