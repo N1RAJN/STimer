@@ -8,7 +8,12 @@ import {
     sessionSortDropdown,
 } from "../elements.js";
 import { state, globals } from "../state.js";
-import { sessionTimeFilter, sessionSorts, customEvents } from "../utils.js";
+import {
+    sessionTimeFilter,
+    sessionSorts,
+    customEvents,
+    formatDurationSec,
+} from "../utils.js";
 
 export function populateSessionList() {
     sessionList.innerHTML = "";
@@ -47,17 +52,7 @@ export function populateSessionList() {
         const timestampDuration = document.createElement("span");
         timestampDuration.classList.add("Timestamp-Duration");
 
-        let hour = Math.floor(session.Duration / 3600);
-        let min = Math.floor(session.Duration / 60) % 60;
-        let sec = session.Duration % 60;
-        let formattedDuration = [
-            hour && `${hour}h`,
-            min && `${min}m`,
-            `${sec}s`,
-        ]
-            .filter(Boolean)
-            .join(" ");
-
+        const formattedDuration = formatDurationSec(session.Duration);
         timestampDuration.innerHTML = formattedDuration;
 
         sessionInfoCardTimestamp.appendChild(timestampTime);
