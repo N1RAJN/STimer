@@ -1,0 +1,159 @@
+.Session-View-Modal {
+    margin: auto;
+    background-color: #1a1a1a;
+    color: white;
+    padding: 0.8em;
+    width: 90%;
+    max-width: 800px;
+    height: 90%;
+    border: solid;
+    border-color: #333333;
+    border-radius: 1.8rem;
+}
+
+.Session-View-Modal-Inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    gap: 0.5em;
+}
+
+.Session-View-Modal-Header-Container {
+    display: flex;
+    flex-direction: row;
+    flex: 0.8;
+    justify-content: space-between;
+    font-size: 1.3rem;
+    border: none;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #333333;
+}
+
+.Session-View-Title {
+    box-sizing: border-box;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border: none;
+    background-color: inherit;
+    font-size: 1.9rem;
+    font-weight: 500;
+    font-family: 'IBM Plex Mono', monospace;
+    color: transparent;
+    text-shadow: 0 0 0 white;
+}
+
+.Session-View-Date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    font-size: 0.8em;
+    font-weight: 500;
+}
+
+.Session-View-Modal-Close-Button {
+    display: flex;
+    flex: 0.1;
+    background-color: #1a1a1a;
+    color: #cccccc;
+    border: 0;
+    font-size: 0.8em;
+    font-weight: 500;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.Session-View-Modal-Body {
+    display: flex;
+    flex-direction: column;
+    flex: 6;
+    gap: 0.5em;
+}
+
+.Session-View-Timestamp-Container {
+    display: flex;
+    flex: 4;
+}
+
+.Session-View-Notes {
+    display: flex;
+    flex: 6;
+    gap: 0.5em;
+}
+
+.Session-View-Description-Container,
+.Session-View-Resources-Container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5em;
+    flex: 1;
+}
+
+.Session-View-Description-Label,
+.Session-View-Resources-Label {
+    flex: 1;
+    font-size: 1.2rem;
+}
+
+.Session-View-Description,
+.Session-View-Resources {
+    flex: 9;
+    border: none;
+    background-color: inherit;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: transparent;
+    text-shadow: 0 0 0 white;
+    resize: none;
+}
+
+.Session-View-Tags-Container {
+    display: flex;
+    flex: 0.6;
+}
+
+.Session-View-Tags {
+    display: flex;
+    align-items: center;
+    color: #999;
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+.Session-View-Tags-List {}
+
+.Session-View-Footer {
+    display: flex;
+    gap: 0.5em;
+    flex: 0.5;
+}
+
+.Session-View-Edit-Button {
+    flex: 1;
+    background-color: #666666;
+    color: white;
+    cursor: pointer;
+    border-radius: 0.5rem;
+}
+
+.Session-View-Delete-Button {
+    flex: 1;
+    background-color: #990000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 0.5rem;
+}
+
+.Session-View-Title:focus,
+.Session-View-Resources:focus,
+.Session-View-Description:focus {
+    outline: none;
+}

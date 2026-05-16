@@ -186,14 +186,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>S
             <button id="settingsModalSaveButton" class="Settings-Modal-Save-Button">Save Settings</button>
         </div>
     </dialog>
     <dialog id="sessionViewModal" class="Session-View-Modal">
         <div id="sessionViewModalInner" class="Session-View-Modal-Inner">
             <div id="sessionViewModalHeaderContainer" class="Session-View-Modal-Header-Container">
-                <input type="text" id="sessionViewTitle" class="Session-View-Title" />
+                <input type="text" id="sessionViewTitle" class="Session-View-Title" readonly />
                 <div id="sessionViewDate" class="Session-View-Date"></div>
                 <button id="sessionViewModalCloseButton" class="Session-View-Modal-Close-Button"> X </button>
             </div>
@@ -207,17 +207,18 @@
                 </div>
                 <div id="sessionViewNotes" class="Session-View-Notes">
                     <div id="sessionViewDescriptionContainer" class="Session-View-Description-Container">
-                        <label>Description: </label>
-                        <input type="text" id="sessionViewDescription" class="Session-View-Description" />
+                        <div class="Session-View-Description-Label">Description: </div>
+                        <textarea type="text" id="sessionViewDescription" class="Session-View-Description"
+                            readyonly></textarea>
                     </div>
                     <div id="sessionViewResourcesContainer" class="Session-View-Resources-Container">
-                        <lablel>Resources: </lablel>
-                        <input type="text" id="sessionViewResources" class="Session-View-Resources" />
+                        <div class="Session-View-Resources-Label">Resources:</div>
+                        <textarea type="text" id="sessionViewResources" class="Session-View-Resources"
+                            readyonly></textarea>
                     </div>
 
                 </div>
                 <div id="sessionViewTagsContainer" class="Session-View-Tags-Container">
-                    <label>Tags:</label>
                     <div id="sessionViewTags" class="Session-View-Tags"></div>
                     <div id="sessionViewTagsList" class="Session-View-Tags-List"></div>
                 </div>
