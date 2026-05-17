@@ -103,7 +103,6 @@ export const sessionViewEditButton = document.getElementById(
 export const sessionViewDeleteButton = document.getElementById(
     "sessionViewDeleteButton",
 );
-
 export const sessionViewDate = document.getElementById("sessionViewDate");
 export const sessionViewStartedDate = document.getElementById(
     "sessionViewStartedDate",
@@ -113,4 +112,10 @@ export const sessionViewEndedDate = document.getElementById(
 );
 export const sessionViewDuration = document.getElementById(
     "sessionViewDuration",
+);
+export const sessionViewTotalDuration = document.getElementById(
+    "sessionViewTotalDuration",
+);
+export const sessionViewPauseDuration = document.getElementById(
+    "sessionViewPauseDuration",
 );

@@ -78,7 +78,39 @@
 
 .Session-View-Timestamp-Container {
     display: flex;
-    flex: 4;
+    flex-direction: column;
+    flex: 3;
+    gap: 0.5em;
+}
+
+.Session-View-Timestamp {
+    height: 50px;
+    background-color: #666;
+}
+
+.Session-View-Timestamp-Label {
+    display: flex;
+    justify-content: space-between;
+}
+
+.Session-View-Aggregate-Time {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+    font-weight: 200;
+}
+
+.Session-View-Total-Duration-Container,
+.Session-View-Duration-Container,
+.Session-View-Pause-Duration-Container {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.Session-View-Started-Date,
+.Session-View-Ended-Date {
+    font-weight: 100;
 }
 
 .Session-View-Notes {
@@ -106,12 +138,24 @@
 .Session-View-Resources {
     flex: 9;
     border: none;
-    background-color: inherit;
+    background-color: #333;
     font-size: 1.1rem;
     font-weight: 500;
     color: transparent;
     text-shadow: 0 0 0 white;
     resize: none;
+    padding: 0.5rem;
+    border: solid 1px #666666;
+    border-radius: 0.25rem;
+    background-color: #333333;
+
+    & a:link {
+        color: white;
+    }
+
+    & a:visited {
+        color: #888;
+    }
 }
 
 .Session-View-Tags-Container {
@@ -126,8 +170,6 @@
     font-size: 1.2em;
     font-weight: 500;
 }
-
-.Session-View-Tags-List {}
 
 .Session-View-Footer {
     display: flex;
@@ -149,7 +191,16 @@
     color: white;
     border: none;
     cursor: pointer;
+    outline: 2px solid #CC0000;
     border-radius: 0.5rem;
+}
+
+.Session-View-Delete-Button:hover {
+    outline: 2px solid #990000;
+}
+
+.Session-View-Delete-Button: {
+    outline: 2px solid #990000;
 }
 
 .Session-View-Title:focus,

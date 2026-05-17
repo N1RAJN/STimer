@@ -42,7 +42,7 @@ export const THRESHOLD = 7200;
 export function formatDurationSec(duration) {
     let hour = Math.floor(duration / 3600);
     let min = Math.floor(duration / 60) % 60;
-    let sec = duration % 60;
+    let sec = Math.floor(duration) % 60;
     let formattedDuration = [hour && `${hour}h`, min && `${min}m`, `${sec}s`]
         .filter(Boolean)
         .join(" ");

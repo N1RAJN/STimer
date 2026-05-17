@@ -199,22 +199,35 @@
             </div>
             <div id="sessionViewModalBody" class="Session-View-Modal-Body">
                 <div id="sessionViewTimestampContainer" class="Session-View-Timestamp-Container">
-                    <div id="sessionViewTimestamp" class="Session-View-Timestamp">
+                    <div id="sessionViewAggregateTime" class="Session-View-Aggregate-Time">
+                        <div id="sessionViewTotalDurationContainer" class="Session-View-Total-Duration-Container">
+                            <label>Total: </label>
+                            <div id="sessionViewTotalDuration" class="Session-View-Total-Duration"> </div>
+                        </div>
+                        <div id="sessionViewDurationContainer" class="Session-View-Duration-Container">
+                            <label>Session: </label>
+                            <div id="sessionViewDuration" class="Session-View-Duration"></div>
+                        </div>
+                        <div id="sessionViewPauseDurationContainer" class="Session-View-Pause-Duration-Container">
+                            <label>Pauses: </label>
+                            <div id="sessionViewPauseDuration" class="Session-View-Pause-Duration"></div>
+                        </div>
+                    </div>
+                    <div id="sessionViewTimestamp" class="Session-View-Timestamp"></div>
+                    <div id="sessionViewTimestampLabel" class="Session-View-Timestamp-Label">
                         <div id="sessionViewStartedDate" class="Session-View-Started-Date"></div>
                         <div id="sessionViewEndedDate" class="Session-View-Ended-Date"></div>
-                        <div id="sessionViewDuration" class="Session-View-Duration"></div>
                     </div>
                 </div>
                 <div id="sessionViewNotes" class="Session-View-Notes">
                     <div id="sessionViewDescriptionContainer" class="Session-View-Description-Container">
                         <div class="Session-View-Description-Label">Description: </div>
-                        <textarea type="text" id="sessionViewDescription" class="Session-View-Description"
-                            readyonly></textarea>
+                        <textarea readonly id="sessionViewDescription" class="Session-View-Description"></textarea>
                     </div>
                     <div id="sessionViewResourcesContainer" class="Session-View-Resources-Container">
                         <div class="Session-View-Resources-Label">Resources:</div>
-                        <textarea type="text" id="sessionViewResources" class="Session-View-Resources"
-                            readyonly></textarea>
+                        <div readonly id="sessionViewResources" class="Session-View-Resources">
+                        </div>
                     </div>
 
                 </div>
