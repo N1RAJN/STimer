@@ -135,10 +135,7 @@ export async function initializeSessionList(
     initHeatmap();
 }
 
-export async function getAndPopulateTagsList(
-    restoreUnsavedSession,
-    showSessionInfoDialog,
-) {
+export async function getAndPopulateTagsList(showSessionInfoDialog) {
     try {
         const result = await fetch("/api/getTags");
         if (!result.ok) {
