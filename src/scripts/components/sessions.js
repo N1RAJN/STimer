@@ -16,9 +16,7 @@ export async function saveSessionInfo() {
         globals.sessionInfo.Tags.push(tag.innerHTML);
         tag.classList.remove("Selected");
     });
-    if (!state.restoredSession) {
-        globals.sessionInfo.Duration = globals.sessionDurationSec;
-    }
+    globals.sessionInfo.Duration = 0;
     globals.sessionInfo.Title = sessionTitle.value;
     globals.sessionInfo.Description = sessionDescription.value;
     globals.sessionInfo.Resources = sessionResources.value.trim();

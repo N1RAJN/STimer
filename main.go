@@ -16,6 +16,7 @@ import (
 type pauseObj struct {
 	StartedAt uint64 `json:"StartedAt"`
 	EndedAt   uint64 `json:"EndedAt"`
+	Duration  uint16 `json:"Duration"`
 }
 type sessionInfoObj struct {
 	StartedAt       uint64     `json:"StartedAt"`
@@ -85,6 +86,7 @@ func createTable() {
 	session_id INTEGER,
 	started_at INTEGER,
 	ended_at INTEGER,
+	duration INTEGER,
 	FOREIGN KEY(session_id) REFERENCES session(session_id)
 	)
 	`
@@ -131,7 +133,7 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 	}
 	startedTime := sessionData.StartedAt
 	endedTime := sessionData.EndedAt
-	duration := sessionData.Duration
+	duration := (endedTime - startedTime) / 1000
 	title := sessionData.Title
 	description := sessionData.Description
 	resources := sessionData.Resources
@@ -156,11 +158,11 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 	}
 	var pausesInSession []pauseObj
 	for _, pause := range sessionData.PausesInSession {
-		pausesInSession = append(pausesInSession, pauseObj{StartedAt: pause.StartedAt, EndedAt: pause.EndedAt})
+		pausesInSession = append(pausesInSession, pauseObj{StartedAt: pause.StartedAt, EndedAt: pause.EndedAt, Duration: (uint16(pause.EndedAt - pause.StartedAt)) / 1000})
 	}
 
 	pausesQuery := `
-	INSERT INTO pauses(session_id, started_at, ended_at) VALUES(?, ?, ?)
+	INSERT INTO pauses(session_id, started_at, ended_at, duration) VALUES(?, ?, ?, ?)
 	`
 	sessionId, err := sessionQueryResult.LastInsertId()
 	if err != nil {
@@ -170,7 +172,8 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	for _, pause := range pausesInSession {
-		_, err = tx.Exec(pausesQuery, sessionId, pause.StartedAt, pause.EndedAt)
+		log.Printf("%d, %d, %d, %d", sessionId, pause.EndedAt, pause.EndedAt, pause.Duration)
+		_, err = tx.Exec(pausesQuery, sessionId, pause.StartedAt, pause.EndedAt, pause.Duration)
 		if err != nil {
 			tx.Rollback()
 			w.WriteHeader(http.StatusInternalServerError)
@@ -204,7 +207,9 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	tx.Commit()
+	if err := tx.Commit(); err != nil {
+		log.Println("commit failed:", err)
+	}
 
 	w.WriteHeader(http.StatusOK)
 	message := fmt.Sprintf("Session Info Saved#%d", sessionId)
@@ -230,6 +235,7 @@ func getTagsList(w http.ResponseWriter, r *http.Request) {
 		}
 		tagsList = append(tagsList, tag)
 	}
+	rows.Close()
 	if err := rows.Err(); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -292,28 +298,32 @@ func getSessions(w http.ResponseWriter, r *http.Request) {
 		session = sessionInfoObj{started, ended, duration, []pauseObj{}, title, description, tagSlice, resources} // keep the pausesInSession empty,  and append later
 		sessionList[sessionId] = session
 	}
+	sessionWithTags.Close()
 
 	// Need multiple columns from pauses table, so do it separately
 	pausesQuery := `
-	SELECT session_id, started_At, ended_At 
+	SELECT session_id, started_At, ended_At, duration
 	FROM pauses
 		`
 	var sId, pStarted, pEnded uint64
+	var pDuration uint16
 	pauses, err := db.Query(pausesQuery)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	for pauses.Next() {
-		if err := pauses.Scan(&sId, &pStarted, &pEnded); err != nil {
+		if err := pauses.Scan(&sId, &pStarted, &pEnded, &pDuration); err != nil {
+			log.Fatal(err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 		if pause, ok := sessionList[sId]; ok {
-			pause.PausesInSession = append(pause.PausesInSession, pauseObj{pStarted, pEnded})
+			pause.PausesInSession = append(pause.PausesInSession, pauseObj{pStarted, pEnded, pDuration})
 			sessionList[sId] = pause
 		}
 	}
+	pauses.Close()
 	encodedList, err := json.Marshal(sessionList)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
