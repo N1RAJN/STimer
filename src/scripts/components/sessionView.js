@@ -38,12 +38,15 @@ export function showSessionViewModal(sessionId) {
         minute: "numeric",
     });
 
-    // FIXME: Use started and ended unix times to calculate the duration, instead of the recorded
-    const totalDuration = (ended - started) / 1000;
-    sessionViewTotalDuration.innerHTML = formatDurationSec(totalDuration);
-    sessionViewDuration.innerHTML = formatDurationSec(session.Duration);
-    sessionViewPauseDuration.innerHTML = formatDurationSec(
-        totalDuration - session.Duration,
+    let totalPauseDuration = 0;
+    session.PausesInSession.forEach((pause) => {
+        totalPauseDuration += pause.Duration;
+    });
+
+    sessionViewTotalDuration.innerHTML = formatDurationSec(session.Duration);
+    sessionViewPauseDuration.innerHTML = formatDurationSec(totalPauseDuration);
+    sessionViewDuration.innerHTML = formatDurationSec(
+        session.Duration - totalPauseDuration,
     );
 
     let links = "";

@@ -110,9 +110,13 @@ async function getSessionList() {
             const dateString = new Date(session.StartedAt).toDateString();
             let dateEntry = globals.allSessionsByDate?.[dateString] ?? {
                 totalSessionDuration: 0,
+                totalPauseDuration: 0,
                 sessions: [],
             };
             dateEntry.totalSessionDuration += session.Duration;
+            session.PausesInSession.forEach((pause) => {
+                dateEntry.totalPauseDuration += pause.Duration;
+            });
             dateEntry.sessions.push(session);
             globals.allSessionsByDate[dateString] = dateEntry;
         }
@@ -131,6 +135,7 @@ export async function initializeSessionList(
     sortSessionList();
     populateSessionList();
     initHeatmap();
+    console.log(globals.allSessionsByDate)
 }
 
 export async function getAndPopulateTagsList(showSessionInfoDialog) {

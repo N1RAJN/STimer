@@ -9,10 +9,11 @@ import { currDate, MAX_ALPHA, MIN_ALPHA, THRESHOLD } from "../utils.js";
 var toolId;
 
 export function calculateAlphaOfCell(dateString) {
-    const duration =
-        globals.allSessionsByDate?.[dateString]?.["totalSessionDuration"] ?? 0;
+    const duration = globals.allSessionsByDate[dateString];
+    const total = duration?.["totalSessionDuration"] ?? 0;
+    const pause = duration?.["totalPauseDuration"] ?? 0;
     return Math.min(
-        MIN_ALPHA + (duration / THRESHOLD) * (MAX_ALPHA - MIN_ALPHA),
+        MIN_ALPHA + ((total - pause) / THRESHOLD) * (MAX_ALPHA - MIN_ALPHA),
         MAX_ALPHA,
     );
 }
@@ -48,10 +49,10 @@ function populateToolTip(e) {
     }
     toolId = setTimeout(() => {
         const cellDate = e.target.id;
-        const duration =
-            globals.allSessionsByDate?.[cellDate]?.["totalSessionDuration"] ??
-            0;
-
+        const session = globals.allSessionsByDate[cellDate];
+        const total = session?.["totalSessionDuration"] ?? 0;
+        const pause = session?.["totalPauseDuration"] ?? 0;
+        const duration = total - pause;
         let formattedDate = cellDate.replace(
             /(\w+) (\w+) (\d+) (\d+)/,
             "$1, $2 $3, $4",
