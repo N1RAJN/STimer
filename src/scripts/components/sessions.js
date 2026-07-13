@@ -10,24 +10,29 @@ import { initHeatmap } from "./heatmap.js";
 
 export async function saveSessionInfo() {
     const selectedTags = document.getElementsByClassName("Selected");
-    globals.sessionInfo.StartedAt = +globals.sessionStartedDate.getTime();
-    globals.sessionInfo.EndedAt = +globals.sessionEndedDate.getTime();
+    const currentSessionInfo = globals.sessionInfo;
+    currentSessionInfo.StartedAt = +globals.sessionStartedDate.getTime();
+    currentSessionInfo.EndedAt = +globals.sessionEndedDate.getTime();
     Array.from(selectedTags).map((tag) => {
-        globals.sessionInfo.Tags.push(tag.innerHTML);
+        currentSessionInfo.Tags.push(tag.innerHTML);
         tag.classList.remove("Selected");
     });
-    globals.sessionInfo.Duration = 0;
-    globals.sessionInfo.Title = sessionTitle.value;
-    globals.sessionInfo.Description = sessionDescription.value;
-    globals.sessionInfo.Resources = sessionResources.value.trim();
-    localStorage.setItem("activeSession", JSON.stringify(globals.sessionInfo));
+    if (!state.restoredSession) {
+        currentSessionInfo.Duration = +Math.floor(
+            (currentSessionInfo.EndedAt - currentSessionInfo.StartedAt) / 1000,
+        );
+    }
+    currentSessionInfo.Title = sessionTitle.value;
+    currentSessionInfo.Description = sessionDescription.value;
+    currentSessionInfo.Resources = sessionResources.value.trim();
+    localStorage.setItem("activeSession", JSON.stringify(currentSessionInfo));
     try {
         const result = await fetch("api/storeSession", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(globals.sessionInfo),
+            body: JSON.stringify(currentSessionInfo),
         });
         return result;
     } catch (err) {
@@ -37,8 +42,9 @@ export async function saveSessionInfo() {
 
 export function savePauseInfo() {
     let size = globals.sessionInfo.PausesInSession.length;
-    globals.sessionInfo.PausesInSession[size - 1].EndedAt =
-        +globals.pauseEndedDate.getTime();
+    const toEdit = globals.sessionInfo.PausesInSession[size - 1];
+    toEdit.EndedAt = +globals.pauseEndedDate.getTime();
+    toEdit.Duration = Math.floor((toEdit.EndedAt - toEdit.StartedAt) / 1000);
     localStorage.setItem("activeSession", JSON.stringify(globals.sessionInfo));
 }
 
@@ -48,9 +54,16 @@ export function storeSessionLocal() {
     if (!state.timerPaused) sessionCopy.Duration = globals.sessionDurationSec;
 
     sessionCopy.EndedAt = +new Date().getTime();
+    sessionCopy.Duration = +Math.floor(
+        (sessionCopy.EndedAt - sessionCopy.StartedAt) / 1000,
+    );
     let size = sessionCopy.PausesInSession.length;
     if (state.timerPaused && state.localCopyCreated) {
-        sessionCopy.PausesInSession[size - 1].EndedAt = +new Date().getTime();
+        const toEdit = sessionCopy.PausesInSession[size - 1];
+        toEdit.EndedAt = +new Date().getTime();
+        toEdit.Duration = +Math.floor(
+            (toEdit.EndedAt - toEdit.StartedAt) / 1000,
+        );
     }
     sessionCopy.Resources = sessionResources.value.trim();
     sessionCopy.Title = sessionTitle.value.trim();
@@ -135,7 +148,6 @@ export async function initializeSessionList(
     sortSessionList();
     populateSessionList();
     initHeatmap();
-    console.log(globals.allSessionsByDate)
 }
 
 export async function getAndPopulateTagsList(showSessionInfoDialog) {

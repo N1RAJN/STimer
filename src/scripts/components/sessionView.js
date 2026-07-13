@@ -20,7 +20,7 @@ export function showSessionViewModal(sessionId) {
     const ended = session.EndedAt;
 
     sessionViewTitle.value = session.Title;
-    sessionViewDescription.value = session.Description;
+    sessionViewDescription.innerHTML = session.Description;
     sessionViewTags.innerHTML = session.Tags?.join(" ");
     sessionViewDate.innerHTML = new Date(started).toDateString();
     sessionViewStartedDate.innerHTML = new Date(started).toLocaleString(

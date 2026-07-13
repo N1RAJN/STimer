@@ -38,7 +38,7 @@ export const customEvents = {
 };
 export const MAX_ALPHA = 1.0;
 export const MIN_ALPHA = 0.1;
-export const THRESHOLD = 7200;
+export const THRESHOLD = 14400;
 export function formatDurationSec(duration) {
     let hour = Math.floor(duration / 3600);
     let min = Math.floor(duration / 60) % 60;
