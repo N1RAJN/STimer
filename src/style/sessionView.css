@@ -9,6 +9,7 @@
     border: solid;
     border-color: #333333;
     border-radius: 1.8rem;
+    overflow: hidden;
 }
 
 .Session-View-Modal-Inner {
@@ -17,6 +18,7 @@
     height: 100%;
     width: 100%;
     gap: 0.5em;
+    min-height: 0;
 }
 
 .Session-View-Modal-Header-Container {
@@ -72,6 +74,7 @@
 .Session-View-Modal-Body {
     display: flex;
     flex-direction: column;
+    min-height: 0;
     flex: 6;
     gap: 0.5em;
 }
@@ -81,16 +84,6 @@
     flex-direction: column;
     flex: 3;
     gap: 0.5em;
-}
-
-.Session-View-Timestamp {
-    height: 50px;
-    background-color: #666;
-}
-
-.Session-View-Timestamp-Label {
-    display: flex;
-    justify-content: space-between;
 }
 
 .Session-View-Aggregate-Time {
@@ -108,12 +101,37 @@
     gap: 0.5em;
 }
 
+.Session-View-Timestamp {
+    height: 50px;
+    background-color: #666;
+    display: flex;
+    flex-direction: row;
+}
+
+.Session-View-Timestamp-Section {
+    flex: 1;
+}
+
+.Session-View-Timestamp-Section.Study {
+    background-color: #ddd;
+}
+
+.Session-View-Timestamp-Section.Pause {
+    background-color: inherit;
+}
+
+.Session-View-Timestamp-Label {
+    display: flex;
+    justify-content: space-between;
+}
+
 .Session-View-Started-Date,
 .Session-View-Ended-Date {
     font-weight: 100;
 }
 
 .Session-View-Notes {
+    min-height: 0;
     display: flex;
     flex: 6;
     gap: 0.5em;
@@ -123,7 +141,9 @@
 .Session-View-Resources-Container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    min-height: 0;
+    min-width: 50%;
     gap: 0.5em;
     flex: 1;
 }
@@ -148,6 +168,8 @@
     border: solid 1px #666666;
     border-radius: 0.25rem;
     background-color: #333333;
+    overflow-y: auto;
+    min-height: 0;
 
     & a:link {
         color: white;
@@ -196,10 +218,6 @@
 }
 
 .Session-View-Delete-Button:hover {
-    outline: 2px solid #990000;
-}
-
-.Session-View-Delete-Button: {
     outline: 2px solid #990000;
 }
 

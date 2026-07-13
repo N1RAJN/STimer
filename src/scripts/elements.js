@@ -83,6 +83,9 @@ export const sessionInfoSaveButton = document.getElementById(
 
 // Session View
 export const sessionViewModal = document.getElementById("sessionViewModal");
+export const sessionViewTimeStamp = document.getElementById(
+    "sessionViewTimestamp",
+);
 export const sessionViewModalCloseButton = document.getElementById(
     "sessionViewModalCloseButton",
 );

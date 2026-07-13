@@ -1,0 +1,2 @@
+ALTER TABLE pauses 
+ADD COLUMN duration INTEGER DEFAULT 0;

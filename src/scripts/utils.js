@@ -48,3 +48,4 @@ export function formatDurationSec(duration) {
         .join(" ");
     return formattedDuration;
 }
+export const TIMESTAMPSCALE = 100;
