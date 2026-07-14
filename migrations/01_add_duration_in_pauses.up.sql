@@ -1,2 +1,3 @@
-ALTER TABLE pauses 
-ADD COLUMN duration INTEGER DEFAULT 0;
+ALTER TABLE pauses ADD COLUMN duration INTEGER DEFAULT 0;
+UPDATE pauses SET duration = ended_at - started_at)/ 1000;
+

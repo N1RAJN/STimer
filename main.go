@@ -16,12 +16,12 @@ import (
 type pauseObj struct {
 	StartedAt uint64 `json:"StartedAt"`
 	EndedAt   uint64 `json:"EndedAt"`
-	Duration  uint16 `json:"Duration"`
+	Duration  uint64 `json:"Duration"`
 }
 type sessionInfoObj struct {
 	StartedAt       uint64     `json:"StartedAt"`
 	EndedAt         uint64     `json:"EndedAt"`
-	Duration        uint16     `json:"Duration"`
+	Duration        uint64     `json:"Duration"`
 	PausesInSession []pauseObj `json:"PausesInSession"`
 	Title           string     `json:"Title"`
 	Description     string     `json:"Description"`
@@ -86,7 +86,6 @@ func createTable() {
 	session_id INTEGER,
 	started_at INTEGER,
 	ended_at INTEGER,
-	duration INTEGER,
 	FOREIGN KEY(session_id) REFERENCES session(session_id)
 	)
 	`
@@ -158,7 +157,7 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 	}
 	var pausesInSession []pauseObj
 	for _, pause := range sessionData.PausesInSession {
-		pausesInSession = append(pausesInSession, pauseObj{StartedAt: pause.StartedAt, EndedAt: pause.EndedAt, Duration: (uint16(pause.EndedAt - pause.StartedAt)) / 1000})
+		pausesInSession = append(pausesInSession, pauseObj{StartedAt: pause.StartedAt, EndedAt: pause.EndedAt, Duration: (uint64(pause.EndedAt - pause.StartedAt)) / 1000})
 	}
 
 	pausesQuery := `
@@ -282,10 +281,9 @@ func getSessions(w http.ResponseWriter, r *http.Request) {
 	var session sessionInfoObj // object to hold each session's info
 	var (
 		// varaibles to build the session Info object
-		sessionId, started, ended     uint64
-		duration                      uint16
-		title, description, resources string
-		tags                          sql.NullString
+		sessionId, started, ended, duration uint64
+		title, description, resources       string
+		tags                                sql.NullString
 	)
 
 	for sessionWithTags.Next() {
@@ -305,8 +303,7 @@ func getSessions(w http.ResponseWriter, r *http.Request) {
 	SELECT session_id, started_At, ended_At, duration
 	FROM pauses
 		`
-	var sId, pStarted, pEnded uint64
-	var pDuration uint16
+	var sId, pStarted, pEnded, pDuration uint64
 	pauses, err := db.Query(pausesQuery)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
