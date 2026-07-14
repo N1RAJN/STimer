@@ -8,7 +8,13 @@ import {
     sessionSortDropdown,
 } from "../elements.js";
 import { state, globals } from "../state.js";
-import { sessionTimeFilter, sessionSorts } from "../utils.js";
+import {
+    sessionTimeFilter,
+    sessionSorts,
+    customEvents,
+    formatDurationSec,
+    getFormattedTimestamp,
+} from "../utils.js";
 
 export function populateSessionList() {
     sessionList.innerHTML = "";
@@ -38,26 +44,12 @@ export function populateSessionList() {
 
         const timestampTime = document.createElement("span");
         timestampTime.classList.add("Timestamp-Time");
-        timestampTime.innerHTML = sessionDate.toLocaleString("en-US", {
-            hour: "numeric",
-            hour12: true,
-            minute: "numeric",
-        });
+        timestampTime.innerHTML = getFormattedTimestamp(sessionDate);
 
         const timestampDuration = document.createElement("span");
         timestampDuration.classList.add("Timestamp-Duration");
 
-        let hour = Math.floor(session.Duration / 3600);
-        let min = Math.floor(session.Duration / 60) % 60;
-        let sec = session.Duration % 60;
-        let formattedDuration = [
-            hour && `${hour}h`,
-            min && `${min}m`,
-            `${sec}s`,
-        ]
-            .filter(Boolean)
-            .join(" ");
-
+        const formattedDuration = formatDurationSec(session.Duration);
         timestampDuration.innerHTML = formattedDuration;
 
         sessionInfoCardTimestamp.appendChild(timestampTime);
@@ -67,6 +59,15 @@ export function populateSessionList() {
         sessionInfoCard.appendChild(sessionInfoCardTimestamp);
 
         sessionList.appendChild(sessionInfoCard);
+
+        sessionInfoCard.addEventListener("click", (e) => {
+            if (e.currentTarget.className == "Session-Info-Card") {
+                globals.sessionToView = e.currentTarget;
+                document.dispatchEvent(
+                    new CustomEvent(customEvents.SessionView),
+                );
+            }
+        });
     });
 }
 

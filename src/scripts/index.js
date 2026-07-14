@@ -22,6 +22,7 @@ import {
 } from "./components/sessionList.js";
 import { calculateAlphaOfCell, initHeatmap } from "./components/heatmap.js";
 import { initSettings } from "./components/settings.js";
+import { showSessionViewModal } from "./components/sessionView.js";
 
 initializeSessionList(
     filterSessionList,
@@ -41,5 +42,5 @@ initSessionModal(
 );
 
 initTimer(showSessionInfoDialog, storeSessionLocal, savePauseInfo);
-initSessionList();
+initSessionList(showSessionViewModal);
 initSettings(toggleTimerMode);

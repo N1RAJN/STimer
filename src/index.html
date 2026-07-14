@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="style/sessionModal.css" />
     <link rel="stylesheet" href="style/timer.css" />
     <link rel="stylesheet" href="style/heatmap.css" />
+    <link rel="stylesheet" href="style/sessionView.css" />
     <link rel="stylesheet" href="style/sessionList.css" />
 </head>
 
@@ -185,9 +186,63 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>S
             <button id="settingsModalSaveButton" class="Settings-Modal-Save-Button">Save Settings</button>
         </div>
+    </dialog>
+    <dialog id="sessionViewModal" class="Session-View-Modal">
+        <div id="sessionViewModalInner" class="Session-View-Modal-Inner">
+            <div id="sessionViewModalHeaderContainer" class="Session-View-Modal-Header-Container">
+                <input type="text" id="sessionViewTitle" class="Session-View-Title" readonly />
+                <div id="sessionViewDate" class="Session-View-Date"></div>
+                <button id="sessionViewModalCloseButton" class="Session-View-Modal-Close-Button"> X </button>
+            </div>
+            <div id="sessionViewModalBody" class="Session-View-Modal-Body">
+                <div id="sessionViewTimestampContainer" class="Session-View-Timestamp-Container">
+                    <div id="sessionViewAggregateTime" class="Session-View-Aggregate-Time">
+                        <div id="sessionViewTotalDurationContainer" class="Session-View-Total-Duration-Container">
+                            <label>Total: </label>
+                            <div id="sessionViewTotalDuration" class="Session-View-Total-Duration"> </div>
+                        </div>
+                        <div id="sessionViewDurationContainer" class="Session-View-Duration-Container">
+                            <label>Session: </label>
+                            <div id="sessionViewDuration" class="Session-View-Duration"></div>
+                        </div>
+                        <div id="sessionViewPauseDurationContainer" class="Session-View-Pause-Duration-Container">
+                            <label>Pauses: </label>
+                            <div id="sessionViewPauseDuration" class="Session-View-Pause-Duration"></div>
+                        </div>
+                    </div>
+                    <div id="sessionViewTimestamp" class="Session-View-Timestamp"></div>
+                    <div id="sessionViewTimestampLabel" class="Session-View-Timestamp-Label">
+                        <div id="sessionViewStartedDate" class="Session-View-Started-Date"></div>
+                        <div id="sessionViewEndedDate" class="Session-View-Ended-Date"></div>
+                    </div>
+                </div>
+                <div id="sessionViewNotes" class="Session-View-Notes">
+                    <div id="sessionViewDescriptionContainer" class="Session-View-Description-Container">
+                        <div class="Session-View-Description-Label">Description: </div>
+                        <div readonly id="sessionViewDescription" class="Session-View-Description"></div>
+                    </div>
+                    <div id="sessionViewResourcesContainer" class="Session-View-Resources-Container">
+                        <div class="Session-View-Resources-Label">Resources:</div>
+                        <div readonly id="sessionViewResources" class="Session-View-Resources">
+                        </div>
+                    </div>
+
+                </div>
+                <div id="sessionViewTagsContainer" class="Session-View-Tags-Container">
+                    <div id="sessionViewTags" class="Session-View-Tags"></div>
+                    <div id="sessionViewTagsList" class="Session-View-Tags-List"></div>
+                </div>
+                <div id="sessionViewStartToolTip" class="Session-View-Start-Tool-Tip"></div>
+                <div id="sessionViewEndToolTip" class="Session-View-End-Tool-Tip"></div>
+                <div id="sessionViewDurationToolTip" class="Session-View-Duration-Tool-Tip"></div>
+            </div>
+            <div id="sessionViewFooter" class="Session-View-Footer">
+                <button id="sessionViewEditButton" class="Session-View-Edit-Button"> Edit </button>
+                <button id="sessionViewDeleteButton" class="Session-View-Delete-Button"> Delete </button>
+            </div>
     </dialog>
     <div id="heatmapCellToolTip" class="Heatmap-Cell-Tool-Tip"></div>
 </body>

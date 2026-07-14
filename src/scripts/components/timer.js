@@ -109,6 +109,7 @@ function toggleSessionTimer(savePauseInfo) {
         globals.sessionInfo.PausesInSession.push({
             StartedAt: +new Date().getTime(),
             EndedAt: null,
+            Duration: 0,
         });
         clearInterval(globals.sessionTimerId);
     } else {

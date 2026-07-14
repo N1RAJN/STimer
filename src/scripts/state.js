@@ -30,6 +30,7 @@ export const globals = {
     sessionStartedDate: null,
     pauseEndedDate: null,
     sessionEndedDate: 0,
+    sessionToView: null,
     sessionInfo: {
         StartedAt: 0,
         EndedAt: 0,
