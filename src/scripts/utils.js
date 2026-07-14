@@ -19,6 +19,16 @@ export const sessionTimeFilter = {
     Year: new Date(currDate.getFullYear(), 0, 1).getTime(),
     All: 0,
 };
+export const counterDelayMS = 1000;
+export const saveIntervalMs = 300000;
+export const customEvents = {
+    TimerStopped: "timerStopped",
+    SessionView: "sessionView",
+};
+export const MAX_ALPHA = 1.0;
+export const MIN_ALPHA = 0.1;
+export const THRESHOLD = 14400;
+export const TIMESTAMPSCALE = 100;
 
 export const sessionSorts = {
     Duration: {
@@ -30,15 +40,7 @@ export const sessionSorts = {
         descending: (a, b) => a[1].StartedAt - b[1].StartedAt,
     },
 };
-export const counterDelayMS = 1000;
-export const saveIntervalMs = 300000;
-export const customEvents = {
-    TimerStopped: "timerStopped",
-    SessionView: "sessionView",
-};
-export const MAX_ALPHA = 1.0;
-export const MIN_ALPHA = 0.1;
-export const THRESHOLD = 14400;
+
 export function formatDurationSec(duration) {
     let hour = Math.floor(duration / 3600);
     let min = Math.floor(duration / 60) % 60;
@@ -48,4 +50,10 @@ export function formatDurationSec(duration) {
         .join(" ");
     return formattedDuration;
 }
-export const TIMESTAMPSCALE = 100;
+export const getFormattedTimestamp = (unixtime) => {
+    return new Date(unixtime).toLocaleString("en-US", {
+        hour: "numeric",
+        hour12: true,
+        minute: "numeric",
+    });
+};

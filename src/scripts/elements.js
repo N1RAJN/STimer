@@ -122,3 +122,12 @@ export const sessionViewTotalDuration = document.getElementById(
 export const sessionViewPauseDuration = document.getElementById(
     "sessionViewPauseDuration",
 );
+export const sessionViewStartToolTip = document.getElementById(
+    "sessionViewStartToolTip",
+);
+export const sessionViewEndToolTip = document.getElementById(
+    "sessionViewEndToolTip",
+);
+export const sessionViewDurationToolTip = document.getElementById(
+    "sessionViewDurationToolTip",
+);

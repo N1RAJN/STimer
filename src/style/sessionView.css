@@ -193,6 +193,22 @@
     font-weight: 500;
 }
 
+.Session-View-Start-Tool-Tip,
+.Session-View-End-Tool-Tip,
+.Session-View-Duration-Tool-Tip {
+    display: none;
+    position: fixed;
+    padding: 0.2em;
+    font-size: 1rem;
+    font-weight: 500;
+    height: 1.5rem;
+    color: #ffffff;
+    background-color: black;
+    border: 1px #888888 solid;
+    border-radius: 1px;
+    align-items: center;
+}
+
 .Session-View-Footer {
     display: flex;
     gap: 0.5em;

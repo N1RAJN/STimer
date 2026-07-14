@@ -13,6 +13,7 @@ import {
     sessionSorts,
     customEvents,
     formatDurationSec,
+    getFormattedTimestamp,
 } from "../utils.js";
 
 export function populateSessionList() {
@@ -43,11 +44,7 @@ export function populateSessionList() {
 
         const timestampTime = document.createElement("span");
         timestampTime.classList.add("Timestamp-Time");
-        timestampTime.innerHTML = sessionDate.toLocaleString("en-US", {
-            hour: "numeric",
-            hour12: true,
-            minute: "numeric",
-        });
+        timestampTime.innerHTML = getFormattedTimestamp(sessionDate);
 
         const timestampDuration = document.createElement("span");
         timestampDuration.classList.add("Timestamp-Duration");
@@ -102,7 +99,7 @@ export function sortSessionList() {
     globals.sessionsToPopulate.sort(state.currentSort);
 }
 
-export function initSessionList(showSessionViewModal) {
+export function initSessionList() {
     toggleSessionListButton.addEventListener("click", () => {
         if (state.timerStarted) return;
         sessionListContainer.style.display = state.isSessionListHidden
