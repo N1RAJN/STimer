@@ -75,7 +75,7 @@ export function showSessionViewModal(sessionId) {
 
     let links = "";
     session.Resources.split("\n").forEach((link) => {
-        const isLink = link.search("/^https:/");
+        const isLink = link.search("^https:/");
         links +=
             isLink === -1
                 ? `${link}<br>`
