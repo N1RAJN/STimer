@@ -46,7 +46,7 @@ export function showSessionViewModal(sessionId) {
         el.style.flex = duration / session.Duration;
 
         el.dataset.Started = getFormattedTimestamp(startedAt);
-        el.dataset.Ended = getFormattedTimestamp(startedAt);
+        el.dataset.Ended = getFormattedTimestamp(endedAt);
         el.dataset.Duration = formatDurationSec(duration / 1000);
         return el;
     };
