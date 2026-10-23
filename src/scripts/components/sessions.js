@@ -45,6 +45,7 @@ export function savePauseInfo() {
     const toEdit = globals.sessionInfo.PausesInSession[size - 1];
     toEdit.EndedAt = +globals.pauseEndedDate.getTime();
     toEdit.Duration = Math.floor((toEdit.EndedAt - toEdit.StartedAt) / 1000);
+    globals.sessionInfo.PauseDuration += toEdit.Duration;
     localStorage.setItem("activeSession", JSON.stringify(globals.sessionInfo));
 }
 
@@ -75,7 +76,7 @@ export function storeSessionLocal() {
     });
 
     // Immediately create a local copy on session start;
-    // Only after atleast saveIntervalMs that we declare the session as unsaved
+    // Only after atleast saveIntervalMs, declare the session as unsaved
     if (state.localCopyCreated) {
         localStorage.setItem("sessionSaved", JSON.stringify(false));
     }
@@ -127,9 +128,7 @@ async function getSessionList() {
                 sessions: [],
             };
             dateEntry.totalSessionDuration += session.Duration;
-            session.PausesInSession.forEach((pause) => {
-                dateEntry.totalPauseDuration += pause.Duration;
-            });
+            dateEntry.totalPauseDuration += session.PauseDuration;
             dateEntry.sessions.push(session);
             globals.allSessionsByDate[dateString] = dateEntry;
         }

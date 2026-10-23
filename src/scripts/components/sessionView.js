@@ -25,8 +25,10 @@ import {
 
 export function showSessionViewModal(sessionId) {
     const session = globals.allSessions[sessionId];
+    console.log(session);
     const started = session.StartedAt;
     const ended = session.EndedAt;
+    const totalDuration = session.Duration + session.PauseDuration;
 
     sessionViewTimeStamp.innerHTML = "";
     sessionViewTitle.value = session.Title;
@@ -37,13 +39,12 @@ export function showSessionViewModal(sessionId) {
 
     sessionViewEndedDate.innerHTML = getFormattedTimestamp(ended);
 
-    let totalPauseDuration = 0;
     let sectionStart = started;
     const makeSection = (className, startedAt, endedAt) => {
         const el = document.createElement("div");
         el.className = `Session-View-Timestamp-Section ${className}`;
         const duration = endedAt - startedAt;
-        el.style.flex = duration / session.Duration;
+        el.style.flex = duration / totalDuration;
 
         el.dataset.Started = getFormattedTimestamp(startedAt);
         el.dataset.Ended = getFormattedTimestamp(endedAt);
@@ -53,12 +54,13 @@ export function showSessionViewModal(sessionId) {
 
     session.PausesInSession.forEach((pause) => {
         sessionViewTimeStamp.append(
+            // Truncation of milliseconds might cause in loss of few seconds
+            // (max being number_of_pauses + 1 seconds)
             makeSection("Study", sectionStart, pause.StartedAt),
         );
         sessionViewTimeStamp.append(
             makeSection("Pause", pause.StartedAt, pause.EndedAt),
         );
-        totalPauseDuration += pause.Duration;
         sectionStart = pause.EndedAt;
     });
 
@@ -67,11 +69,13 @@ export function showSessionViewModal(sessionId) {
             makeSection("Study", sectionStart, session.EndedAt),
         );
     }
-    sessionViewTotalDuration.innerHTML = formatDurationSec(session.Duration);
-    sessionViewPauseDuration.innerHTML = formatDurationSec(totalPauseDuration);
-    sessionViewDuration.innerHTML = formatDurationSec(
-        session.Duration - totalPauseDuration,
+    sessionViewTotalDuration.innerHTML = formatDurationSec(
+        session.Duration + session.PauseDuration,
     );
+    sessionViewPauseDuration.innerHTML = formatDurationSec(
+        session.PauseDuration,
+    );
+    sessionViewDuration.innerHTML = formatDurationSec(session.Duration);
 
     let links = "";
     session.Resources.split("\n").forEach((link) => {

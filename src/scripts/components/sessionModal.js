@@ -112,7 +112,10 @@ export function initSessionModal(
 
             const response = await result.text();
             const message = response.split("#");
-            console.log(message[0]);
+
+            // Update the session and pause duration
+            globals.sessionInfo.Duration = +message[2];
+            globals.sessionInfo.PauseDuration = +message[3];
 
             // Add the saved session to the all session list
             globals.allSessions[message[1]] = JSON.parse(
@@ -131,6 +134,7 @@ export function initSessionModal(
             globals.allSessionsByDate[dateString].sessions.push(
                 globals.sessionInfo,
             );
+            console.log(globals.sessionInfo);
             const alpha = calculateAlphaOfCell(dateString);
             document.getElementById(`${dateString}`).style.backgroundColor =
                 `rgba(255, 255, 255, ${alpha})`;

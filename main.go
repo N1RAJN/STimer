@@ -22,6 +22,7 @@ type sessionInfoObj struct {
 	StartedAt       uint64     `json:"StartedAt"`
 	EndedAt         uint64     `json:"EndedAt"`
 	Duration        uint64     `json:"Duration"`
+	PauseDuration   uint64     `json:"PauseDuration"`
 	PausesInSession []pauseObj `json:"PausesInSession"`
 	Title           string     `json:"Title"`
 	Description     string     `json:"Description"`
@@ -57,7 +58,7 @@ func main() {
 	http.Handle("/", fs)
 	http.HandleFunc("/api/storeSession", storeSessionInfo)
 	http.HandleFunc("/api/getTags", getTagsList)
-	http.HandleFunc("/api/updateTags", updatedTags)
+	http.HandleFunc("/api/updateTags", updateTags)
 	http.HandleFunc("/api/getSession", getSessions)
 
 	port := os.Getenv("PORT")
@@ -132,7 +133,8 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 	}
 	startedTime := sessionData.StartedAt
 	endedTime := sessionData.EndedAt
-	duration := (endedTime - startedTime) / 1000
+	sessionDuration := (endedTime - startedTime) / 1000
+	pauseDuration := uint64(0)
 	title := sessionData.Title
 	description := sessionData.Description
 	resources := sessionData.Resources
@@ -144,25 +146,28 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var pausesInSession []pauseObj
+	for _, pause := range sessionData.PausesInSession {
+		currentDuration := (uint64(pause.EndedAt - pause.StartedAt)) / 1000
+		sessionDuration -= currentDuration
+		pauseDuration += currentDuration
+
+		pausesInSession = append(pausesInSession, pauseObj{StartedAt: pause.StartedAt, EndedAt: pause.EndedAt, Duration: currentDuration})
+	}
+	log.Printf("Session: %d, Pause: %d", sessionDuration, pauseDuration)
+
 	sessionQuery := `
-	INSERT INTO session(started_at, ended_at, duration, title, description, resources)
-	Values(?, ?, ?, ?, ?, ?)
+	INSERT INTO session(started_at, ended_at, duration, title, description, resources, pause_duration)
+	Values(?, ?, ?, ?, ?, ?, ?)
 	`
-	sessionQueryResult, queryErr := tx.Exec(sessionQuery, startedTime, endedTime, duration, title, description, resources)
+	sessionQueryResult, queryErr := tx.Exec(sessionQuery, startedTime, endedTime, sessionDuration, title, description, resources, pauseDuration)
 	if queryErr != nil {
 		tx.Rollback()
 		w.WriteHeader(http.StatusInternalServerError)
 		io.WriteString(w, "Query failed")
 		return
 	}
-	var pausesInSession []pauseObj
-	for _, pause := range sessionData.PausesInSession {
-		pausesInSession = append(pausesInSession, pauseObj{StartedAt: pause.StartedAt, EndedAt: pause.EndedAt, Duration: (uint64(pause.EndedAt - pause.StartedAt)) / 1000})
-	}
 
-	pausesQuery := `
-	INSERT INTO pauses(session_id, started_at, ended_at, duration) VALUES(?, ?, ?, ?)
-	`
 	sessionId, err := sessionQueryResult.LastInsertId()
 	if err != nil {
 		tx.Rollback()
@@ -170,8 +175,12 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, "Query failed")
 		return
 	}
+
+	pausesQuery := `
+	INSERT INTO pauses(session_id, started_at, ended_at, duration) VALUES(?, ?, ?, ?)
+	`
+
 	for _, pause := range pausesInSession {
-		log.Printf("%d, %d, %d, %d", sessionId, pause.EndedAt, pause.EndedAt, pause.Duration)
 		_, err = tx.Exec(pausesQuery, sessionId, pause.StartedAt, pause.EndedAt, pause.Duration)
 		if err != nil {
 			tx.Rollback()
@@ -211,7 +220,7 @@ func storeSessionInfo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	message := fmt.Sprintf("Session Info Saved#%d", sessionId)
+	message := fmt.Sprintf("Session Info Saved#%d#%d#%d", sessionId, sessionDuration, pauseDuration)
 	io.WriteString(w, message)
 }
 
@@ -281,19 +290,19 @@ func getSessions(w http.ResponseWriter, r *http.Request) {
 	var session sessionInfoObj // object to hold each session's info
 	var (
 		// varaibles to build the session Info object
-		sessionId, started, ended, duration uint64
-		title, description, resources       string
-		tags                                sql.NullString
+		sessionId, started, ended, sessionDuration, pauseDuration uint64
+		title, description, resources                             string
+		tags                                                      sql.NullString
 	)
 
 	for sessionWithTags.Next() {
-		err = sessionWithTags.Scan(&sessionId, &started, &ended, &duration, &title, &description, &resources, &tags)
+		err = sessionWithTags.Scan(&sessionId, &started, &ended, &sessionDuration, &title, &description, &resources, &pauseDuration, &tags)
 		var tagSlice []string
 		if tags.Valid {
 			// tags contains all tags associated with the session, separated by comma
 			tagSlice = strings.Split(tags.String, ",")
 		}
-		session = sessionInfoObj{started, ended, duration, []pauseObj{}, title, description, tagSlice, resources} // keep the pausesInSession empty,  and append later
+		session = sessionInfoObj{started, ended, sessionDuration, pauseDuration, []pauseObj{}, title, description, tagSlice, resources} // keep the pausesInSession empty,  and append later
 		sessionList[sessionId] = session
 	}
 	sessionWithTags.Close()
@@ -331,7 +340,7 @@ func getSessions(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, string(encodedList))
 
 }
-func updatedTags(w http.ResponseWriter, r *http.Request) {
+func updateTags(w http.ResponseWriter, r *http.Request) {
 	var requestBody []byte
 	var tagUpdates tagUpdateBuffer
 	requestBody, err := io.ReadAll(r.Body)

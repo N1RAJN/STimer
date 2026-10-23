@@ -50,9 +50,7 @@ function populateToolTip(e) {
     toolId = setTimeout(() => {
         const cellDate = e.target.id;
         const session = globals.allSessionsByDate[cellDate];
-        const total = session?.["totalSessionDuration"] ?? 0;
-        const pause = session?.["totalPauseDuration"] ?? 0;
-        const duration = total - pause;
+        const duration = session?.["totalSessionDuration"] ?? 0;
         let formattedDate = cellDate.replace(
             /(\w+) (\w+) (\d+) (\d+)/,
             "$1, $2 $3, $4",

@@ -20,21 +20,22 @@ export const globals = {
         },
     },
     sessionDurationSec: 0,
-    allSessions: {},
-    sessionTags: [],
-    allSessionsByDate: {},
-    sessionsToPopulate: [],
-    sessionTimerId: 0,
-    localSessionId: 0,
+    allSessions: {}, // list of all session (ungrouped)
+    sessionTags: [], // list of all session tags
+    allSessionsByDate: {}, // list of all session grouped by date
+    sessionsToPopulate: [], // list of session to be displayed in session list
+    sessionTimerId: 0, // ID of session timer
+    localSessionId: 0, // ID of timer for local storage of session info
     pauseStartedDate: 0,
     sessionStartedDate: null,
     pauseEndedDate: null,
     sessionEndedDate: 0,
-    sessionToView: null,
+    sessionToView: null, // Info of session to be displayed
     sessionInfo: {
         StartedAt: 0,
         EndedAt: 0,
-        Duration: "",
+        Duration: 0,
+        PauseDuration: 0,
         PausesInSession: [],
         Title: "",
         Description: "",
