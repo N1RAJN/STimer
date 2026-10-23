@@ -1,1 +1,0 @@
-UPDATE pauses SET duration = (ended_at - started_at)/ 1000;
